@@ -1,0 +1,39 @@
+<!-- GCC Cornell — shared footer. Paste as the last child of <body>, before <script src="site.js">.
+     Requires styles.css. Ink ground (design-system v1.1), cream text, four columns, the single "Subscribe" pill — cream fill, ink text (v1.2) — cropped giant wordmark.
+     The mailing-list form posts to the chapter inbox as a placeholder (data-placeholder) until a list provider is wired. -->
+<footer class="footer" id="connect">
+  <div class="footer__cols">
+    <div>
+      <h4>Mailing list</h4>
+      <p>Recruitment dates, events and news, straight to your inbox.</p>
+      <form class="footer__form" action="mailto:cornellgccinfo@gmail.com" method="post" enctype="text/plain" data-placeholder="mailing-list-endpoint">
+        <label class="sr-only" for="footer-email">Email address</label>
+        <input id="footer-email" type="email" name="email" placeholder="Email address" autocomplete="email" required>
+        <button class="pill pill--cream" type="submit">Subscribe</button>
+      </form>
+    </div>
+    <div>
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="mailto:cornellgccinfo@gmail.com">Get in touch</a></li>
+        <li><a href="mailto:cornellgccinfo@gmail.com">cornellgccinfo@gmail.com</a></li>
+        <li>Ithaca, New York</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Social</h4>
+      <ul>
+        <li><a href="https://www.instagram.com/cornellgcc/" rel="noopener">Instagram @cornellgcc</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Cornell</h4>
+      <ul>
+        <li>Registered Student Organization of Cornell University</li>
+        <li><a href="https://hr.cornell.edu/about/workplace-rights/equal-education-and-employment" rel="noopener">Equal Education and Employment</a></li>
+        <li class="footer__note">© 2026 GCC Cornell</li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer__wordmark" aria-hidden="true">GCC</div>
+</footer>

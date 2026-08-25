@@ -1,0 +1,58 @@
+{
+ "_how_to_edit": "Home page photos. carousel = the slideshow under 'A global network of alumni' (first card is the opener; 4–6 cards). pillars = the three 'What we do' cards. Put new photos in assets/img/ (any size; ~2000px wide is plenty), reference them here, write the caption as what the photo actually shows, then run `python3 build.py`. 'position' is CSS object-position — which part of the photo stays in frame when it is cropped (e.g. '50% 30%' keeps faces in the upper third).",
+ "carousel": [
+  {
+   "src": "assets/img/client/sp18---pic3.jpg",
+   "alt": "Five members laughing together on the Arts Quad, arms around each other's shoulders",
+   "caption": "Members on the Arts Quad",
+   "position": "50% 40%"
+  },
+  {
+   "src": "assets/img/client/homegallery6.jpg",
+   "alt": "Five members on the leather sofas in the Sage Hall atrium",
+   "caption": "In the Sage Hall atrium",
+   "position": "50% 40%"
+  },
+  {
+   "src": "assets/img/client/sp18---pic2.jpg",
+   "alt": "Five members standing together on the Arts Quad with McGraw Tower behind them",
+   "caption": "Members on the Arts Quad, McGraw Tower behind",
+   "position": "50% 45%"
+  },
+  {
+   "src": "assets/img/client/homegallery3.jpg",
+   "alt": "Members gathered together on the Arts Quad lawn",
+   "caption": "Members on the Arts Quad lawn",
+   "position": "50% 50%"
+  }
+ ],
+ "pillars": [
+  {
+   "title": "New Member Education",
+   "text": "A 10-week series of workshops, speaker panels and mock interviews, led by senior members.",
+   "link_text": "See recruitment",
+   "href": "recruitment.html",
+   "src": "assets/img/client/recruitmentpic4.jpg",
+   "alt": "Three members together in the Sage Hall atrium",
+   "position": "50% 85%"
+  },
+  {
+   "title": "Mentorship Pairs (Buddies)",
+   "text": "Every new member is paired with an upperclassman buddy — for academics, recruiting and everything in between.",
+   "link_text": "Meet members",
+   "href": "members.html",
+   "src": "assets/img/client/sp18---pic4.jpg",
+   "alt": "A mentor and his mentee standing together on the Arts Quad, McGraw Tower behind them",
+   "position": "50% 30%"
+  },
+  {
+   "title": "A Family for Life",
+   "text": "Semesterly banquets, the retreat, alumni dinners and road trips — lifelong friendships with 100+ alumni who stay close.",
+   "link_text": "Alumni network",
+   "href": "members.html#alumni",
+   "src": "assets/img/client/sp18---pic1.jpg",
+   "alt": "Six members standing together on the slope above Libe, backlit by the afternoon sun",
+   "position": "50% 30%"
+  }
+ ]
+}

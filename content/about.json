@@ -1,0 +1,21 @@
+{
+  "_how_to_edit": "about.html pulls two blocks from here. who_runs_it = up to four names from board.json (in this order). values = the three pillars, each shown through one or two named board members; keep each fact to one true sentence about what that role does. Run `python3 build.py` after editing.",
+  "who_runs_it": ["Andrew Chinn", "Pa Tantiponganant", "Aiden Jung", "Raphael Popescu"],
+  "values": [
+    {
+      "name": "Professional Excellence",
+      "people": ["Sarah Li", "Kaitlyn Xia"],
+      "fact": "Sarah and Kaitlyn run the 10-week new member education series each semester — workshops, speaker panels and mock interviews, hosted with other senior members."
+    },
+    {
+      "name": "Inclusivity",
+      "people": ["Mac Capella"],
+      "fact": "Mac chairs Diversity & Inclusion. Recruitment is open to any Cornell student interested in business — any background, any major, any year."
+    },
+    {
+      "name": "Mentorship",
+      "people": ["Alina Fu", "Jonathan Li"],
+      "fact": "Alina and Jonathan run internal affairs — the buddy pairs, the banquets and the retreat. Every new member is paired with an upperclassman buddy from week one."
+    }
+  ]
+}

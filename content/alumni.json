@@ -1,0 +1,462 @@
+{
+ "featured": [
+  "Radhika Poddar",
+  "Tracy Xu",
+  "Michael Li",
+  "Jessica Chen",
+  "Dan Chung",
+  "Justin Kuang"
+ ],
+ "people": [
+  {
+   "name": "George Shey",
+   "role": "Equity Trading Intern at Trillium Management",
+   "photo": "assets/people/george-shey.jpg"
+  },
+  {
+   "name": "Dean Park",
+   "role": "SWE at Walmart Global Tech",
+   "photo": "assets/people/dean-park.jpg"
+  },
+  {
+   "name": "Karen Joo",
+   "role": "MPS in Management at Cornell University",
+   "photo": "assets/people/karen-joo.jpg"
+  },
+  {
+   "name": "Isabella Panguluri",
+   "role": "Investment Banking Analyst at Lazard",
+   "photo": "assets/people/isabella-panguluri.jpg"
+  },
+  {
+   "name": "Steven Lu",
+   "role": "Analyst at American Express Strategy",
+   "photo": "assets/people/steven-lu.jpg"
+  },
+  {
+   "name": "Michael Li",
+   "role": "Asset & Wealth Management Analyst at J.P. Morgan (Hong Kong)",
+   "photo": "assets/people/michael-li.jpg"
+  },
+  {
+   "name": "Koonj Vekaria",
+   "role": "XVA Trader at Goldman Sachs",
+   "photo": "assets/people/koonj-vekaria.jpg"
+  },
+  {
+   "name": "Catherine Huang",
+   "role": "Asset & Wealth Management Analyst at J.P. Morgan (Hong Kong)",
+   "photo": "assets/people/catherine-huang.jpg"
+  },
+  {
+   "name": "Hyun Kyoo Choi",
+   "role": "Investment Banking Analyst at NH Investment & Securities (Seoul)",
+   "photo": "assets/people/hyun-kyoo-choi.jpg"
+  },
+  {
+   "name": "Charlton Leung",
+   "role": "Derivatives Sales at Nomura (Hong Kong)",
+   "photo": "assets/people/charlton-leung.jpg"
+  },
+  {
+   "name": "Dan Chung",
+   "role": "Investment Banking Analyst at Citi",
+   "photo": "assets/people/dan-chung.jpg"
+  },
+  {
+   "name": "Byron Lee",
+   "role": "Associate Consultant at Bain & Company (Hong Kong)",
+   "photo": null
+  },
+  {
+   "name": "Kevin Hwang",
+   "role": "Investment Banking Analyst at Nomura",
+   "photo": "assets/people/kevin-hwang.jpg"
+  },
+  {
+   "name": "Raphael Uribe",
+   "role": "Analyst at Citigroup Global Markets",
+   "photo": "assets/people/raphael-uribe.jpg"
+  },
+  {
+   "name": "George Zhuang",
+   "role": "Software Engineer at Meta",
+   "photo": "assets/people/george-zhuang.jpg"
+  },
+  {
+   "name": "Darren Ho",
+   "role": "MFA at London Business School",
+   "photo": "assets/people/darren-ho.jpg"
+  },
+  {
+   "name": "Adrian Chan",
+   "role": "Private Equity Analyst at Primavera Capital",
+   "photo": "assets/people/adrian-chan.jpg"
+  },
+  {
+   "name": "Jessica Chen",
+   "role": "Fixed Income Analyst at Morgan Stanley",
+   "photo": "assets/people/jessica-chen.jpg"
+  },
+  {
+   "name": "Yi Hsin Wei",
+   "role": "Business Development Summer Intern at Ava Labs",
+   "photo": "assets/people/yi-hsin-wei.jpg"
+  },
+  {
+   "name": "Sam Lee",
+   "role": "Project Finance Analyst at CIBC",
+   "photo": "assets/people/sam-lee.jpg"
+  },
+  {
+   "name": "Reina Zhang",
+   "role": "Investment Analyst at Strategic Investment Group",
+   "photo": "assets/people/reina-zhang.jpg"
+  },
+  {
+   "name": "Ann Li",
+   "role": "Summer Fixed Income Research Analyst at Fidelity",
+   "photo": "assets/people/ann-li.jpg"
+  },
+  {
+   "name": "Mingda Dong",
+   "role": "Applied Economics & Management '26",
+   "photo": "assets/people/mingda-dong.jpg"
+  },
+  {
+   "name": "Vicky Quan",
+   "role": "Quant Trader at Susquehanna International Group",
+   "photo": "assets/people/vicky-quan.jpg"
+  },
+  {
+   "name": "Astrid Day",
+   "role": "Analyst at Oak Hill Advisors",
+   "photo": "assets/people/astrid-day.jpg"
+  },
+  {
+   "name": "Sophia Chen",
+   "role": "Architectural Intern at Kengo Kuma & Associates",
+   "photo": "assets/people/sophia-chen.jpg"
+  },
+  {
+   "name": "Kazuya Chue",
+   "role": "Software Engineer at Capital One",
+   "photo": "assets/people/kazuya-chue.jpg"
+  },
+  {
+   "name": "Vivian Cheng",
+   "role": "Technical Solutions Specialist at IBM",
+   "photo": null
+  },
+  {
+   "name": "Elaine Liu",
+   "role": "MS in Data Science at Stanford University",
+   "photo": null
+  },
+  {
+   "name": "Mark Jang",
+   "role": "Associate Consultant at Bain & Company (Seoul)",
+   "photo": null
+  },
+  {
+   "name": "Jon Chao",
+   "role": "Private Equity Analyst at Arcline Investment Management",
+   "photo": "assets/people/jon-chao.jpg"
+  },
+  {
+   "name": "Hayden Cheng",
+   "role": "Repo Trader at Barclays",
+   "photo": "assets/people/hayden-cheng.jpg"
+  },
+  {
+   "name": "Connie Zhong",
+   "role": "Credit Analyst at S&P Global Ratings",
+   "photo": "assets/people/connie-zhong.jpg"
+  },
+  {
+   "name": "David Wu",
+   "role": "Derivatives Trader at Optiver",
+   "photo": null
+  },
+  {
+   "name": "Brian Shi",
+   "role": "Equity Derivatives Trader at Barclays",
+   "photo": "assets/people/brian-shi.jpg"
+  },
+  {
+   "name": "Amanda Wang",
+   "role": "Program Manager at Microsoft",
+   "photo": "assets/people/amanda-wang.jpg"
+  },
+  {
+   "name": "Tracy Xu",
+   "role": "Associate Consultant at Bain & Company",
+   "photo": "assets/people/tracy-xu.jpg"
+  },
+  {
+   "name": "Allen Chen",
+   "role": "Business Analyst at Wavestone",
+   "photo": "assets/people/allen-chen.jpg"
+  },
+  {
+   "name": "Alyssa Lee",
+   "role": "Equity Research Analyst at Barclays",
+   "photo": "assets/people/alyssa-lee.jpg"
+  },
+  {
+   "name": "Adeline Kwan",
+   "role": "M.Eng in Financial Engineering at Cornell University",
+   "photo": "assets/people/adeline-kwan.jpg"
+  },
+  {
+   "name": "Jessica Zheng",
+   "role": "Investment Banking Analyst at Nomura",
+   "photo": "assets/people/jessica-zheng.jpg"
+  },
+  {
+   "name": "Willa Chen",
+   "role": "Investment Banking Analyst at UBS",
+   "photo": "assets/people/willa-chen.jpg"
+  },
+  {
+   "name": "Maywa Padungrat",
+   "role": "Product Manager at Agoda",
+   "photo": "assets/people/maywa-padungrat.jpg"
+  },
+  {
+   "name": "Jing Su",
+   "role": "J.D. Candidate at NYU School of Law",
+   "photo": "assets/people/jing-su.jpg"
+  },
+  {
+   "name": "Jenny Liang He",
+   "role": "Summer Consulting Intern at EY",
+   "photo": "assets/people/jenny-liang-he.jpg"
+  },
+  {
+   "name": "Adrien Sion",
+   "role": "Succession and Separation Analyst at Credit Agricole",
+   "photo": "assets/people/adrien-sion.jpg"
+  },
+  {
+   "name": "Nancy Zhang",
+   "role": "Technology Analyst at Barclays",
+   "photo": "assets/people/nancy-zhang.jpg"
+  },
+  {
+   "name": "Daniel Lee",
+   "role": "Investment Banking Analyst at Bank of America",
+   "photo": "assets/people/daniel-lee.jpg"
+  },
+  {
+   "name": "Claire Jing",
+   "role": "FP&A Analyst at Park Hotels & Resorts",
+   "photo": "assets/people/claire-jing.jpg"
+  },
+  {
+   "name": "Matthew Gaerke",
+   "role": "Investment Banking Analyst at CohnReznick Capital",
+   "photo": "assets/people/matthew-gaerke.jpg"
+  },
+  {
+   "name": "Stephen Coon",
+   "role": "Residence Operations at The Ritz-Carlton Hotel Company",
+   "photo": "assets/people/stephen-coon.jpg"
+  },
+  {
+   "name": "Linda Cao",
+   "role": "Investment Banking Analyst at Bank of America",
+   "photo": null
+  },
+  {
+   "name": "Karen Chen",
+   "role": "Cyber and Strategic Risk Analyst at Deloitte",
+   "photo": "assets/people/karen-chen.jpg"
+  },
+  {
+   "name": "Jisoo Ryu",
+   "role": "M.Eng in Financial Engineering at Cornell University",
+   "photo": null
+  },
+  {
+   "name": "Grace Zhang",
+   "role": "Associate Consultant at Bain & Company (Shanghai)",
+   "photo": "assets/people/grace-zhang.jpg"
+  },
+  {
+   "name": "Frances Ling",
+   "role": "Assurance Staff at EY",
+   "photo": "assets/people/frances-ling.jpg"
+  },
+  {
+   "name": "Audrey Fan",
+   "role": "Applied Research Scientist at Facebook",
+   "photo": "assets/people/audrey-fan.jpg"
+  },
+  {
+   "name": "Victor Xie",
+   "role": "Analyst at Blackstone",
+   "photo": "assets/people/victor-xie.jpg"
+  },
+  {
+   "name": "Steven Yeung",
+   "role": "Data Analyst at Uber",
+   "photo": "assets/people/steven-yeung.jpg"
+  },
+  {
+   "name": "Andrew Gao",
+   "role": "Software Engineer at Robinhood",
+   "photo": "assets/people/andrew-gao.jpg"
+  },
+  {
+   "name": "Andrew Zhang",
+   "role": "Finance Analyst at General Motors",
+   "photo": "assets/people/andrew-zhang.jpg"
+  },
+  {
+   "name": "Reza Madhvan",
+   "role": "Software Development Engineer at AWS",
+   "photo": "assets/people/reza-madhvan.jpg"
+  },
+  {
+   "name": "Radhika Poddar",
+   "role": "Investment Banking Analyst at Goldman Sachs",
+   "photo": "assets/people/radhika-poddar.jpg"
+  },
+  {
+   "name": "Saumya Sharma",
+   "role": "Consultant at EY",
+   "photo": "assets/people/saumya-sharma.jpg"
+  },
+  {
+   "name": "Brendan Lo",
+   "role": "Software Engineer at Bank of America",
+   "photo": "assets/people/brendan-lo.jpg"
+  },
+  {
+   "name": "Nicholas Suriadjaja",
+   "role": "Credit Risk Analyst at Citi",
+   "photo": "assets/people/nicholas-suriadjaja.jpg"
+  },
+  {
+   "name": "Grant Wu",
+   "role": "Associate Consultant at Trinity Life Sciences",
+   "photo": "assets/people/grant-wu.jpg"
+  },
+  {
+   "name": "Jiwook Jung",
+   "role": "J.D. Candidate at Cornell Law School",
+   "photo": "assets/people/jiwook-jung.jpg"
+  },
+  {
+   "name": "Gabe Schiffer",
+   "role": "People Advisory Services at EY",
+   "photo": "assets/people/gabe-schiffer.jpg"
+  },
+  {
+   "name": "John Lee",
+   "role": "Software Engineer at Aabix Corporation",
+   "photo": "assets/people/john-lee.jpg"
+  },
+  {
+   "name": "Dongho Kim",
+   "role": "Software Development Engineer Intern at Amazon",
+   "photo": "assets/people/dongho-kim.jpg"
+  },
+  {
+   "name": "Teresa Liang",
+   "role": "Financial Analyst at LaSalle Investment Management",
+   "photo": "assets/people/teresa-liang.jpg"
+  },
+  {
+   "name": "Mike Sosa",
+   "role": "Software Engineer at Ocean Solar Technologies",
+   "photo": "assets/people/mike-sosa.jpg"
+  },
+  {
+   "name": "Luke Baek",
+   "role": "People Advisory Services Consultant at EY",
+   "photo": null
+  },
+  {
+   "name": "Justin Kuang",
+   "role": "Software Engineer at Facebook",
+   "photo": "assets/people/justin-kuang.jpg"
+  },
+  {
+   "name": "Irene Du",
+   "role": "Investment Banking Analyst at Wells Fargo Securities",
+   "photo": null
+  },
+  {
+   "name": "Eric Huang",
+   "role": "Associate Consultant at Bain & Company (Hong Kong)",
+   "photo": "assets/people/eric-huang.jpg"
+  },
+  {
+   "name": "Andrew Wong",
+   "role": "Investment Banking Analyst at Lincoln International",
+   "photo": "assets/people/andrew-wong.jpg"
+  },
+  {
+   "name": "April Ye",
+   "role": "Software Engineer at Meta",
+   "photo": null
+  },
+  {
+   "name": "Ploy Chirathivat",
+   "role": "Associate at EY Real Estate",
+   "photo": "assets/people/ploy-chirathivat.jpg"
+  },
+  {
+   "name": "Freddie Quan",
+   "role": "Credit Trading Desk Analyst at J.P. Morgan",
+   "photo": "assets/people/freddie-quan.jpg"
+  },
+  {
+   "name": "Antinah Yeh",
+   "role": "M.Eng in Computer Science at University of Pennsylvania",
+   "photo": "assets/people/antinah-yeh.jpg"
+  },
+  {
+   "name": "Steven Wang",
+   "role": "Associate at Bowery Valuation",
+   "photo": "assets/people/steven-wang.jpg"
+  },
+  {
+   "name": "Adrian Lee",
+   "role": "Software Development Engineer at Amazon",
+   "photo": "assets/people/adrian-lee.jpg"
+  },
+  {
+   "name": "Patrick Zhang",
+   "role": "Software Engineer at Amazon",
+   "photo": "assets/people/patrick-zhang.jpg"
+  },
+  {
+   "name": "Michelle Li",
+   "role": "Global Finance & Business Management Analyst at J.P. Morgan",
+   "photo": "assets/people/michelle-li.jpg"
+  },
+  {
+   "name": "Nicole Kim",
+   "role": "Real Estate Analyst at Blackstone",
+   "photo": "assets/people/nicole-kim.jpg"
+  },
+  {
+   "name": "Westar Zong",
+   "role": "Equity Research Analyst at Wells Fargo Securities",
+   "photo": "assets/people/westar-zong.jpg"
+  },
+  {
+   "name": "Christopher Kim",
+   "role": "Investment Banking Analyst at Wells Fargo",
+   "photo": "assets/people/christopher-kim.jpg"
+  },
+  {
+   "name": "Brian Xu",
+   "role": "Investment Banking Analyst at Guggenheim Partners",
+   "photo": "assets/people/brian-xu.jpg"
+  }
+ ]
+}

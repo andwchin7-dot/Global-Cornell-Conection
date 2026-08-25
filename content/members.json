@@ -1,0 +1,339 @@
+{
+ "groups": [
+  {
+   "semester": "Fall 2025",
+   "people": [
+    {
+     "name": "Andrew Chinn",
+     "major": "Economics & Government '28",
+     "photo": "assets/people/andrew-chinn.jpg"
+    },
+    {
+     "name": "Jayne Sung",
+     "major": "Applied Mathematics '28",
+     "photo": "assets/people/jayne-sung.jpg"
+    },
+    {
+     "name": "Ethan Chiang",
+     "major": "Applied Economics & Management '29",
+     "photo": "assets/people/ethan-chiang.jpg"
+    },
+    {
+     "name": "Chun Guo",
+     "major": "Hotel Administration '28",
+     "photo": "assets/people/chun-guo.jpg"
+    },
+    {
+     "name": "Star Kim",
+     "major": "Government '28",
+     "photo": "assets/people/star-kim.jpg"
+    },
+    {
+     "name": "Kyle Loh",
+     "major": "Hotel Administration '29",
+     "photo": "assets/people/kyle-loh.jpg"
+    },
+    {
+     "name": "Emily Jiang",
+     "major": "Economics '28",
+     "photo": "assets/people/emily-jiang.jpg"
+    },
+    {
+     "name": "Sarah Li",
+     "major": "Information Science & Environment & Sustainability '28",
+     "photo": "assets/people/sarah-li.jpg"
+    },
+    {
+     "name": "Victor Blanchard",
+     "major": "Industrial & Labor Relations '29",
+     "photo": "assets/people/victor-blanchard.jpg"
+    },
+    {
+     "name": "Ethan Li",
+     "major": "Hotel Administration '28",
+     "photo": "assets/people/ethan-li.jpg"
+    },
+    {
+     "name": "Aiden Jung",
+     "major": "Applied Economics & Management '29",
+     "photo": "assets/people/aiden-jung.jpg"
+    }
+   ]
+  },
+  {
+   "semester": "Spring 2025",
+   "people": [
+    {
+     "name": "Leonardo Liu",
+     "major": "Industrial & Labor Relations '27",
+     "photo": "assets/people/leonardo-liu.jpg"
+    },
+    {
+     "name": "Kaitlyn Xia",
+     "major": "Government & China and Asia-Pacific Studies '28",
+     "photo": "assets/people/kaitlyn-xia.jpg"
+    },
+    {
+     "name": "Raphael Popescu",
+     "major": "Operations Research and Information Engineering '28",
+     "photo": "assets/people/raphael-popescu.jpg"
+    },
+    {
+     "name": "Jonathan Li",
+     "major": "Computer Science & Economics '28",
+     "photo": "assets/people/jonathan-li.jpg"
+    },
+    {
+     "name": "Anuva Kolli",
+     "major": "Industrial & Labor Relations '28",
+     "photo": "assets/people/anuva-kolli.jpg"
+    }
+   ]
+  },
+  {
+   "semester": "Fall 2024",
+   "people": [
+    {
+     "name": "Chere Hong",
+     "major": "Applied Economics & Management '27",
+     "photo": "assets/people/chere-hong.jpg"
+    },
+    {
+     "name": "Pa Tantiponganant",
+     "major": "Economics '28",
+     "photo": "assets/people/pa-tantiponganant.jpg"
+    },
+    {
+     "name": "Miya Padungrat",
+     "major": "Biological Science '28",
+     "photo": "assets/people/miya-padungrat.jpg"
+    },
+    {
+     "name": "Vivian Lei",
+     "major": "Industrial & Labor Relations '27",
+     "photo": "assets/people/vivian-lei.jpg"
+    },
+    {
+     "name": "Keira Hsu",
+     "major": "Hotel Administration '27",
+     "photo": "assets/people/keira-hsu.jpg"
+    },
+    {
+     "name": "Madeleine Yoon",
+     "major": "Information Science & Economics '28",
+     "photo": "assets/people/madeleine-yoon.jpg"
+    },
+    {
+     "name": "Minh Anh Le",
+     "major": "Applied Economics & Management '27",
+     "photo": "assets/people/minh-anh-le.jpg"
+    },
+    {
+     "name": "William Dai",
+     "major": "Information Science '27",
+     "photo": "assets/people/william-dai.jpg"
+    }
+   ]
+  },
+  {
+   "semester": "Spring 2024",
+   "people": [
+    {
+     "name": "Andrew Mercantini",
+     "major": "Industrial & Labor Relations '27",
+     "photo": "assets/people/andrew-mercantini.jpg"
+    },
+    {
+     "name": "Sydney Jiang",
+     "major": "Economics '27",
+     "photo": "assets/people/sydney-jiang.jpg"
+    },
+    {
+     "name": "Sara Chiang",
+     "major": "Hotel Administration '27",
+     "photo": "assets/people/sara-chiang.jpg"
+    },
+    {
+     "name": "Mingda Dong",
+     "major": "Applied Economics & Management '26",
+     "photo": "assets/people/mingda-dong.jpg"
+    }
+   ]
+  },
+  {
+   "semester": "Fall 2023",
+   "people": [
+    {
+     "name": "Jasmine Ren",
+     "major": "Applied Economics & Management & Information Science '26",
+     "photo": "assets/people/jasmine-ren.jpg"
+    },
+    {
+     "name": "Aidan Loh",
+     "major": "Hotel Administration '26",
+     "photo": "assets/people/aidan-loh.jpg"
+    },
+    {
+     "name": "Aei Jirathun",
+     "major": "Applied Economics & Management '27",
+     "photo": "assets/people/aei-jirathun.jpg"
+    },
+    {
+     "name": "Joshua Dong",
+     "major": "Applied Economics & Management '26",
+     "photo": "assets/people/joshua-dong.jpg"
+    },
+    {
+     "name": "Tiffany Yeung",
+     "major": "Economics & Information Science '26",
+     "photo": "assets/people/tiffany-yeung.jpg"
+    },
+    {
+     "name": "Edward Handjaja",
+     "major": "Mathematics & Economics '27",
+     "photo": "assets/people/edward-handjaja.jpg"
+    },
+    {
+     "name": "Ian Kim",
+     "major": "Applied Economics & Management '26",
+     "photo": "assets/people/ian-kim.jpg"
+    },
+    {
+     "name": "Eric Chen",
+     "major": "Economics '27",
+     "photo": "assets/people/eric-chen.jpg"
+    },
+    {
+     "name": "Calista Cornet",
+     "major": "China and Asia Pacific Studies '26",
+     "photo": "assets/people/calista-cornet.jpg"
+    },
+    {
+     "name": "Alex Zhang",
+     "major": "Communications & Information Science '27",
+     "photo": "assets/people/alex-zhang.jpg"
+    }
+   ]
+  },
+  {
+   "semester": "Spring 2023",
+   "people": [
+    {
+     "name": "Adrien Sion",
+     "major": "Economics '25",
+     "photo": "assets/people/adrien-sion.jpg"
+    },
+    {
+     "name": "Hannah Kim",
+     "major": "Urban & Regional Studies '26",
+     "photo": "assets/people/hannah-kim.jpg"
+    },
+    {
+     "name": "Andrea Thia",
+     "major": "Applied Economics & Management '26",
+     "photo": "assets/people/andrea-thia.jpg"
+    },
+    {
+     "name": "Jessica Meng",
+     "major": "Hotel Administration '26",
+     "photo": "assets/people/jessica-meng.jpg"
+    },
+    {
+     "name": "Ashley Liu",
+     "major": "Computer Science '26",
+     "photo": "assets/people/ashley-liu.jpg"
+    },
+    {
+     "name": "Linda Sun",
+     "major": "Computer Science '26",
+     "photo": "assets/people/linda-sun.jpg"
+    },
+    {
+     "name": "David Shen",
+     "major": "Applied Economics & Management '26",
+     "photo": "assets/people/david-shen.jpg"
+    }
+   ]
+  },
+  {
+   "semester": "Fall 2022",
+   "people": [
+    {
+     "name": "Aaron Wahid",
+     "major": "Applied Economics & Management '26",
+     "photo": "assets/people/aaron-wahid.jpg"
+    },
+    {
+     "name": "Flora Chen",
+     "major": "Communications & Information Science '25",
+     "photo": "assets/people/flora-chen.jpg"
+    },
+    {
+     "name": "Amanda Yongvanich",
+     "major": "Computer Science '26",
+     "photo": "assets/people/amanda-yongvanich.jpg"
+    },
+    {
+     "name": "Jenny Liang He",
+     "major": "Industrial & Labor Relations '25",
+     "photo": "assets/people/jenny-liang-he.jpg"
+    },
+    {
+     "name": "Brian Xu",
+     "major": "Applied Economics & Management '25",
+     "photo": "assets/people/brian-xu.jpg"
+    },
+    {
+     "name": "Jiwook Jung",
+     "major": "Industrial & Labor Relations '25",
+     "photo": "assets/people/jiwook-jung.jpg"
+    },
+    {
+     "name": "Cindy Liang",
+     "major": "Computer Science '26",
+     "photo": "assets/people/cindy-liang.jpg"
+    },
+    {
+     "name": "Mac Zhou",
+     "major": "Hotel Administration '26",
+     "photo": "assets/people/mac-zhou.jpg"
+    }
+   ]
+  },
+  {
+   "semester": "Spring 2022",
+   "people": [
+    {
+     "name": "Ann Li",
+     "major": "Applied Economics & Management '25",
+     "photo": "assets/people/ann-li.jpg"
+    },
+    {
+     "name": "Jonathan Yeung",
+     "major": "Architecture '26",
+     "photo": "assets/people/jonathan-yeung.jpg"
+    },
+    {
+     "name": "Christopher Kim",
+     "major": "Applied Economics & Management '24",
+     "photo": "assets/people/christopher-kim.jpg"
+    },
+    {
+     "name": "Reina Zhang",
+     "major": "Applied Economics & Management '24",
+     "photo": "assets/people/reina-zhang.jpg"
+    },
+    {
+     "name": "Grant Wu",
+     "major": "Economics & Information Science '24",
+     "photo": "assets/people/grant-wu.jpg"
+    },
+    {
+     "name": "Jing Su",
+     "major": "Industrial & Labor Relations '24",
+     "photo": "assets/people/jing-su.jpg"
+    }
+   ]
+  }
+ ]
+}

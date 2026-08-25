@@ -1,0 +1,19 @@
+<!-- GCC Cornell — shared nav. Paste as the first child of <body>, after the <svg class="sr-only"> symbol sheet if you use nodes.
+     Requires styles.css. The nav sits in normal flow over the page's mist gradient (body background),
+     so inner pages need no extra spacing: put your first section straight after it.
+     "Connect" points at the footer (#connect). The one nav pill is the OUTLINE "Apply" (design-system §3/§8);
+     the filled navy "Apply" lives in the page body (recruitment section) only. -->
+<header class="nav" role="banner">
+  <a class="nav__brand" href="index.html" aria-label="GCC Cornell — home">GCC Cornell</a>
+  <nav class="nav__cols" aria-label="Primary">
+    <ul>
+      <li><a href="about.html">About</a></li>
+      <li><a href="members.html">Members &amp; Alumni</a></li>
+    </ul>
+    <ul>
+      <li><a href="recruitment.html">Recruitment</a></li>
+      <li><a href="#connect">Connect</a></li>
+    </ul>
+  </nav>
+  <a class="pill nav__cta" href="https://forms.gle/EF45zMF4ZgkGfidT7" rel="noopener">Apply</a>
+</header>

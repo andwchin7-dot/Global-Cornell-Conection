@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>About — GCC Cornell</title>
+  <meta name="description" content="GCC Cornell was founded in 2009 as part of a global student network; today an independent organization with 100+ alumni worldwide. Who runs it, what we do each week, how big the network is, and the people behind what we stand for.">
+  <meta property="og:title" content="About — GCC Cornell">
+  <meta property="og:description" content="Founded at Cornell in 2009, independent today: what GCC does each week, who runs it, and the network of 100+ alumni behind it.">
+  <meta property="og:image" content="assets/gen/hero-stock-poster.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="assets/src/favicon.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500&family=Instrument+Serif&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v=1787666714">
+  <style>
+    /* about.html — page styles only; everything else comes from styles.css */
+    .nav__cols a[aria-current="page"]::before { background: var(--ink); }
+
+    /* two-column rows share one axis: 620px text column, 64px gutter, right column from ~712px */
+    .row2 { display: grid; grid-template-columns: minmax(0, 620px) minmax(0, 1fr); gap: 40px 64px; align-items: start; }
+    .row2 .card { width: 100%; aspect-ratio: 3 / 2; }
+    /* a light-ground photo needs a scrim behind its caption (same device as the program cards on Home) */
+    .card--scrim::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgba(26, 30, 35, .5), rgba(26, 30, 35, 0) 38%); pointer-events: none; }
+
+    /* founding story: text + one candid, then the three proof numerals (shared .stats) */
+    .story { margin-top: 48px; }
+    .story__text p + p { margin-top: 20px; }
+
+    /* people rows (board, values): four equal columns, 4:5 headshots, 12px radius, one consistent tight crop.
+       --oy is where the face sits in the source; the crop zooms around that point so every face lands on the same line. */
+    .people { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 40px 24px; margin-top: 48px; }
+    .person { margin: 0; min-width: 0; }
+    .person__photo { position: relative; aspect-ratio: 4 / 5; border-radius: 12px; overflow: hidden; }
+    .person__photo img {
+      display: block; width: 100%; height: 100%;
+      object-fit: cover; object-position: 50% var(--oy, 36%);
+      transform: scale(1.2); transform-origin: 50% var(--oy, 36%);
+      user-select: none; -webkit-user-drag: none;
+    }
+    .person__name { display: block; margin-top: 16px; font: 500 16px/1.3 var(--sans); }
+    .person__role { display: block; margin-top: 3px; font-size: 14px; line-height: 1.35; color: var(--ink-60); }
+
+    /* what we do: the three programmes stacked left, one photo right */
+    .doings { margin-top: 48px; }
+    .doings__list { display: grid; gap: 32px; }
+    .doings h3 { font: 500 18px/1.3 var(--sans); }
+    .doings p { margin-top: 10px; max-width: 560px; }
+
+    /* global network: paragraph left, two quiet city lists right (no map on this page — the nodes are the only drawn hand).
+       Named .globe, not .network, so the Home page's shared .network map layout in styles.css never reaches it. */
+    .globe { margin-top: 20px; }
+    .globe p + p { margin-top: 20px; }
+    .cities { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+    .cities h3 { font: 500 13px/1.2 var(--sans); text-transform: uppercase; letter-spacing: .04em; margin-bottom: 16px; }
+    .cities li { color: var(--ink-60); font-size: 18px; line-height: 1.45; }
+    .cities li + li { margin-top: 6px; }
+
+    /* what we stand for: each pillar is a real person or pair. One 4-column grid; the pillar groups are display:contents
+       so the three rows line up — pillar name (row 1) → headshots (row 2, names on one baseline) → one factual line (row 3). */
+    .values { display: grid; grid-template-columns: repeat(var(--cols, 4), minmax(0, 1fr)); gap: 0 24px; margin-top: 56px; }
+    .person__photo--empty { background: rgba(26,30,35,.05); border: 1px solid var(--line, rgba(26,30,35,.18)); }
+    .value, .value__people { display: contents; }
+    .value__name { grid-row: 1; font: 500 18px/1.3 var(--sans); padding-bottom: 18px; }
+    .value .person { grid-row: 2; }
+    .value__fact { grid-row: 3; margin-top: 24px; max-width: 620px; }
+    .value--pair .value__name, .value--pair .value__fact { grid-column: span 2; }
+
+    /* questions: one list, question left, answer right, hairline between rows */
+    .faq, .faq dt, .faq dd { margin: 0; }
+    .faq { margin-top: 32px; }
+    .faq__row { padding: 24px 0 28px; border-top: 1px solid var(--ink); gap: 12px 64px; }
+    .faq__row:first-child { border-top: 0; padding-top: 8px; }
+    .faq__q { font: 400 18px/1.45 var(--sans); max-width: 520px; }
+    .faq__a { font: 400 16px/1.5 var(--sans); color: var(--ink-60); max-width: 620px; }
+
+    @media (max-width: 1100px) {
+      .people, .values { gap: 32px 20px; }
+      .values { row-gap: 0; }
+    }
+    @media (max-width: 800px) {
+      .row2 { grid-template-columns: 1fr; gap: 28px; }
+      .story { margin-top: 36px; }
+      .people { grid-template-columns: 1fr 1fr; gap: 32px 16px; margin-top: 36px; }
+      .doings { margin-top: 36px; }
+      .doings p { max-width: 620px; }
+      .cities h3 { min-height: 32px; }
+      .values { grid-template-columns: 1fr; gap: 48px; margin-top: 40px; }
+      .value { display: block; }
+      .value__people { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+      .value__name { padding-bottom: 16px; }
+      .value__fact { margin-top: 20px; }
+      .faq__row { gap: 8px; padding: 20px 0 24px; }
+    }
+  </style>
+</head>
+<body class="page--photo">
+
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- symbol sheet: three hand-drawn node shapes -->
+<svg class="sr-only" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="n1" viewBox="-4 -4 108 108"><path d="M89.4 50C88.8 54.9 89.1 59 88.4 64C87.7 68.9 87.9 75.2 85.4 79.7C82.9 84.1 78.2 88.5 73.5 90.8C68.9 93 62.8 92.5 57.6 93.1C52.4 93.7 47.4 94.7 42.2 94.4C37 94 31.2 93.2 26.4 91C21.5 88.7 16.4 85.2 13.1 81C9.7 76.8 7.6 71.1 6.2 65.9C4.9 60.8 4.4 55.1 5 50C5.6 44.9 7.3 39.5 9.9 35.4C12.6 31.3 17.5 28.9 20.9 25.6C24.2 22.3 26.6 19.2 30.1 15.6C33.6 11.9 37 6.3 41.8 3.6C46.6 1 53.6 -1.1 58.8 -0.2C64.1 0.8 69.1 5.8 73.6 9.2C78.1 12.5 82.9 15.6 86 19.8C89.1 24 91.7 29.6 92.3 34.6C92.9 39.6 90.1 45.1 89.4 50Z"/></symbol>
+    <symbol id="n2" viewBox="-4 -4 108 108"><path d="M101 50C101.1 55.4 98.1 61.9 95 66.4C91.8 70.9 86.3 73.9 82.1 77C78 80.1 74.2 82 70.2 84.9C66.1 87.8 62.4 93 57.8 94.2C53.2 95.4 47.5 93.3 42.6 92.2C37.6 91.2 33.1 89.7 28.1 88C23 86.3 15.9 85.4 12.1 81.8C8.4 78.1 6.5 71.5 5.6 66.2C4.7 60.9 6.5 55.4 6.6 50C6.7 44.6 4.8 39 6.1 34C7.3 29 10.5 23.6 14.1 19.9C17.7 16.1 23 13.4 27.8 11.6C32.6 9.8 37.8 9.9 42.8 9.1C47.8 8.3 52.9 6 57.7 6.6C62.5 7.2 67 10.3 71.5 12.7C76.1 15 81.1 17.2 84.9 20.7C88.7 24.2 91.9 28.9 94.5 33.8C97.2 38.7 101 44.6 101 50Z"/></symbol>
+    <symbol id="n3" viewBox="-4 -4 108 108"><path d="M93.5 50C93.6 55.2 94.3 60.7 92.8 65.6C91.3 70.4 88.1 75.3 84.6 79C81.1 82.7 76.4 85.5 71.9 87.9C67.4 90.3 62.7 91.7 57.7 93.5C52.6 95.3 46.9 98.5 41.5 98.5C36 98.5 29.5 96.6 24.8 93.6C20.2 90.6 15.9 85.5 13.5 80.7C11 75.8 11 69.6 10.3 64.5C9.6 59.4 9.2 54.8 9.2 50C9.2 45.2 8.7 40.1 10 35.4C11.3 30.8 14.5 27 17 22.3C19.6 17.7 21.4 11.4 25.4 7.4C29.4 3.4 35.5 -1.1 40.9 -1.5C46.3 -2 53 2 58 4.6C63 7.1 67.1 10.5 71 13.6C74.9 16.8 78.1 19.9 81.7 23.4C85.3 26.9 90.6 30.1 92.6 34.5C94.6 38.9 93.5 44.8 93.5 50Z"/></symbol>
+  </defs>
+</svg>
+
+<!-- ===== nav (partials/nav.html) ===== -->
+<header class="nav" role="banner">
+  <a class="nav__brand" href="index.html" aria-label="GCC Cornell — home">GCC Cornell</a>
+  <nav class="nav__cols" aria-label="Primary">
+    <ul>
+      <li><a href="about.html" aria-current="page">About</a></li>
+      <li><a href="members.html">Members &amp; Alumni</a></li>
+    </ul>
+    <ul>
+      <li><a href="recruitment.html">Recruitment</a></li>
+      <li><a href="#connect">Connect</a></li>
+    </ul>
+  </nav>
+  <a class="pill nav__cta" href="https://forms.gle/EF45zMF4ZgkGfidT7" rel="noopener">Apply</a>
+</header>
+
+<main>
+
+  <!-- ===== 1. hero ===== -->
+  <!-- photo hero (v2.0): full-bleed photograph, paper-wash nav ground, cream serif title — same system as Home -->
+  <section class="hero hero--photo" aria-labelledby="hero-title">
+    <img class="hero__img" src="assets/img/client/sp18---pic2.jpg" alt="" style="object-position: 50% 38%">
+    <div class="hero__scrim" aria-hidden="true"></div>
+    <h1 class="hero__title" id="hero-title">Founded at Cornell in 2009. Today, a home for every major, background and ambition.</h1>
+  </section>
+
+  <!-- ===== 2. founding story + the proof numerals ===== -->
+  <section class="section" aria-labelledby="story-title">
+    <div class="section__head">
+      <h2 class="section__title" id="story-title">Founding story</h2>
+      <a class="section__link" href="members.html">Members &amp; Alumni</a>
+    </div>
+    <div class="row2 story">
+      <div class="story__text">
+        <p>GCC Cornell was founded in 2009 by Randy Wan ’12 to connect Cornell students interested in China-related affairs with a fast-growing global network of students, professionals, firms and institutions. From the start it was a place where students who wanted to lead in business and technology were pushed to their full potential — through a rigorous professional development series and peer mentorship.</p>
+        <p>That is still what we do — and today GCC Cornell is an independent organization. More than 100 alumni work across industries around the world and remain part of the family. What sets us apart from other business organizations at Cornell is that emphasis on family: a mentor for every new member, and friendships that last well past graduation.</p>
+      </div>
+      <figure class="card card--scrim">
+        <img src="assets/img/client/sp18---pic2.jpg" alt="Five members standing together on the Arts Quad with McGraw Tower behind them" style="object-position:50% 40%" draggable="false">
+        <figcaption data-placeholder="caption">Members on the Arts Quad, McGraw Tower behind</figcaption>
+      </figure>
+    </div>
+    <ul class="stats">
+      <li class="stat"><span class="stat__n">2009</span><span class="stat__l">Founded at Cornell</span></li>
+      <li class="stat"><span class="stat__n">25+</span><span class="stat__l">Cities where alumni work</span></li>
+      <li class="stat"><span class="stat__n">100+</span><span class="stat__l">Alumni</span></li>
+    </ul>
+  </section>
+
+  <!-- ===== 3. meet the board: the four most senior board members (board.json order) ===== -->
+  <section class="section" aria-labelledby="board-title">
+    <div class="section__head">
+      <h2 class="section__title" id="board-title">Meet the board</h2>
+      <a class="section__link" href="members.html#board-title">Full board</a>
+    </div>
+    <ul class="people">
+      <!-- build:who-runs-it -->
+      <li>
+          <figure class="person">
+            <div class="person__photo"><img src="assets/people/andrew-chinn.jpg" alt="Andrew Chinn" style="--oy:36%" loading="lazy" draggable="false"></div>
+            <figcaption><span class="person__name">Andrew Chinn</span><span class="person__role">President</span></figcaption>
+          </figure>
+      </li>
+      <li>
+          <figure class="person">
+            <div class="person__photo"><img src="assets/people/pa-tantiponganant.jpg" alt="Pa Tantiponganant" style="--oy:38%" loading="lazy" draggable="false"></div>
+            <figcaption><span class="person__name">Pa Tantiponganant</span><span class="person__role">Senior Vice President</span></figcaption>
+          </figure>
+      </li>
+      <li>
+          <figure class="person">
+            <div class="person__photo"><img src="assets/people/aiden-jung.jpg" alt="Aiden Jung" style="--oy:37%" loading="lazy" draggable="false"></div>
+            <figcaption><span class="person__name">Aiden Jung</span><span class="person__role">VP of Recruitment</span></figcaption>
+          </figure>
+      </li>
+      <li>
+          <figure class="person">
+            <div class="person__photo"><img src="assets/people/raphael-popescu.jpg" alt="Raphael Popescu" style="--oy:43%" loading="lazy" draggable="false"></div>
+            <figcaption><span class="person__name">Raphael Popescu</span><span class="person__role">VP of Finance</span></figcaption>
+          </figure>
+      </li>
+<!-- /build:who-runs-it -->
+    </ul>
+  </section>
+
+  <!-- ===== 4. what we do ===== -->
+  <section class="section" aria-labelledby="do-title">
+    <div class="section__head">
+      <h2 class="section__title" id="do-title">What we do</h2>
+      <a class="section__link" href="recruitment.html">How recruitment works</a>
+    </div>
+    <div class="row2 doings">
+      <div class="doings__list">
+        <div>
+          <h3>New member education</h3>
+          <p>Each semester, new members go through a 10-week professional development series — workshops, speaker panels and mock interviews, designed and led by experienced seniors, with guidance tailored to your own career interests.</p>
+        </div>
+        <div>
+          <h3>Mentorship</h3>
+          <p>Every new member is paired with an upperclassman mentor: advice and resources for academics and recruiting, and usually one of your closest friends at Cornell.</p>
+        </div>
+        <div>
+          <h3>Life in GCC</h3>
+          <p>A semesterly banquet and retreat, alumni dinners and road trips. We push each other professionally and personally, and the friendships last well past graduation.</p>
+        </div>
+      </div>
+      <figure class="card">
+        <img src="assets/img/photo-13.jpg" alt="Two members, one laughing, arms around each other's shoulders in the Sage Hall atrium" style="object-position:50% 40%;transform:scale(1.15);transform-origin:50% 40%" draggable="false">
+        <figcaption data-placeholder="caption">Big–little reveal, Sage Hall</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- the motif resolves once: a network glyph as divider -->
+  <div class="divider" aria-hidden="true">
+    <svg viewBox="0 0 240 220" focusable="false">
+      <path class="arc" d="M120 82 Q 112 56 120 38"/>
+      <path class="arc" d="M143 94 Q 160 72 176 66"/>
+      <path class="arc" d="M148 116 Q 170 128 188 128"/>
+      <path class="arc" d="M134 136 Q 140 162 150 176"/>
+      <path class="arc" d="M104 134 Q 96 160 88 172"/>
+      <path class="arc" d="M92 114 Q 70 126 48 123"/>
+      <path class="arc" d="M100 92 Q 82 76 68 62"/>
+      <g class="js-drift"><use class="node" href="#n1" x="92" y="82" width="56" height="56"/></g>
+      <g class="js-drift"><use class="node" href="#n2" x="111" y="19" width="18" height="18"/></g>
+      <g class="js-drift"><use class="node" href="#n3" x="179" y="53" width="12" height="12"/></g>
+      <g class="js-drift"><use class="node" href="#n1" x="189" y="119" width="22" height="22"/></g>
+      <g class="js-drift"><use class="node" href="#n2" x="146" y="178" width="14" height="14"/></g>
+      <g class="js-drift"><use class="node" href="#n3" x="71" y="172" width="20" height="20"/></g>
+      <g class="js-drift"><use class="node" href="#n1" x="33" y="118" width="12" height="12"/></g>
+      <g class="js-drift"><use class="node" href="#n2" x="51" y="47" width="16" height="16"/></g>
+    </svg>
+  </div>
+
+  <!-- ===== 5. global network (no map on About: paragraph + two city lists) ===== -->
+  <section class="section" aria-labelledby="network-title">
+    <div class="section__head">
+      <h2 class="section__title" id="network-title">A global network of alumni</h2>
+      <a class="section__link" href="members.html#alumni">Alumni</a>
+    </div>
+    <div class="row2 globe">
+      <div>
+        <p>GCC Cornell began in 2009 as the Cornell chapter of a global student network. Today it is an independent organization — and what remains is the network itself: more than 100 alumni in 25+ cities, from New York and San Francisco to London, Hong Kong and Singapore, who still show up for dinners, coffee chats and each other.</p>
+        <p>Ithaca is where it starts.</p>
+      </div>
+      <div class="cities">
+        <div>
+          <h3>Where our members come from</h3>
+          <ul>
+            <li>New York City</li><li>San Francisco</li><li>Los Angeles</li><li>Vancouver</li><li>Chicago</li>
+            <li>Atlanta</li><li>Boston</li><li>Seattle</li><li>Dallas</li><li>Washington, DC</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 6. what we stand for: each pillar through a real person (people.json) ===== -->
+  <section class="section" aria-labelledby="values-title">
+    <div class="section__head">
+      <h2 class="section__title" id="values-title">What we stand for</h2>
+      <a class="section__link" href="recruitment.html">Recruitment</a>
+    </div>
+    <div class="values" style="--cols:5">
+      <!-- build:values -->
+      <div class="value value--pair">
+        <h3 class="value__name">Professional Excellence</h3>
+        <div class="value__people">
+          <figure class="person">
+            <div class="person__photo"><img src="assets/people/sarah-li.jpg" alt="Sarah Li" style="--oy:33%" loading="lazy" draggable="false"></div>
+            <figcaption><span class="person__name">Sarah Li</span><span class="person__role">Director of Professional Development</span></figcaption>
+          </figure>
+          <figure class="person">
+            <div class="person__photo"><img src="assets/people/kaitlyn-xia.jpg" alt="Kaitlyn Xia" style="--oy:46%" loading="lazy" draggable="false"></div>
+            <figcaption><span class="person__name">Kaitlyn Xia</span><span class="person__role">Director of Professional Development</span></figcaption>
+          </figure>
+        </div>
+        <p class="value__fact">Sarah and Kaitlyn run the 10-week new member education series each semester — workshops, speaker panels and mock interviews, hosted with other senior members.</p>
+      </div>
+      <div class="value">
+        <h3 class="value__name">Inclusivity</h3>
+        <div class="value__people">
+          <figure class="person">
+            <div class="person__photo"><img src="assets/people/mac-capella.jpg" alt="Mac Capella" style="--oy:20%" loading="lazy" draggable="false"></div>
+            <figcaption><span class="person__name">Mac Capella</span><span class="person__role">D&amp;I Chair</span></figcaption>
+          </figure>
+        </div>
+        <p class="value__fact">Mac chairs Diversity &amp; Inclusion. Recruitment is open to any Cornell student interested in business — any background, any major, any year.</p>
+      </div>
+      <div class="value value--pair">
+        <h3 class="value__name">Mentorship</h3>
+        <div class="value__people">
+          <figure class="person">
+            <div class="person__photo"><img src="assets/people/alina-fu.jpg" alt="Alina Fu" style="--oy:36%" loading="lazy" draggable="false"></div>
+            <figcaption><span class="person__name">Alina Fu</span><span class="person__role">VP of Internal Affairs (Social Chair)</span></figcaption>
+          </figure>
+          <figure class="person">
+            <div class="person__photo"><img src="assets/people/jonathan-li.jpg" alt="Jonathan Li" style="--oy:37%" loading="lazy" draggable="false"></div>
+            <figcaption><span class="person__name">Jonathan Li</span><span class="person__role">VP of Internal Affairs (Social Chair)</span></figcaption>
+          </figure>
+        </div>
+        <p class="value__fact">Alina and Jonathan run internal affairs — the buddy pairs, the banquets and the retreat. Every new member is paired with an upperclassman buddy from week one.</p>
+      </div>
+<!-- /build:values -->
+    </div>
+  </section>
+
+  <!-- ===== 7. questions ===== -->
+  <section class="section" aria-labelledby="faq-title">
+    <div class="section__head">
+      <h2 class="section__title" id="faq-title">Questions</h2>
+      <a class="section__link" href="mailto:cornellgccinfo@gmail.com">Ask us</a>
+    </div>
+    <dl class="faq">
+      <div class="row2 faq__row">
+        <dt class="faq__q">Is GCC a part of Global China Connection?</dt>
+        <dd class="faq__a" data-placeholder="answer">GCC Cornell is an independent organization. It began in 2009 as the Cornell chapter of a global student network and has since become its own community — different in who we accept and how we operate.</dd>
+      </div>
+      <div class="row2 faq__row">
+        <dt class="faq__q">Who should join GCC?</dt>
+        <dd class="faq__a" data-placeholder="answer">Any Cornell student interested in business and professional development — any background, any major.</dd>
+      </div>
+      <div class="row2 faq__row">
+        <dt class="faq__q">What year should I be to apply?</dt>
+        <dd class="faq__a" data-placeholder="answer">Any year. We recruit each semester, and recent new member classes have been mostly first-years and sophomores.</dd>
+      </div>
+      <div class="row2 faq__row">
+        <dt class="faq__q">What is the recruitment process like, and how should I prepare?</dt>
+        <dd class="faq__a" data-placeholder="answer">Coffee chats and information sessions, a short written application, then two rounds of interviews. Come curious about the community; no prior finance or consulting experience is expected.</dd>
+      </div>
+      <div class="row2 faq__row">
+        <dt class="faq__q">What would I learn as a new member?</dt>
+        <dd class="faq__a" data-placeholder="answer">Technical and qualitative skills and business knowledge through the 10-week series — workshops, speaker panels and mock interviews — plus guidance tailored to your own career interests.</dd>
+      </div>
+      <div class="row2 faq__row">
+        <dt class="faq__q">What makes GCC’s new member education different from other business organizations on campus?</dt>
+        <dd class="faq__a" data-placeholder="answer">It is designed and led by experienced seniors, tailored to each member’s interests, and paired with a mentor from day one — inside a community that treats you as family, not a cohort.</dd>
+      </div>
+      <div class="row2 faq__row">
+        <dt class="faq__q">If I didn’t get accepted in a past semester, should I still apply?</dt>
+        <dd class="faq__a" data-placeholder="answer">Yes — please do. Each semester’s recruitment is a fresh process, and we welcome returning applicants.</dd>
+      </div>
+    </dl>
+  </section>
+
+  <!-- ===== 8. apply strip ===== -->
+  <section class="section" aria-labelledby="apply-title">
+    <div class="section__head">
+      <h2 class="section__title" id="apply-title">Join GCC</h2>
+      <a class="section__link" href="recruitment.html">Recruitment timeline</a>
+    </div>
+    <div class="recruit">
+      <p>Recruitment runs every semester. If you are a Cornell student interested in business and professional development — any background, any major — we would like to meet you.</p>
+      <div class="actions">
+        <a class="pill pill--primary" href="https://forms.gle/EF45zMF4ZgkGfidT7" rel="noopener">Apply</a>
+        <a class="pill" href="members.html">Meet the members</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ===== 9. footer (partials/footer.html) ===== -->
+<footer class="footer" id="connect">
+  <div class="footer__cols">
+    <div>
+      <h4>Mailing list</h4>
+      <p>Recruitment dates, events and news, straight to your inbox.</p>
+      <form class="footer__form" action="mailto:cornellgccinfo@gmail.com" method="post" enctype="text/plain" data-placeholder="mailing-list-endpoint">
+        <label class="sr-only" for="footer-email">Email address</label>
+        <input id="footer-email" type="email" name="email" placeholder="Email address" autocomplete="email" required>
+        <button class="pill pill--cream" type="submit">Subscribe</button>
+      </form>
+    </div>
+    <div>
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="mailto:cornellgccinfo@gmail.com">Get in touch</a></li>
+        <li><a href="mailto:cornellgccinfo@gmail.com">cornellgccinfo@gmail.com</a></li>
+        <li>Ithaca, New York</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Social</h4>
+      <ul>
+        <li><a href="https://www.instagram.com/cornellgcc/" rel="noopener">Instagram @cornellgcc</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Cornell</h4>
+      <ul>
+        <li>Registered Student Organization of Cornell University</li>
+        <li><a href="https://hr.cornell.edu/about/workplace-rights/equal-education-and-employment" rel="noopener">Equal Education and Employment</a></li>
+        <li class="footer__note">© 2026 GCC Cornell</li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer__wordmark" aria-hidden="true">GCC</div>
+</footer>
+
+<script src="site.js?v=1787666714" defer></script>
+</body>
+</html>
