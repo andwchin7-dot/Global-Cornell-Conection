@@ -76,6 +76,7 @@
     /* alumni network: one full-width photo card closes the section, under the quote (reuses .card for radius/caption) */
     .alumni-photo { margin-top: 56px; }
     .alumni-photo .card { width: 100%; aspect-ratio: 1100 / 540; }
+    .alumni-photo .card img { object-position: 50% 94%; }   /* portrait source in a wide card: centre the group, not the sky */
 
     /* section rhythm on this page: 104px between sections, nothing trailing inside them */
     .firms { margin-top: 56px; }
@@ -93,9 +94,10 @@
       .directory { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
     @media (max-width: 800px) {
-      .people--board { grid-template-columns: 1fr; gap: 24px; }
+      .people.people--board { grid-template-columns: 1fr; gap: 24px; }
       .people--board > li { grid-template-columns: 96px minmax(0, 1fr); column-gap: 16px; }
       .people--board .hs { width: 96px; }
+      .board__term { margin-top: 12px; }
       .hero__nodes { display: none; }
       .hero__nodes--m { display: block; }
       .people, .people--6 { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 36px var(--gap); }
@@ -106,6 +108,7 @@
       .photos .card { aspect-ratio: 4 / 3; }
       .alumni-photo { margin-top: 40px; }
       .alumni-photo .card { aspect-ratio: 4 / 3; }
+      .alumni-photo .card img { object-position: 50% 100%; }   /* taller phone card: bottom-anchor keeps the group centred */
       .firms { margin-top: 40px; }
       .people--6 { margin-top: 48px; }
     }
@@ -174,7 +177,7 @@
     </figure>
     <div class="alumni-photo">
       <figure class="card">
-        <img src="assets/img/senior/dsc04653.jpg" alt="Six graduating members walking together across the lawn, redbuds in bloom and a stone hall behind them" style="object-position:50% 76%" draggable="false">
+        <img src="assets/img/senior/dsc04653.jpg" alt="Six graduating members walking together across the lawn, redbuds in bloom and a stone hall behind them" draggable="false">
         <figcaption data-placeholder="caption">Lifelong friendships</figcaption>
       </figure>
     </div>
