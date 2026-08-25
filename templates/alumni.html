@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Alumni directory | GCC Cornell</title>
+  <meta name="description" content="The members-only alumni directory of Global Cornell Connection.">
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="assets/src/favicon.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500&family=Instrument+Serif&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* alumni.html — the members-only directory. The list ships AES-encrypted (build.py); this page derives the
+       key from the shared password with WebCrypto and decrypts in the browser. No password, no names. */
+    .nav__cols a[aria-current="page"] { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; }
+
+    .gatewrap { min-height: 52vh; display: grid; align-content: start; }
+    .gate { max-width: 460px; margin-top: 48px; }
+    .gate p { color: var(--ink-60); max-width: 420px; }
+    .gate form { display: flex; gap: 8px; margin-top: 24px; border: 1px solid var(--ink); border-radius: 999px; padding: 4px 4px 4px 18px; }
+    .gate input { flex: 1; min-width: 0; background: transparent; border: 0; color: var(--ink); font: 400 16px/1.2 var(--sans); outline: none; }
+    .gate__err { margin-top: 14px; font-size: 15px; color: var(--carnelian); display: none; }
+    .gate.is-wrong .gate__err { display: block; }
+
+    /* the unlocked directory (same treatment as the roster pages) */
+    .directory { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px 40px; margin-top: 48px; }
+    .directory > li { min-width: 0; }
+    .directory__name { display: block; font: 400 16px/1.3 var(--sans); }
+    .directory__role { display: block; margin-top: 1px; font: 400 14px/1.35 var(--sans); color: var(--ink-60); }
+    .vault__note { margin-top: 40px; font-size: 14px; color: var(--ink-60); max-width: 620px; }
+    @media (max-width: 1100px) { .directory { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 520px) { .directory { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+{{NODES}}
+
+{{NAV}}
+
+<main id="main">
+
+  <section class="section" aria-labelledby="dir-title">
+    <div class="section__head">
+      <h2 class="section__title" id="dir-title">Alumni directory</h2>
+      <a class="section__link" href="members.html">Members &amp; Alumni</a>
+    </div>
+
+    <div class="gatewrap">
+      <div class="gate" data-gate>
+        <p class="label muted" style="margin-top: 40px;">Members area</p>
+        <p style="margin-top: 16px;">The full alumni directory is for members of Global Cornell Connection. Enter the members password — ask any board member if you need it.</p>
+        <form>
+          <label class="sr-only" for="gate-pw">Members password</label>
+          <input id="gate-pw" type="password" autocomplete="current-password" placeholder="Members password" required>
+          <button class="pill pill--primary" type="submit">Unlock</button>
+        </form>
+        <p class="gate__err" role="alert">That password didn&rsquo;t unlock the directory. Check with a board member and try again.</p>
+      </div>
+
+      <div class="vault" data-vault hidden>
+        <p class="section__intro">Recent alumni and where they went next — reach out, alumni expect it.</p>
+        <div data-vault-list></div>
+        <p class="vault__note">Please keep this directory within the GCC community. To update your own listing, email <a href="mailto:cornellgccinfo@gmail.com">cornellgccinfo@gmail.com</a>.</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+{{FOOTER}}
+
+<script type="application/json" id="dir-payload">{{PAYLOAD}}</script>
+<script>
+(function () {
+  "use strict";
+  var payload = JSON.parse(document.getElementById("dir-payload").textContent);
+  var gate = document.querySelector("[data-gate]");
+  var vault = document.querySelector("[data-vault]");
+  var list = document.querySelector("[data-vault-list]");
+  var form = gate.querySelector("form");
+  var input = document.getElementById("gate-pw");
+
+  function b64(s) { var b = atob(s), a = new Uint8Array(b.length); for (var i = 0; i < b.length; i++) a[i] = b.charCodeAt(i); return a; }
+
+  async function tryUnlock(pw) {
+    var enc = new TextEncoder();
+    var base = await crypto.subtle.importKey("raw", enc.encode(pw), "PBKDF2", false, ["deriveKey"]);
+    var key = await crypto.subtle.deriveKey(
+      { name: "PBKDF2", salt: b64(payload.s), iterations: 310000, hash: "SHA-256" },
+      base, { name: "AES-GCM", length: 256 }, false, ["decrypt"]);
+    var plain = await crypto.subtle.decrypt({ name: "AES-GCM", iv: b64(payload.i) }, key, b64(payload.c));
+    return new TextDecoder().decode(plain);
+  }
+
+  async function unlock(pw, remember) {
+    var html = await tryUnlock(pw);               /* throws on a wrong password */
+    list.innerHTML = html;
+    gate.hidden = true;
+    vault.hidden = false;
+    if (remember) try { sessionStorage.setItem("gcc-dir-pw", pw); } catch (e) {}
+  }
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    gate.classList.remove("is-wrong");
+    unlock(input.value, true).catch(function () { gate.classList.add("is-wrong"); input.select(); });
+  });
+
+  /* already unlocked this browser session → open straight away */
+  var saved = null;
+  try { saved = sessionStorage.getItem("gcc-dir-pw"); } catch (e) {}
+  if (saved) unlock(saved, false).catch(function () {});
+})();
+</script>
+</body>
+</html>

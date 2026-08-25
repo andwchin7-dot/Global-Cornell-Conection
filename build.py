@@ -136,6 +136,29 @@ out = (tpl.replace("{{NODES}}", partial("nodes.html")).replace("{{NAV}}", nav_fo
           .replace("{{ALUMNI_COUNT}}", str(len(alumni))).replace("{{OMITTED}}", str(omitted)))
 (SITE / "members.html").write_text(out, encoding="utf-8")
 
+# ---------- alumni.html: the members-only directory, AES-encrypted at build time ----------
+# The password lives in content/alumni-password.txt (gitignored — never pushed). The published page holds
+# only ciphertext; the browser decrypts with the shared password. Change the password -> rebuild -> push.
+pw_file = CONTENT / "alumni-password.txt"
+if not pw_file.exists():
+    pw_file.write_text("GCCfamily2026\n", encoding="utf-8")
+_password = pw_file.read_text(encoding="utf-8").strip()
+try:
+    from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+    import hashlib as _hashlib, os as _os, base64 as _b64
+    _dir_html = '<ul class="directory" aria-label="GCC alumni and where they work">' + "\n".join(dir_li(p) for p in alumni) + "</ul>"
+    _salt = _os.urandom(16); _iv = _os.urandom(12)
+    _key = _hashlib.pbkdf2_hmac("sha256", _password.encode(), _salt, 310000, dklen=32)
+    _ct = AESGCM(_key).encrypt(_iv, _dir_html.encode("utf-8"), None)
+    _payload = json.dumps({"s": _b64.b64encode(_salt).decode(), "i": _b64.b64encode(_iv).decode(), "c": _b64.b64encode(_ct).decode()})
+    _atpl = (SITE / "templates/alumni.html").read_text(encoding="utf-8")
+    _aout = (_atpl.replace("{{NODES}}", partial("nodes.html")).replace("{{NAV}}", nav_for("alumni.html"))
+                  .replace("{{FOOTER}}", partial("footer.html")).replace("{{PAYLOAD}}", _payload))
+    (SITE / "alumni.html").write_text(_aout, encoding="utf-8")
+    print(f"alumni.html: encrypted directory of {len(alumni)} alumni (password in content/alumni-password.txt)")
+except ImportError:
+    print("alumni.html: SKIPPED - run: python3 -m pip install --user cryptography")
+
 # ---------- marker replacement helper ----------
 def replace_block(path, marker, inner):
     t = path.read_text(encoding="utf-8")
@@ -190,7 +213,8 @@ for page in ["index.html", "about.html", "recruitment.html"]:
 
 # ---------- cache-busting: stamp ?v=<styles mtime> on styles/site links in every page ----------
 asset_version = int((SITE / "styles.css").stat().st_mtime)
-for page in ["index.html", "about.html", "members.html", "recruitment.html"]:
+for page in ["index.html", "about.html", "members.html", "recruitment.html", "alumni.html"]:
+    if not (SITE / page).exists(): continue
     path = SITE / page; t2 = path.read_text(encoding="utf-8")
     t2 = re.sub(r'(href="styles\.css)(\?v=\d+)?(")', r"\1?v=%d\3" % asset_version, t2)
     t2 = re.sub(r'(src="(?:site|globe)\.js)(\?v=\d+)?(")', r"\1?v=%d\3" % asset_version, t2)

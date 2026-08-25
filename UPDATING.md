@@ -46,3 +46,10 @@ It rewrites the generated parts of the pages and prints a short report. Nothing 
 
 ## Publish
 The folder is a static site: drag `gcc-website/` onto Netlify Drop, or push it to GitHub Pages / Vercel. Point gcccornell.com at the host when you're ready to replace the Wix site.
+
+## The members-only alumni directory → `alumni.html`
+- The full alumni list lives behind a shared password at `alumni.html`. The page is encrypted at build time —
+  the published site contains no readable names without the password.
+- The password is in `content/alumni-password.txt` (this file is gitignored and must never be committed).
+  To change it: edit the file, run `python3 build.py`, push. Share the new password with members.
+- Requires the `cryptography` package once per machine: `python3 -m pip install --user cryptography`.
