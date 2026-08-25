@@ -1,6 +1,55 @@
 {
  "groups": [
   {
+   "semester": "Spring 2026",
+   "people": [
+    {
+     "name": "Chloe Loo",
+     "major": "AEM '29"
+    },
+    {
+     "name": "Joel Lee",
+     "major": "Economics '29"
+    },
+    {
+     "name": "Alina Fu",
+     "major": "Landscape Architecture '29"
+    },
+    {
+     "name": "Anthony Wu",
+     "major": "Hotel Administration '29"
+    },
+    {
+     "name": "Dennis Lu",
+     "major": "Hotel Administration '29"
+    },
+    {
+     "name": "Jonah Ringdahl",
+     "major": "Economics & History '29"
+    },
+    {
+     "name": "Raymond Lin",
+     "major": "Hotel Administration '29"
+    },
+    {
+     "name": "Rey Lee",
+     "major": "Urban & Regional Studies '29"
+    },
+    {
+     "name": "Sophia Jian",
+     "major": "AEM '29"
+    },
+    {
+     "name": "Mac Capella",
+     "major": "ILR '29"
+    },
+    {
+     "name": "Melinda Wu",
+     "major": "AEM '29"
+    }
+   ]
+  },
+  {
    "semester": "Fall 2025",
    "people": [
     {

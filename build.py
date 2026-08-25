@@ -89,9 +89,11 @@ def board_li(p):
     second = esc(p.get("role", ""))
     detail = " · ".join(x for x in [esc(p.get("major", "")), esc(p.get("year", ""))] if x)
     mail = f'<a class="person__mail" href="mailto:{esc(p["email"])}">{esc(p["email"])}</a>' if show_emails and p.get("email") else ""
+    extra = " \u00b7 ".join(x for x in [esc(p.get("hometown", "")), esc(p.get("interest", ""))] if x)
     return ("<li>" + headshot(p) + f'<span class="person__name">{esc(p["name"])}</span>'
             + f'<span class="person__role">{second}</span>'
-            + (f'<span class="person__detail">{detail}</span>' if detail else "") + mail + "</li>")
+            + (f'<span class="person__detail">{detail}</span>' if detail else "")
+            + (f'<span class="person__detail">{extra}</span>' if extra else "") + mail + "</li>")
 
 def roster_li(p):
     out = "<li>" + headshot(p) + '<span class="roster__text">' + f'<span class="roster__name">{esc(p["name"])}</span>'

@@ -1,36 +1,185 @@
 {
-  "_how_to_edit": "This is the executive board shown on members.html (and the first four names on about.html). Edit names/roles/majors here, then run `python3 build.py` from the gcc-website folder. Photo: drop a JPEG at assets/people/<first-last>.jpg (lowercase, hyphens) and it is picked up automatically; or set \"photo\" to any path. Leave \"email\" empty to hide it. Phone numbers are never published.",
-  "term": "Fall 2026 / Spring 2027",
-  "show_emails": true,
-  "groups": [
-    {"name": "Leadership", "people": [
-      {"name": "Andrew Chinn", "role": "President", "year": "'28", "major": "Economics & Government", "email": "ahc264@cornell.edu"},
-      {"name": "Pa Tantiponganant", "role": "Senior Vice President", "year": "'28", "major": "Economics & Information Science", "email": "st2237@cornell.edu"}
-    ]},
-    {"name": "Recruitment Committee", "people": [
-      {"name": "Aiden Jung", "role": "VP of Recruitment", "year": "'29", "major": "Applied Economics & Management", "email": "ahj36@cornell.edu"},
-      {"name": "Ethan Chiang", "role": "Recruitment Chair", "year": "'29", "major": "Applied Economics & Management", "email": "erc226@cornell.edu"},
-      {"name": "Mac Capella", "role": "D&I Chair", "year": "'29", "major": "Industrial & Labor Relations", "email": "mac635@cornell.edu"}
-    ]},
-    {"name": "Education", "people": [
-      {"name": "Sarah Li", "role": "Director of Professional Development", "year": "'28", "major": "Environment & Sustainability & Information Science", "email": "yl3632@cornell.edu"},
-      {"name": "Kaitlyn Xia", "role": "Director of Professional Development", "year": "'28", "major": "Government & China and Asia-Pacific Studies", "email": "kx89@cornell.edu"}
-    ]},
-    {"name": "Marketing Committee", "people": [
-      {"name": "Sophia Jian", "role": "VP of Marketing", "year": "'29", "major": "Applied Economics & Management", "email": "sj874@cornell.edu"},
-      {"name": "Dennis Lu", "role": "Creative Director", "year": "'29", "major": "Hotel Administration & Management", "email": "dl2323@cornell.edu"}
-    ]},
-    {"name": "Operations & Internal", "people": [
-      {"name": "Kyle Loh", "role": "VP of Operations", "year": "'29", "major": "Hotel Administration & Management", "email": "kl989@cornell.edu"},
-      {"name": "Alina Fu", "role": "VP of Internal Affairs (Social Chair)", "year": "'29", "major": "Landscape Architecture", "email": "lf464@cornell.edu"},
-      {"name": "Jonathan Li", "role": "VP of Internal Affairs (Social Chair)", "year": "'28", "major": "Computer Science & Economics", "email": "jyl86@cornell.edu"}
-    ]},
-    {"name": "External & Alumni", "people": [
-      {"name": "Melinda Wu", "role": "VP of External Affairs", "year": "'29", "major": "Applied Economics & Management", "email": "mzw8@cornell.edu"},
-      {"name": "Anthony Wu", "role": "VP of Alumni Affairs", "year": "'29", "major": "Hotel Administration & Management", "email": "arw277@cornell.edu"}
-    ]},
-    {"name": "Finance", "people": [
-      {"name": "Raphael Popescu", "role": "VP of Finance", "year": "'28", "major": "Operations Research & Information Engineering", "email": "rsp228@cornell.edu"}
-    ]}
-  ]
+ "_how_to_edit": "This is the executive board shown on members.html (and the first four names on about.html). Edit names/roles/majors here, then run `python3 build.py` from the gcc-website folder. Photo: drop a JPEG at assets/people/<first-last>.jpg (lowercase, hyphens) and it is picked up automatically; or set \"photo\" to any path. Leave \"email\" empty to hide it. Phone numbers are never published.",
+ "term": "Fall 2026 / Spring 2027",
+ "show_emails": true,
+ "groups": [
+  {
+   "name": "Leadership",
+   "people": [
+    {
+     "name": "Andrew Chinn",
+     "role": "President",
+     "year": "'28",
+     "major": "Economics & Government",
+     "email": "ahc264@cornell.edu",
+     "hometown": "Jakarta, ID",
+     "interest": "Banking"
+    },
+    {
+     "name": "Pa Tantiponganant",
+     "role": "Senior Vice President",
+     "year": "'28",
+     "major": "Economics & Information Science",
+     "email": "st2237@cornell.edu",
+     "hometown": "Bangkok, TH",
+     "interest": "Finance"
+    }
+   ]
+  },
+  {
+   "name": "Recruitment Committee",
+   "people": [
+    {
+     "name": "Aiden Jung",
+     "role": "VP of Recruitment",
+     "year": "'29",
+     "major": "Applied Economics & Management",
+     "email": "ahj36@cornell.edu",
+     "hometown": "Seattle, WA",
+     "interest": "Banking"
+    },
+    {
+     "name": "Ethan Chiang",
+     "role": "Recruitment Chair",
+     "year": "'29",
+     "major": "Applied Economics & Management",
+     "email": "erc226@cornell.edu",
+     "hometown": "Los Gatos, CA",
+     "interest": "Banking"
+    },
+    {
+     "name": "Mac Capella",
+     "role": "D&I Chair",
+     "year": "'29",
+     "major": "Industrial & Labor Relations",
+     "email": "mac635@cornell.edu",
+     "hometown": "New York, NY",
+     "interest": "Private Credit"
+    }
+   ]
+  },
+  {
+   "name": "Education",
+   "people": [
+    {
+     "name": "Sarah Li",
+     "role": "Director of Professional Development",
+     "year": "'28",
+     "major": "Environment & Sustainability & Information Science",
+     "email": "yl3632@cornell.edu",
+     "hometown": "Shanghai, CN",
+     "interest": "Equity Research"
+    },
+    {
+     "name": "Kaitlyn Xia",
+     "role": "Director of Professional Development",
+     "year": "'28",
+     "major": "Government & China and Asia-Pacific Studies",
+     "email": "kx89@cornell.edu",
+     "hometown": "Barrington, IL",
+     "interest": "Banking"
+    },
+    {
+     "name": "Vivian Lei",
+     "role": "Director of Professional Development",
+     "year": "'27",
+     "major": "Industrial & Labor Relations",
+     "hometown": "Brooklyn, NY",
+     "interest": "Banking"
+    }
+   ]
+  },
+  {
+   "name": "Marketing Committee",
+   "people": [
+    {
+     "name": "Sophia Jian",
+     "role": "VP of Marketing",
+     "year": "'29",
+     "major": "Applied Economics & Management",
+     "email": "sj874@cornell.edu",
+     "hometown": "New York, NY",
+     "interest": "Venture Capital"
+    },
+    {
+     "name": "Dennis Lu",
+     "role": "Creative Director",
+     "year": "'29",
+     "major": "Hotel Administration & Management",
+     "email": "dl2323@cornell.edu",
+     "hometown": "Toronto, CA",
+     "interest": "Consulting"
+    }
+   ]
+  },
+  {
+   "name": "Operations & Internal",
+   "people": [
+    {
+     "name": "Kyle Loh",
+     "role": "VP of Operations",
+     "year": "'29",
+     "major": "Hotel Administration & Management",
+     "email": "kl989@cornell.edu",
+     "hometown": "Hong Kong, HK",
+     "interest": "Real Estate"
+    },
+    {
+     "name": "Alina Fu",
+     "role": "VP of Internal Affairs (Social Chair)",
+     "year": "'29",
+     "major": "Landscape Architecture",
+     "email": "lf464@cornell.edu",
+     "hometown": "Beijing, CN",
+     "interest": "Banking"
+    },
+    {
+     "name": "Jonathan Li",
+     "role": "VP of Internal Affairs (Social Chair)",
+     "year": "'28",
+     "major": "Computer Science & Economics",
+     "email": "jyl86@cornell.edu",
+     "hometown": "Clarksville, MD",
+     "interest": "Consulting"
+    }
+   ]
+  },
+  {
+   "name": "External & Alumni",
+   "people": [
+    {
+     "name": "Melinda Wu",
+     "role": "VP of External Affairs",
+     "year": "'29",
+     "major": "Applied Economics & Management",
+     "email": "mzw8@cornell.edu",
+     "hometown": "Cherry Hill, NJ",
+     "interest": "Banking"
+    },
+    {
+     "name": "Anthony Wu",
+     "role": "VP of Alumni Affairs",
+     "year": "'29",
+     "major": "Hotel Administration & Management",
+     "email": "arw277@cornell.edu",
+     "hometown": "Bellevue, WA",
+     "interest": "Banking"
+    }
+   ]
+  },
+  {
+   "name": "Finance",
+   "people": [
+    {
+     "name": "Raphael Popescu",
+     "role": "VP of Finance",
+     "year": "'28",
+     "major": "Operations Research & Information Engineering",
+     "email": "rsp228@cornell.edu",
+     "hometown": "Long Island, NY",
+     "interest": "Wealth Management"
+    }
+   ]
+  }
+ ]
 }
