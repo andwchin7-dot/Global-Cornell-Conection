@@ -38,6 +38,17 @@
     .people--6 .person__name { font-size: 16px; }
     .people--6 .person__role { min-height: 2.8em; }
 
+    /* executive board (v2.2): compact 120px headshots in text-led rows — small uniform squares standardize
+       mixed source photos; the description carries the weight. Two people per row. */
+    .people--board { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px 48px; margin-top: 40px; }
+    .people--board > li { display: grid; grid-template-columns: 120px minmax(0, 1fr); grid-template-rows: auto auto auto 1fr; column-gap: 20px; align-items: start; min-width: 0; }
+    .people--board .hs { width: 120px; grid-column: 1; grid-row: 1 / -1; }
+    .people--board .person__name, .people--board .person__role, .people--board .person__detail, .people--board .person__mail { grid-column: 2; }
+    .people--board .person__name { margin-top: 0; font: 500 20px/1.25 var(--sans); white-space: normal; }
+    .people--board .person__role { margin-top: 4px; font: 400 15px/1.4 var(--sans); color: var(--ink); }
+    .people--board .person__detail { margin-top: 6px; }
+    .people--board .person__mail { margin-top: 4px; }
+
     /* members roster: text-first, grouped by the semester they joined; 64px thumbs beside the name */
     .roster { margin-top: 8px; }
     .roster__note { margin-top: 20px; max-width: 620px; color: var(--ink-60); }
@@ -82,6 +93,9 @@
       .directory { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
     @media (max-width: 800px) {
+      .people--board { grid-template-columns: 1fr; gap: 24px; }
+      .people--board > li { grid-template-columns: 96px minmax(0, 1fr); column-gap: 16px; }
+      .people--board .hs { width: 96px; }
       .hero__nodes { display: none; }
       .hero__nodes--m { display: block; }
       .people, .people--6 { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 36px var(--gap); }
@@ -194,7 +208,7 @@
       <a class="section__link" href="mailto:cornellgccinfo@gmail.com">Contact</a>
     </div>
     <p class="label board__term">Executive board · {{BOARD_TERM}}</p>
-    <ul class="people people--4" aria-label="Executive board, 2025–26" data-placeholder="roster">
+    <ul class="people people--board" aria-label="Executive board" data-placeholder="roster">
 {{BOARD}}
     </ul>
   </section>
