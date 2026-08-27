@@ -16,7 +16,7 @@
   <!-- loading screen gate: html.is-loading exists only when JS runs and motion is allowed — no-JS and
        reduced-motion visitors never see the curtain. Set before first paint. -->
   <script>try{if(!matchMedia("(prefers-reduced-motion: reduce)").matches)document.documentElement.classList.add("is-loading")}catch(e){}</script>
-  <link rel="stylesheet" href="styles.css?v=1787798904">
+  <link rel="stylesheet" href="styles.css?v=1787799131">
 </head>
 <body class="home--cinema">
 
@@ -25,6 +25,7 @@
 <!-- loading screen (Home): a paper curtain while the hero video buffers — serif counter, carnelian hairline,
      then the curtain lifts into the hero intro. site.js drives it; shown only under html.is-loading. -->
 <div class="loader" data-loader aria-hidden="true">
+  <img class="loader__mark" src="assets/src/gcc-mark.png" alt="">
   <span class="loader__brand">Global Cornell Connection</span>
   <span class="loader__n" data-loader-n>0</span>
   <span class="loader__bar" data-loader-bar></span>
@@ -346,6 +347,6 @@
   <div class="footer__wordmark" aria-hidden="true">GCC</div>
 </footer>
 
-<script src="site.js?v=1787798904" defer></script>
+<script src="site.js?v=1787799131" defer></script>
 </body>
 </html>

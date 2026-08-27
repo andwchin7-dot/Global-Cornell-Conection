@@ -516,3 +516,7 @@ svg .is-drifting { transform-box: fill-box; transform-origin: center; }
   .fchip:hover img { filter: grayscale(0) opacity(1); }
   .fchip--text:hover { color: var(--ink); }
 }
+
+/* ---------- v3.2 loading screen: the GCC monogram, centred ---------- */
+.loader__mark { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); height: 72px; width: auto; }
+@media (max-width: 800px) { .loader__mark { height: 56px; } }
