@@ -468,7 +468,7 @@ svg .is-drifting { transform-box: fill-box; transform-origin: center; }
 .tape { position: relative; overflow: hidden; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink); margin-top: 44px; padding: 18px 0;
   -webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
           mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent); }
-.tape__track { display: flex; width: max-content; animation: tapeScroll 80s linear infinite; }
+.tape__track { display: flex; width: max-content; animation: tapeScroll 40s linear infinite; will-change: transform; }   /* v3.1: twice the pace; eager images keep the loop width stable */
 @media (hover: hover) and (pointer: fine) { .tape:hover .tape__track { animation-play-state: paused; } }
 .tape__set { display: flex; align-items: center; flex: none; }
 .tape__set > span { font: 500 13px/1 var(--sans); text-transform: uppercase; letter-spacing: .08em; white-space: nowrap; }
