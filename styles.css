@@ -14,7 +14,7 @@
   --carnelian: #B31B1B;
   --navy: #0B2A5B;
   --mist: #DCE3E8;
-  --night: #0D1424;            /* footer ground */
+  --carnelian-deep: #8C1515;   /* v3.3: the footer ground — the box mark at architectural scale */
   --ink-60: rgba(19, 24, 36, .62);
   --serif: "Instrument Serif", Georgia, "Times New Roman", serif;
   --sans: "Instrument Sans", "Helvetica Neue", Arial, sans-serif;
@@ -202,7 +202,7 @@ svg .is-drifting { transform-box: fill-box; transform-origin: center; }
 .home--cinema .nav__brand, .home--cinema .nav__cols a { color: var(--ink); }   /* v1.6: ink over the bright daylight sky */
 .home--cinema .nav__cols a::before { border-color: var(--ink); }
 .home--cinema .nav .nav__cta { background: var(--carnelian); border-color: var(--carnelian); color: var(--cream); }
-.hero--cinema { position: sticky; top: 0; height: 100vh; height: 100svh; padding: 0 var(--m); display: grid; place-items: center; overflow: hidden; background: var(--navy); z-index: 0; }
+.hero--cinema { position: sticky; top: 0; height: 100vh; height: 100svh; padding: 0 var(--m); display: grid; place-items: center; overflow: hidden; background: var(--cream); z-index: 0; }
 .hero--cinema .hero__video, .hero--cinema .hero__poster { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .hero--cinema .hero__poster { display: none; }
 .hero--cinema .hero__scrim { position: absolute; inset: 0;
@@ -217,7 +217,7 @@ svg .is-drifting { transform-box: fill-box; transform-origin: center; }
 .home--cinema .sheet { position: relative; z-index: 2; background: var(--cream); border-radius: 32px 32px 0 0; margin-top: -9vh; padding-top: 8px; box-shadow: 0 -24px 60px rgba(13, 16, 24, .18); }
 .home--cinema .sheet > .section:first-child .section__head { border-top: 0; }   /* no hairline riding the sheet's leading edge — the serif title opens the sheet cleanly */
 .home--cinema footer { position: relative; z-index: 2; }
-.home--cinema .stats .stat__n { color: var(--navy); }
+.home--cinema .stats .stat__n { color: var(--carnelian); }
 @media (max-width: 800px) {
   .hero--cinema { min-height: 520px; }
   .hero--cinema .hero__text { padding: 120px 0 56px; }
@@ -349,13 +349,13 @@ svg .is-drifting { transform-box: fill-box; transform-origin: center; }
 .step__t { font-size: 18px; line-height: 1.45; }
 
 /* ---------- footer (ink ground, cream text, four columns, cropped wordmark) ---------- */
-.footer { position: relative; margin-top: var(--section); background: var(--night); color: var(--cream); padding: 80px var(--m) 0; overflow: hidden; }
+.footer { position: relative; margin-top: var(--section); background: var(--carnelian-deep); color: var(--cream); padding: 80px var(--m) 0; overflow: hidden; }
 .footer__cols { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1.2fr; gap: 40px; }
 .footer__cols h4 { font: 500 13px/1.2 var(--sans); text-transform: uppercase; letter-spacing: .04em; margin-bottom: 22px; }
 .footer__cols p, .footer__cols li { font-size: 18px; line-height: 1.45; }
 .footer__cols li + li { margin-top: 6px; }
 .footer__cols a { text-decoration: underline; text-decoration-color: transparent; text-decoration-thickness: 1px; text-underline-offset: 4px; transition: text-decoration-color 200ms var(--ease-out); }
-.footer__cols a:hover { text-decoration-color: var(--carnelian); }
+.footer__cols a:hover { text-decoration-color: #fff; }
 .footer__form { display: flex; align-items: center; gap: 8px; margin-top: 22px; max-width: 380px; border: 1px solid var(--cream); border-radius: 999px; padding: 4px 4px 4px 18px; }
 .footer__form input { flex: 1; min-width: 0; background: transparent; border: 0; color: var(--cream); font: 400 14px/1.2 var(--sans); outline: none; }
 .footer__form input::placeholder { color: var(--cream); opacity: .6; }
@@ -439,7 +439,7 @@ svg .is-drifting { transform-box: fill-box; transform-origin: center; }
 .loader__brand { position: absolute; top: 26px; left: var(--m); font: 500 18px/1.3 var(--sans); letter-spacing: -.01em; }
 .loader__n { position: absolute; left: var(--m); bottom: 44px; font: 400 clamp(96px, 14vw, 200px)/1 var(--serif); font-variant-numeric: lining-nums tabular-nums; }
 .loader__n::after { content: "%"; font-size: .35em; margin-left: .06em; }
-.loader__bar { position: absolute; left: 0; bottom: 0; height: 2px; width: 100%; background: var(--carnelian); transform-origin: 0 50%; transform: scaleX(0); transition: transform 300ms var(--ease-out); }
+.loader__bar { position: absolute; left: calc(50% - 90px); top: calc(50% + 84px); width: 180px; height: 2px; background: var(--carnelian); transform-origin: 0 50%; transform: scaleX(0); transition: transform 300ms var(--ease-out); }
 .is-lifting .loader { transform: translateY(-100%); }
 /* the hero intro holds while the curtain is up; removing .is-loading re-arms the heroRise animations */
 .is-loading .hero__title, .is-loading .hero__sub, .is-loading .hero__cta { animation: none; opacity: 0; }
@@ -485,7 +485,7 @@ svg .is-drifting { transform-box: fill-box; transform-origin: center; }
 .desks { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 56px 64px; margin-top: 56px; }
 .desk { border-top: 1px solid var(--ink); padding-top: 18px; }
 .desk__label { font: 500 13px/1.2 var(--sans); text-transform: uppercase; letter-spacing: .04em; }
-.desk__n { display: block; margin-top: 18px; font: 400 56px/1 var(--serif); font-variant-numeric: lining-nums tabular-nums; color: var(--navy); }
+.desk__n { display: block; margin-top: 18px; font: 400 56px/1 var(--serif); font-variant-numeric: lining-nums tabular-nums; color: var(--carnelian); }
 .desk__nl { display: block; margin-top: 6px; font-size: 14px; color: var(--ink-60); }
 .desk__firms { margin-top: 20px; }
 .desk__firms li { font-size: 17px; line-height: 1.6; }
@@ -521,4 +521,7 @@ svg .is-drifting { transform-box: fill-box; transform-origin: center; }
 .loader__mark--box { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
   display: grid; place-items: center; width: 108px; height: 108px; border-radius: 6px;
   background: var(--carnelian); color: #fff; font: 400 50px/1 var(--serif); letter-spacing: 0; }
-@media (max-width: 800px) { .loader__mark--box { width: 84px; height: 84px; font-size: 38px; border-radius: 5px; } }
+@media (max-width: 800px) {
+  .loader__mark--box { width: 84px; height: 84px; font-size: 38px; border-radius: 5px; }
+  .loader__bar { left: calc(50% - 70px); top: calc(50% + 68px); width: 140px; }
+}
