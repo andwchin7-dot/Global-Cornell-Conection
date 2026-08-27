@@ -517,6 +517,8 @@ svg .is-drifting { transform-box: fill-box; transform-origin: center; }
   .fchip--text:hover { color: var(--ink); }
 }
 
-/* ---------- v3.2 loading screen: the GCC monogram, centred ---------- */
-.loader__mark { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); height: 72px; width: auto; }
-@media (max-width: 800px) { .loader__mark { height: 56px; } }
+/* ---------- v3.2 loading screen: the GCC box mark, centred — white serif GCC on carnelian (client pick) ---------- */
+.loader__mark--box { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  display: grid; place-items: center; width: 108px; height: 108px; border-radius: 6px;
+  background: var(--carnelian); color: #fff; font: 400 50px/1 var(--serif); letter-spacing: 0; }
+@media (max-width: 800px) { .loader__mark--box { width: 84px; height: 84px; font-size: 38px; border-radius: 5px; } }
