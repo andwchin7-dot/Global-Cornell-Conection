@@ -193,19 +193,10 @@ def about_person(name):
             f'<span class="person__role">{esc(p.get("role",""))}</span></figcaption>\n          </figure>')
 who = "\n".join("      <li>\n" + about_person(n) + "\n      </li>" for n in about_data["who_runs_it"][:4])
 replace_block(SITE / "about.html", "who-runs-it", who)
-vals = []
-for v in about_data["values"]:
-    cls = "value value--pair" if len(v["people"]) > 1 else "value"
-    vals.append(f'      <div class="{cls}">\n        <h3 class="value__name">{esc(v["name"])}</h3>\n        <div class="value__people">\n'
-                + "\n".join(about_person(n) for n in v["people"]) + f'\n        </div>\n        <p class="value__fact">{esc(v["fact"])}</p>\n      </div>')
-replace_block(SITE / "about.html", "values", "\n".join(vals))
-_cols = sum(len(v["people"]) for v in about_data["values"])
-_ap = SITE / "about.html"; _t = _ap.read_text(encoding="utf-8")
-_t = re.sub(r'<div class="values"( style="--cols:\d+")?>', f'<div class="values" style="--cols:{_cols}">', _t, count=1)
-_ap.write_text(_t, encoding="utf-8")
+# (the "What we stand for" values section was removed at the client's request, 2026-08-26)
 
 # ---------- re-sync nav/footer into the static pages ----------
-for page in ["index.html", "about.html", "recruitment.html"]:
+for page in ["index.html", "about.html", "recruitment.html", "placements.html"]:
     path = SITE / page; t = path.read_text(encoding="utf-8")
     t = re.sub(r'<header\b[^>]*class="[^"]*\bnav\b[^"]*"[^>]*>.*?</header>', lambda m: nav_for(page), t, count=1, flags=re.S)
     t = re.sub(r'<footer\b.*?</footer>', lambda m: partial("footer.html"), t, count=1, flags=re.S)
@@ -213,7 +204,7 @@ for page in ["index.html", "about.html", "recruitment.html"]:
 
 # ---------- cache-busting: stamp ?v=<styles mtime> on styles/site links in every page ----------
 asset_version = int((SITE / "styles.css").stat().st_mtime)
-for page in ["index.html", "about.html", "members.html", "recruitment.html", "alumni.html"]:
+for page in ["index.html", "about.html", "members.html", "recruitment.html", "alumni.html", "placements.html"]:
     if not (SITE / page).exists(): continue
     path = SITE / page; t2 = path.read_text(encoding="utf-8")
     t2 = re.sub(r'(href="styles\.css)(\?v=\d+)?(")', r"\1?v=%d\3" % asset_version, t2)

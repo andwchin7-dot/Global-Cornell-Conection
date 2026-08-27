@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500&family=Instrument+Serif&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=1787762112">
+  <link rel="stylesheet" href="styles.css?v=1787794282">
   <style>
     /* about.html — page styles only; everything else comes from styles.css */
     .nav__cols a[aria-current="page"]::before { background: var(--ink); }
@@ -55,6 +55,9 @@
     .cities { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
     .cities h3 { font: 500 13px/1.2 var(--sans); text-transform: uppercase; letter-spacing: .04em; margin-bottom: 16px; }
     .cities li { color: var(--ink-60); font-size: 18px; line-height: 1.45; }
+    .cities li + li { margin-top: 6px; }
+    .cities ul { columns: 2; column-gap: 32px; }
+    .cities li { break-inside: avoid; }
     .cities li + li { margin-top: 6px; }
 
     /* what we stand for: each pillar is a real person or pair. One 4-column grid; the pillar groups are display:contents
@@ -117,6 +120,7 @@
       <li><a href="members.html">Members &amp; Alumni</a></li>
     </ul>
     <ul>
+      <li><a href="placements.html">Placements</a></li>
       <li><a href="recruitment.html">Recruitment</a></li>
       <li><a href="#connect">Connect</a></li>
     </ul>
@@ -257,63 +261,17 @@
         <div>
           <h3>Where our members come from</h3>
           <ul>
-            <li>New York City</li><li>San Francisco</li><li>Los Angeles</li><li>Vancouver</li><li>Chicago</li>
-            <li>Atlanta</li><li>Boston</li><li>Seattle</li><li>Dallas</li><li>Washington, DC</li>
+            <li>New York City</li><li>San Francisco</li><li>Los Angeles</li><li>Chicago</li><li>Boston</li>
+            <li>Seattle</li><li>Dallas</li><li>Atlanta</li><li>Washington, DC</li><li>Bangkok</li>
+            <li>Jakarta</li><li>Seoul</li><li>Hong Kong</li><li>Shanghai</li><li>Beijing</li>
+            <li>Taipei</li><li>Toronto</li><li>Vancouver</li>
           </ul>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ===== 6. what we stand for: each pillar through a real person (people.json) ===== -->
-  <section class="section" aria-labelledby="values-title">
-    <div class="section__head">
-      <h2 class="section__title" id="values-title">What we stand for</h2>
-      <a class="section__link" href="recruitment.html">Recruitment</a>
-    </div>
-    <div class="values" style="--cols:5">
-      <!-- build:values -->
-      <div class="value value--pair">
-        <h3 class="value__name">Professional Excellence</h3>
-        <div class="value__people">
-          <figure class="person">
-            <div class="person__photo"><img src="assets/people/sarah-li.jpg" alt="Sarah Li" style="--oy:34%" loading="lazy" draggable="false"></div>
-            <figcaption><span class="person__name">Sarah Li</span><span class="person__role">Director of Professional Development</span></figcaption>
-          </figure>
-          <figure class="person">
-            <div class="person__photo"><img src="assets/people/kaitlyn-xia.jpg" alt="Kaitlyn Xia" style="--oy:44%" loading="lazy" draggable="false"></div>
-            <figcaption><span class="person__name">Kaitlyn Xia</span><span class="person__role">Director of Professional Development</span></figcaption>
-          </figure>
-        </div>
-        <p class="value__fact">Sarah and Kaitlyn run the 10-week new member education series each semester — workshops, speaker panels and mock interviews, hosted with other senior members.</p>
-      </div>
-      <div class="value">
-        <h3 class="value__name">Inclusivity</h3>
-        <div class="value__people">
-          <figure class="person">
-            <div class="person__photo"><img src="assets/people/mac-capella.jpg" alt="Mac Capella" style="--oy:25%" loading="lazy" draggable="false"></div>
-            <figcaption><span class="person__name">Mac Capella</span><span class="person__role">D&amp;I Chair</span></figcaption>
-          </figure>
-        </div>
-        <p class="value__fact">Mac chairs Diversity &amp; Inclusion. Recruitment is open to any Cornell student interested in business — any background, any major, any year.</p>
-      </div>
-      <div class="value value--pair">
-        <h3 class="value__name">Mentorship</h3>
-        <div class="value__people">
-          <figure class="person">
-            <div class="person__photo"><img src="assets/people/alina-fu.jpg" alt="Alina Fu" style="--oy:28%" loading="lazy" draggable="false"></div>
-            <figcaption><span class="person__name">Alina Fu</span><span class="person__role">VP of Internal Affairs (Social Chair)</span></figcaption>
-          </figure>
-          <figure class="person">
-            <div class="person__photo"><img src="assets/people/jonathan-li.jpg" alt="Jonathan Li" style="--oy:35%" loading="lazy" draggable="false"></div>
-            <figcaption><span class="person__name">Jonathan Li</span><span class="person__role">VP of Internal Affairs (Social Chair)</span></figcaption>
-          </figure>
-        </div>
-        <p class="value__fact">Alina and Jonathan run internal affairs — the buddy pairs, the banquets and the retreat. Every new member is paired with an upperclassman buddy from week one.</p>
-      </div>
-<!-- /build:values -->
-    </div>
-  </section>
+  
 
   <!-- ===== 7. questions ===== -->
   <section class="section" aria-labelledby="faq-title">
@@ -408,6 +366,6 @@
   <div class="footer__wordmark" aria-hidden="true">GCC</div>
 </footer>
 
-<script src="site.js?v=1787762112" defer></script>
+<script src="site.js?v=1787794282" defer></script>
 </body>
 </html>
