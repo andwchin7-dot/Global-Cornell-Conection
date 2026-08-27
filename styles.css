@@ -508,13 +508,11 @@ svg .is-drifting { transform-box: fill-box; transform-origin: center; }
 /* ---------- v3.0 firm chips (Placements desks): grayscale at rest, colour + gentle scale on hover ---------- */
 .desk__logos { display: flex; flex-wrap: wrap; gap: 20px 30px; align-items: center; margin-top: 24px; }
 .fchip { display: inline-flex; align-items: center; transition: transform 200ms var(--ease-out); }
-.fchip img { height: 20px; width: auto; max-width: 160px; filter: grayscale(1) opacity(.72); transition: filter 200ms var(--ease-out); }
+.fchip img { height: 20px; width: auto; max-width: 160px; }   /* v3.4: full colour always — mobile has no hover to reveal it */
 .fchip img.tall { height: 30px; }
-.fchip--text { font: 500 12px/1.3 var(--sans); text-transform: uppercase; letter-spacing: .07em; color: var(--ink-60); transition: color 200ms var(--ease-out); }
+.fchip--text { font: 500 12px/1.3 var(--sans); text-transform: uppercase; letter-spacing: .07em; color: var(--ink); }
 @media (hover: hover) and (pointer: fine) {
   .fchip:hover { transform: scale(1.12); }
-  .fchip:hover img { filter: grayscale(0) opacity(1); }
-  .fchip--text:hover { color: var(--ink); }
 }
 
 /* ---------- v3.2 loading screen: the GCC box mark, centred — white serif GCC on carnelian (client pick) ---------- */
