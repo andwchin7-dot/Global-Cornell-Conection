@@ -437,8 +437,6 @@ svg .is-drifting { transform-box: fill-box; transform-origin: center; }
   transition: transform 800ms var(--ease-in-out);
 }
 .loader__brand { position: absolute; top: 26px; left: var(--m); font: 500 18px/1.3 var(--sans); letter-spacing: -.01em; }
-.loader__n { position: absolute; left: var(--m); bottom: 44px; font: 400 clamp(96px, 14vw, 200px)/1 var(--serif); font-variant-numeric: lining-nums tabular-nums; }
-.loader__n::after { content: "%"; font-size: .35em; margin-left: .06em; }
 .loader__bar { position: absolute; left: calc(50% - 90px); top: calc(50% + 84px); width: 180px; height: 2px; background: var(--carnelian); transform-origin: 0 50%; transform: scaleX(0); transition: transform 300ms var(--ease-out); }
 .is-lifting .loader { transform: translateY(-100%); }
 /* the hero intro holds while the curtain is up; removing .is-loading re-arms the heroRise animations */
@@ -464,23 +462,6 @@ svg .is-drifting { transform-box: fill-box; transform-origin: center; }
     linear-gradient(to bottom, rgba(19, 24, 36, .26), rgba(19, 24, 36, .22) 45%, rgba(19, 24, 36, .44)); }
 }
 
-/* ---------- the tape (v2.6): firm destinations as a slow market ribbon - pause on hover, static under reduced motion ---------- */
-.tape { position: relative; overflow: hidden; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink); margin-top: 44px; padding: 18px 0;
-  -webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
-          mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent); }
-.tape__track { display: flex; width: max-content; animation: tapeScroll 40s linear infinite; will-change: transform; }   /* v3.1: twice the pace; eager images keep the loop width stable */
-@media (hover: hover) and (pointer: fine) { .tape:hover .tape__track { animation-play-state: paused; } }
-.tape__set { display: flex; align-items: center; flex: none; }
-.tape__set > span { font: 500 13px/1 var(--sans); text-transform: uppercase; letter-spacing: .08em; white-space: nowrap; }
-.tape__dot { width: 9px; height: 9px; margin: 0 22px; flex: none; fill: var(--carnelian); }
-@keyframes tapeScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-@media (prefers-reduced-motion: reduce) {
-  .tape { -webkit-mask-image: none; mask-image: none; }
-  .tape__track { animation: none !important; width: auto; }
-  .tape__set { flex-wrap: wrap; gap: 14px 0; }
-  .tape__set[aria-hidden] { display: none; }
-}
-
 /* ---------- placements page: the desks ledger ---------- */
 .desks { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 56px 64px; margin-top: 56px; }
 .desk { border-top: 1px solid var(--ink); padding-top: 18px; }
@@ -498,12 +479,6 @@ svg .is-drifting { transform-box: fill-box; transform-origin: center; }
   .nav__cols { gap: 24px 32px; }
   .page--photo .hero--photo { height: auto; min-height: 520px; padding: 250px var(--m) 56px; }   /* title always clears the stacked nav, whatever the real viewport does */
 }
-
-/* ---------- v2.9: the tape carries real marks — grayscale, uniform height, generous air ---------- */
-.tape__set--logos { gap: 64px; padding-right: 64px; }
-.tape__set--logos img { height: 24px; width: auto; max-width: 190px; filter: grayscale(1) opacity(.7); }
-.tape__set--logos img.tall { height: 36px; }
-@media (max-width: 800px) { .tape__set--logos { gap: 44px; padding-right: 44px; } .tape__set--logos img { height: 20px; } .tape__set--logos img.tall { height: 30px; } }
 
 /* ---------- v3.0 firm chips (Placements desks): grayscale at rest, colour + gentle scale on hover ---------- */
 .desk__logos { display: flex; flex-wrap: wrap; gap: 20px 30px; align-items: center; margin-top: 24px; }
@@ -523,3 +498,46 @@ svg .is-drifting { transform-box: fill-box; transform-origin: center; }
   .loader__mark--box { width: 84px; height: 84px; font-size: 38px; border-radius: 5px; }
   .loader__bar { left: calc(50% - 70px); top: calc(50% + 68px); width: 140px; }
 }
+
+/* ---------- v3.6: the wall — every firm at once (the tape retired). Filters on Home light one practice ---------- */
+.wall { margin-top: 44px; }
+.wall__filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 40px; }
+.wallf { font: 500 12px/1 var(--sans); text-transform: uppercase; letter-spacing: .07em; color: var(--ink-60);
+  background: none; border: 1px solid rgba(19, 24, 36, .25); border-radius: 999px; padding: 9px 14px; cursor: pointer;
+  transition: color var(--t-press) var(--ease-out), border-color var(--t-press) var(--ease-out),
+              background-color var(--t-press) var(--ease-out); }
+.wallf.is-on { color: #fff; background: var(--carnelian); border-color: var(--carnelian); }
+.wallf:focus-visible { outline: 2px solid var(--carnelian); outline-offset: 2px; }
+@media (hover: hover) and (pointer: fine) { .wallf:not(.is-on):hover { color: var(--ink); border-color: var(--ink); } }
+.wall__grid { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 32px 46px; }
+.wall__item { display: flex; align-items: center; transition: opacity 360ms var(--ease-out), filter 360ms var(--ease-out); }
+.wall__item img { height: 24px; width: auto; max-width: 170px; display: block; }
+.wall__item img.tall { height: 32px; }
+.wall__item.is-dim { opacity: .14; filter: grayscale(1); }
+@media (max-width: 800px) {
+  .wall__filters { gap: 6px; margin-bottom: 30px; }
+  .wallf { padding: 8px 12px; font-size: 11px; }
+  .wall__grid { gap: 24px 30px; }
+  .wall__item img { height: 20px; }
+  .wall__item img.tall { height: 27px; }
+}
+
+/* ---------- v3.7: loader carries the globe mark (box + counter retired); the bar sits beneath it ---------- */
+.loader__mark--globe { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 224px; height: auto; }
+.loader__bar { left: calc(50% - 90px); top: calc(50% + 64px); }
+@media (max-width: 800px) {
+  .loader__mark--globe { width: 168px; }
+  .loader__bar { left: calc(50% - 70px); top: calc(50% + 52px); }
+}
+
+/* ---------- v3.8: wall footnote + the placements stat band ---------- */
+.wall__note { margin-top: 30px; font-size: 13px; color: var(--ink-60); }
+.stats--desks { margin-top: 0; }
+.stats .stat__n { color: var(--carnelian); }
+
+/* v3.8b: glyph-only marks (Wintermute) pair the icon with the name */
+.fchip--lockup { gap: 8px; }
+.fchip--lockup img { height: 22px; }
+.fchip--lockup span, .wall__item--lockup span { font: 500 12px/1.3 var(--sans); text-transform: uppercase; letter-spacing: .07em; color: var(--ink); }
+.wall__item--lockup { gap: 8px; }
+.wall__item--lockup img { height: 24px; }

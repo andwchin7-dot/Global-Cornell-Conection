@@ -22,7 +22,7 @@
       if (done) return;
       done = true;
       shown = 100;
-      nEl.textContent = "100";
+      if (nEl) nEl.textContent = "100";
       if (barEl) barEl.style.transform = "scaleX(1)";
       window.setTimeout(function () {
         root.classList.add("is-lifting");
@@ -35,7 +35,7 @@
       var target = Math.min(90, 90 * (1 - Math.pow(1 - Math.min(t / 3.2, 1), 2)));
       if (target > shown) {
         shown = target;
-        nEl.textContent = String(Math.round(shown));
+        if (nEl) nEl.textContent = String(Math.round(shown));
         if (barEl) barEl.style.transform = "scaleX(" + (shown / 100).toFixed(3) + ")";
       }
       window.requestAnimationFrame(tick);
@@ -226,4 +226,28 @@
       nodes[i].classList.add("is-drifting");
     }
   }
+})();
+
+/* ---------- the wall (v3.6): desk filters — tap a practice and its firms stay lit ---------- */
+(function () {
+  "use strict";
+  document.querySelectorAll("[data-wall]").forEach(function (wall) {
+    var btns = Array.prototype.slice.call(wall.querySelectorAll(".wallf"));
+    var items = Array.prototype.slice.call(wall.querySelectorAll(".wall__item"));
+    if (!btns.length) return;
+    btns.forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var desk = btn.getAttribute("data-desk");
+        btns.forEach(function (b) {
+          var on = b === btn;
+          b.classList.toggle("is-on", on);
+          b.setAttribute("aria-pressed", on ? "true" : "false");
+        });
+        items.forEach(function (it) {
+          var mine = (it.getAttribute("data-desk") || "").split(" ");
+          it.classList.toggle("is-dim", desk !== "all" && mine.indexOf(desk) === -1);
+        });
+      });
+    });
+  });
 })();
