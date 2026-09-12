@@ -4,7 +4,7 @@ Everything is plain files — no accounts, no build tools to install. You need P
 
 ## Preview it locally
 ```
-cd "/Users/andrewchinn/Claude Code/gcc-website"
+cd path/to/Global-Cornell-Conection   # wherever you cloned it
 python3 -m http.server 8123
 ```
 Then open http://localhost:8123 — or just double-click `index.html`. After editing, hard-refresh (⌘⇧R).
@@ -12,7 +12,7 @@ Then open http://localhost:8123 — or just double-click `index.html`. After edi
 ## The one command
 After changing anything in `content/`, run:
 ```
-cd "/Users/andrewchinn/Claude Code/gcc-website"
+cd path/to/Global-Cornell-Conection   # wherever you cloned it
 python3 build.py
 ```
 It rewrites the generated parts of the pages and prints a short report. Nothing else on the site is touched.
