@@ -281,121 +281,103 @@
   });
 })();
 
-/* ---------- redesign/akpsi: the desk switcher on Placements — one desk at a time, tabs + arrows + keyboard.
-   Without JS every desk simply stacks, as before. ---------- */
+/* ---------- redesign/akpsi: the field (Placements) — every firm floating on one stage.
+   Layout: a jittered grid, stable between visits (seeded by index). Each mark bobs on its own phase and sits on one of
+   three depths that parallax with the pointer (eased, velocity-style); a spotlight lights what the pointer is near; on
+   touch the light wanders on its own. A filter gathers one desk into a centred cluster and lets the rest recede.
+   Reduced motion: no bob, no parallax, instant layout, everything lit. Without JS the marks simply wrap. ---------- */
 (function () {
   "use strict";
-  var host = document.querySelector("[data-desks]");
+  var host = document.querySelector("[data-field]");
   if (!host) return;
-  var panels = Array.prototype.slice.call(host.querySelectorAll(".desk"));
-  if (panels.length < 2) return;
-  var el = function (tag, cls, attrs) {
-    var e = document.createElement(tag); e.className = cls;
-    for (var k in attrs) { if (attrs.hasOwnProperty(k)) e.setAttribute(k, attrs[k]); }
-    return e;
-  };
-  var bar = el("div", "deskbar", {});
-  var prev = el("button", "deskbar__arrow", { type: "button", "aria-label": "Previous desk" }); prev.innerHTML = "&larr;";
-  var next = el("button", "deskbar__arrow", { type: "button", "aria-label": "Next desk" }); next.innerHTML = "&rarr;";
-  var tabs = el("div", "deskbar__tabs", { role: "tablist", "aria-label": "Desks" });
-  var count = el("span", "deskbar__count", { "aria-hidden": "true" });
-  var btns = panels.map(function (p, i) {
-    var id = "desk-" + i; p.id = id; p.setAttribute("role", "tabpanel");
-    var b = el("button", "deskbar__tab", { type: "button", role: "tab", "aria-controls": id });
-    var lab = p.querySelector(".desk__label"); b.textContent = lab ? lab.textContent : ("Desk " + (i + 1));
-    b.addEventListener("click", function (e) { show(i, !!(e && e.isTrusted)); });
-    tabs.appendChild(b); return b;
-  });
-  bar.appendChild(prev); bar.appendChild(tabs); bar.appendChild(count); bar.appendChild(next);
-  host.parentNode.insertBefore(bar, host);
-  host.classList.add("is-switching");
-  var cur = 0, n = panels.length;
-  var pad = function (k) { return (k < 10 ? "0" : "") + k; };
-  var show = function (i, focus) {
-    cur = (i + n) % n;
-    panels.forEach(function (p, k) { var on = k === cur; p.classList.toggle("is-active", on); p.hidden = !on; });
-    btns.forEach(function (b, k) { var on = k === cur; b.setAttribute("aria-selected", on ? "true" : "false"); b.tabIndex = on ? 0 : -1; });
-    count.textContent = pad(cur + 1) + " / " + pad(n);
-    if (focus) btns[cur].focus();
-  };
-  prev.addEventListener("click", function () { show(cur - 1); });
-  next.addEventListener("click", function () { show(cur + 1); });
-  tabs.addEventListener("keydown", function (e) {
-    if (e.key === "ArrowRight") { e.preventDefault(); show(cur + 1, true); }
-    else if (e.key === "ArrowLeft") { e.preventDefault(); show(cur - 1, true); }
-    else if (e.key === "Home") { e.preventDefault(); show(0, true); }
-    else if (e.key === "End") { e.preventDefault(); show(n - 1, true); }
-  });
-  show(0);
-})();
-
-/* ---------- redesign/akpsi: the wall as a stage — a spotlight follows the pointer; on touch it drifts on its own;
-   under reduced motion every mark is simply lit. Also hands each mark its index for the entrance cascade. ---------- */
-(function () {
-  "use strict";
+  var stage = host.querySelector(".field");
+  var tiles = Array.prototype.slice.call(stage.querySelectorAll(".tile"));
+  var btns = Array.prototype.slice.call(host.querySelectorAll(".fieldf"));
+  var cap = host.querySelector("[data-field-caption]");
+  if (!tiles.length) return;
   var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  document.querySelectorAll("[data-spot]").forEach(function (wall) {
-    var items = Array.prototype.slice.call(wall.querySelectorAll(".wall__item"));
-    if (!items.length) return;
-    items.forEach(function (it, i) { it.style.setProperty("--i", i); });
-    if (reduce) return;   /* CSS: :not(.is-lit) keeps everything lit */
-    var fine = window.matchMedia && window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-    var rects = [], px = -1e4, py = -1e4, raf = false, t0 = performance.now();
-    var measure = function () {
-      var w = wall.getBoundingClientRect();
-      rects = items.map(function (it) { var r = it.getBoundingClientRect(); return { x: r.left - w.left + r.width / 2, y: r.top - w.top + r.height / 2 }; });
-    };
-    var paint = function () {
-      raf = false;
-      var r = Math.max(220, wall.clientWidth * 0.22);
-      for (var i = 0; i < items.length; i++) {
-        var dx = rects[i].x - px, dy = rects[i].y - py, d = Math.sqrt(dx * dx + dy * dy);
-        var lit = d > r ? 0 : 1 - d / r; lit = lit * lit * (3 - 2 * lit);   /* smoothstep */
-        items[i].style.setProperty("--lit", lit.toFixed(3));
-      }
-    };
-    var req = function () { if (!raf) { raf = true; requestAnimationFrame(paint); } };
-    measure();
-    window.addEventListener("resize", function () { measure(); req(); });
-    window.addEventListener("load", function () { measure(); req(); });
-    wall.classList.add("is-lit");
-    if (fine) {
-      wall.addEventListener("pointermove", function (e) { var w = wall.getBoundingClientRect(); px = e.clientX - w.left; py = e.clientY - w.top; req(); });
-      wall.addEventListener("pointerleave", function () { px = -1e4; py = -1e4; req(); });
-      req();
-    } else {
-      var loop = function (now) {   /* no fine pointer: the light wanders the wall, slowly */
-        var s = (now - t0) / 1000, W = wall.clientWidth, Hh = wall.clientHeight;
-        px = W * (0.5 + 0.42 * Math.sin(s * 0.23)); py = Hh * (0.5 + 0.40 * Math.sin(s * 0.31 + 1.3));
-        paint(); requestAnimationFrame(loop);
-      };
-      requestAnimationFrame(loop);
+  var fine = window.matchMedia && window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  var n = tiles.length, W = 1, H = 1, desk = "all";
+  var rnd = function (i, k) { var x = Math.sin(i * 12.9898 + k * 78.233) * 43758.5453; return x - Math.floor(x); };
+  tiles.forEach(function (t, i) {
+    t._depth = [0.86, 1, 1.14][i % 3]; t._par = [0.35, 0.65, 1][i % 3];
+    t._phase = rnd(i, 1) * Math.PI * 2; t._speed = 0.32 + rnd(i, 2) * 0.36; t._amp = 5 + rnd(i, 3) * 6;
+    t._codes = (t.getAttribute("data-desk") || "").split(" ");
+    t._bob = t.querySelector(".tile__bob") || t; t._lit = -1; t._tx = 0; t._ty = 0;
+    t.style.setProperty("--i", i); t.style.setProperty("--d", t._depth);
+  });
+  var place = function () {
+    W = Math.max(1, stage.clientWidth);
+    var live = W >= 600;   /* narrow screens keep the marks in flow: denser, and a filter simply collapses the rest */
+    stage.classList.toggle("is-live", live);
+    if (!live) {
+      var onN = desk === "all" ? tiles : tiles.filter(function (t) { return t._codes.indexOf(desk) !== -1; });
+      tiles.forEach(function (t) { t.classList.toggle("is-off", onN.indexOf(t) === -1); });
+      stage.style.height = "";
+      var sr = stage.getBoundingClientRect(); H = Math.max(1, sr.height);
+      tiles.forEach(function (t) { var r = t.getBoundingClientRect(); t._tx = r.left - sr.left + r.width / 2; t._ty = r.top - sr.top + r.height / 2; });
+      return;
     }
-  });
-})();
-
-/* ---------- redesign/akpsi: the wall's filters and the desk switcher speak to each other (matched by desk label) ---------- */
-(function () {
-  "use strict";
-  var wall = document.querySelector("[data-wall][data-spot]"), host = document.querySelector("[data-desks]");
-  if (!wall || !host) return;
-  var norm = function (s) { return (s || "").replace(/\s+/g, " ").trim().toLowerCase(); };
-  var busy = false;
-  var wallBtns = Array.prototype.slice.call(wall.querySelectorAll(".wallf"));
-  var byLabel = function (list, label) { var L = norm(label); return list.filter(function (b) { return norm(b.getAttribute("data-label") || b.textContent) === L; })[0]; };
-  wallBtns.forEach(function (b) {
-    b.addEventListener("click", function () {
-      if (busy) return; busy = true;
-      var tab = byLabel(Array.prototype.slice.call(document.querySelectorAll(".deskbar__tab")), b.getAttribute("data-label") || "");
-      if (tab) tab.click();
-      busy = false;
+    var cols = Math.max(2, Math.min(9, Math.round(W / 190)));
+    var cw = W / cols, rh = Math.max(96, cw * 0.6), rows = Math.ceil(n / cols);
+    tiles.forEach(function (t, i) {   /* every mark keeps a home slot, so "All firms" is always the same picture */
+      var c = i % cols, r = Math.floor(i / cols), hw = (t.offsetWidth || 120) / 2;
+      /* jitter mostly in y: wide wordmarks share the row, so x stays close to the cell centre; and never past the stage edge */
+      t._hx = Math.min(W - hw, Math.max(hw, c * cw + cw / 2 + (rnd(i, 4) - 0.5) * cw * 0.16));
+      t._hy = r * rh + rh / 2 + (rnd(i, 5) - 0.5) * rh * 0.36;
     });
-  });
-  document.addEventListener("click", function (e) {
-    var tab = e.target.closest && e.target.closest(".deskbar__tab"); if (!tab || busy) return;
-    busy = true;
-    var wb = byLabel(wallBtns, tab.textContent);
-    if (wb) wb.click();
-    busy = false;
-  });
+    H = rows * rh;
+    if (desk === "all") {
+      tiles.forEach(function (t) { t._tx = t._hx; t._ty = t._hy; t.classList.remove("is-off"); });
+    } else {
+      var on = tiles.filter(function (t) { return t._codes.indexOf(desk) !== -1; }), m = on.length;
+      var ccols = Math.max(2, Math.min(cols, Math.ceil(Math.sqrt(m * 1.7)))), crows = Math.ceil(m / ccols);
+      var ccw = Math.min(cw * 1.2, W / ccols), crh = rh;
+      var ox = (W - ccols * ccw) / 2, oy = (H - crows * crh) / 2, k = 0;
+      tiles.forEach(function (t) {
+        if (on.indexOf(t) === -1) { t._tx = t._hx; t._ty = t._hy; t.classList.add("is-off"); return; }
+        var c = k % ccols, r = Math.floor(k / ccols); k++;
+        var last = (r === crows - 1) ? (m - r * ccols) : ccols;   /* a short last row sits centred */
+        t._tx = ox + (ccols - last) * ccw / 2 + c * ccw + ccw / 2; t._ty = oy + r * crh + crh / 2;
+        t.classList.remove("is-off");
+      });
+    }
+    stage.style.height = Math.round(H) + "px";
+    tiles.forEach(function (t) { t.style.setProperty("--x", t._tx.toFixed(1) + "px"); t.style.setProperty("--y", t._ty.toFixed(1) + "px"); });
+  };
+  var px = -1e4, py = -1e4, tx = 0, ty = 0, mx = 0, my = 0, t0 = performance.now();
+  var setPointer = function (cx, cy) { var r = stage.getBoundingClientRect(); px = cx - r.left; py = cy - r.top; tx = px / W - 0.5; ty = py / H - 0.5; };
+  var frame = function (now) {
+    var s = (now - t0) / 1000;
+    if (!fine) { px = W * (0.5 + 0.42 * Math.sin(s * 0.23)); py = H * (0.5 + 0.40 * Math.sin(s * 0.31 + 1.3)); tx = px / W - 0.5; ty = py / H - 0.5; }
+    mx += (tx - mx) * 0.06; my += (ty - my) * 0.06;
+    var R = Math.max(220, W * 0.22);
+    for (var i = 0; i < n; i++) {
+      var t = tiles[i];
+      var bx = Math.sin(s * t._speed + t._phase) * t._amp * 0.35, by = Math.cos(s * t._speed * 0.8 + t._phase) * t._amp;
+      t._bob.style.transform = "translate(" + (bx - mx * 28 * t._par).toFixed(2) + "px," + (by - my * 22 * t._par).toFixed(2) + "px)";
+      var dx = t._tx - px, dy = t._ty - py, d = Math.sqrt(dx * dx + dy * dy);
+      var lit = d > R ? 0 : 1 - d / R; lit = lit * lit * (3 - 2 * lit);
+      if (Math.abs(lit - t._lit) > 0.004) { t._lit = lit; t.style.setProperty("--lit", lit.toFixed(3)); }
+    }
+    requestAnimationFrame(frame);
+  };
+  var setDesk = function (code, btn) {
+    desk = code;
+    btns.forEach(function (b) { var on = b === btn; b.classList.toggle("is-on", on); b.setAttribute("aria-pressed", on ? "true" : "false"); });
+    if (cap) cap.textContent = btn.getAttribute("data-desc") || "";
+    place();
+  };
+  btns.forEach(function (b) { b.addEventListener("click", function () { setDesk(b.getAttribute("data-desk") || "all", b); }); });
+  stage.classList.add("is-settling");   /* no transition on the first placement */
+  place();
+  requestAnimationFrame(function () { requestAnimationFrame(function () { stage.classList.remove("is-settling"); }); });
+  window.addEventListener("resize", place);
+  window.addEventListener("load", place);
+  if (fine) {
+    stage.addEventListener("pointermove", function (e) { setPointer(e.clientX, e.clientY); });
+    stage.addEventListener("pointerleave", function () { px = -1e4; py = -1e4; tx = 0; ty = 0; });
+  }
+  if (reduce) { tiles.forEach(function (t) { t.style.setProperty("--lit", 1); }); }
+  else { requestAnimationFrame(frame); }
 })();
