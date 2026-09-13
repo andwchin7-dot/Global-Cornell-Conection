@@ -149,18 +149,22 @@
   if (!reduce) {   /* v2.0: the reveal register runs site-wide (Millennium continuity), not just on Home */
     var heroText = document.querySelector(".hero--cinema .hero__text");
     var heroDim = document.querySelector(".hero--cinema .hero__dim");
-    if (heroText || heroDim) {
+    var heroVideo = document.querySelector(".hero--cinema .hero__video");
+    if (heroText || heroDim || heroVideo) {
       var htTick = false;
       var htRamp = function () {
         htTick = false;
         var y = window.pageYOffset || 0, vh = window.innerHeight || 800;
         var f = Math.min(1, y / (vh * 0.55));
+        var g = Math.min(1, y / vh);   /* redesign: the zoom runs the full first viewport, slower than the fade */
         if (heroText) {
           heroText.style.opacity = (1 - f).toFixed(3);
-          heroText.style.transform = "translateY(" + (-f * 60).toFixed(1) + "px)";
+          heroText.style.transform = "translateY(" + (-f * 90).toFixed(1) + "px)";
         }
         /* continuity: the video recedes into the band's night as the sheet arrives — the hand-off is one world */
         if (heroDim) heroDim.style.opacity = (f * 0.6).toFixed(3);
+        /* redesign: the aerial creeps in as the sheet rises over it (1 -> 1.1), so the pinned frame never reads as frozen */
+        if (heroVideo) heroVideo.style.transform = "scale(" + (1 + g * 0.1).toFixed(4) + ")";
       };
       window.addEventListener("scroll", function () { if (!htTick) { htTick = true; requestAnimationFrame(htRamp); } }, { passive: true });
       htRamp();
@@ -250,4 +254,77 @@
       });
     });
   });
+})();
+
+/* ---------- redesign/akpsi: the header gains a paper ground once the page has moved (no layout shift: Home nav is fixed,
+   other pages sticky) ---------- */
+(function () {
+  "use strict";
+  var nav = document.querySelector(".nav");
+  if (!nav) return;
+  var on = false, tick = false;
+  var upd = function () {
+    tick = false;
+    var s = (window.pageYOffset || 0) > 24;
+    if (s !== on) { on = s; nav.classList.toggle("is-scrolled", s); }
+  };
+  window.addEventListener("scroll", function () { if (!tick) { tick = true; requestAnimationFrame(upd); } }, { passive: true });
+  upd();
+})();
+
+/* ---------- redesign/akpsi: staggered children — any [data-stagger] container hands each child its index;
+   styles.css turns that into a 50ms cascade once the section reveals ---------- */
+(function () {
+  "use strict";
+  document.querySelectorAll("[data-stagger]").forEach(function (g) {
+    Array.prototype.forEach.call(g.children, function (c, i) { c.style.setProperty("--i", i); });
+  });
+})();
+
+/* ---------- redesign/akpsi: the desk switcher on Placements — one desk at a time, tabs + arrows + keyboard.
+   Without JS every desk simply stacks, as before. ---------- */
+(function () {
+  "use strict";
+  var host = document.querySelector("[data-desks]");
+  if (!host) return;
+  var panels = Array.prototype.slice.call(host.querySelectorAll(".desk"));
+  if (panels.length < 2) return;
+  var el = function (tag, cls, attrs) {
+    var e = document.createElement(tag); e.className = cls;
+    for (var k in attrs) { if (attrs.hasOwnProperty(k)) e.setAttribute(k, attrs[k]); }
+    return e;
+  };
+  var bar = el("div", "deskbar", {});
+  var prev = el("button", "deskbar__arrow", { type: "button", "aria-label": "Previous desk" }); prev.innerHTML = "&larr;";
+  var next = el("button", "deskbar__arrow", { type: "button", "aria-label": "Next desk" }); next.innerHTML = "&rarr;";
+  var tabs = el("div", "deskbar__tabs", { role: "tablist", "aria-label": "Desks" });
+  var count = el("span", "deskbar__count", { "aria-hidden": "true" });
+  var btns = panels.map(function (p, i) {
+    var id = "desk-" + i; p.id = id; p.setAttribute("role", "tabpanel");
+    var b = el("button", "deskbar__tab", { type: "button", role: "tab", "aria-controls": id });
+    var lab = p.querySelector(".desk__label"); b.textContent = lab ? lab.textContent : ("Desk " + (i + 1));
+    b.addEventListener("click", function () { show(i, true); });
+    tabs.appendChild(b); return b;
+  });
+  bar.appendChild(prev); bar.appendChild(tabs); bar.appendChild(count); bar.appendChild(next);
+  host.parentNode.insertBefore(bar, host);
+  host.classList.add("is-switching");
+  var cur = 0, n = panels.length;
+  var pad = function (k) { return (k < 10 ? "0" : "") + k; };
+  var show = function (i, focus) {
+    cur = (i + n) % n;
+    panels.forEach(function (p, k) { var on = k === cur; p.classList.toggle("is-active", on); p.hidden = !on; });
+    btns.forEach(function (b, k) { var on = k === cur; b.setAttribute("aria-selected", on ? "true" : "false"); b.tabIndex = on ? 0 : -1; });
+    count.textContent = pad(cur + 1) + " / " + pad(n);
+    if (focus) btns[cur].focus();
+  };
+  prev.addEventListener("click", function () { show(cur - 1); });
+  next.addEventListener("click", function () { show(cur + 1); });
+  tabs.addEventListener("keydown", function (e) {
+    if (e.key === "ArrowRight") { e.preventDefault(); show(cur + 1, true); }
+    else if (e.key === "ArrowLeft") { e.preventDefault(); show(cur - 1, true); }
+    else if (e.key === "Home") { e.preventDefault(); show(0, true); }
+    else if (e.key === "End") { e.preventDefault(); show(n - 1, true); }
+  });
+  show(0);
 })();

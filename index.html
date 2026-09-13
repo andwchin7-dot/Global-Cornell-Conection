@@ -17,7 +17,7 @@
   <!-- loading screen gate: html.is-loading exists only when JS runs and motion is allowed — no-JS and
        reduced-motion visitors never see the curtain. Set before first paint. -->
   <script>try{if(!matchMedia("(prefers-reduced-motion: reduce)").matches)document.documentElement.classList.add("is-loading")}catch(e){}</script>
-  <link rel="stylesheet" href="styles.css?v=1789175761">
+  <link rel="stylesheet" href="styles.css?v=1789326495">
 </head>
 <body class="home--cinema">
 
@@ -188,7 +188,30 @@
       <h2 class="section__title" id="about-title">About GCC</h2>
       <a class="section__link" href="about.html">About us</a>
     </div>
-    <p class="section__lede section__lede--opener">At Cornell since 2009. Every new member gets ten weeks of training and an upperclassman mentor, and stays part of the community after graduating.</p>
+    <p class="section__lede section__lede--opener">Cornell's only international finance club. Since 2009.</p>
+    <!-- redesign/akpsi: the numbered 01–04 — what GCC is, in four parts (the model's about pattern, our content) -->
+    <ol class="facets" data-stagger>
+      <li class="facet">
+        <span class="facet__n">01</span>
+        <h3 class="facet__t">Global business, taught early</h3>
+        <p>Finance and business across borders, for students who want to work in a world where capital, firms and careers no longer stop at one country.</p>
+      </li>
+      <li class="facet">
+        <span class="facet__n">02</span>
+        <h3 class="facet__t">Ten weeks of training</h3>
+        <p>The new member series: workshops, speaker panels and mock interviews, led by senior members who have been through recruiting.</p>
+      </li>
+      <li class="facet">
+        <span class="facet__n">03</span>
+        <h3 class="facet__t">A mentor from week one</h3>
+        <p>Every new member is paired with an upperclassman buddy for classes, recruiting and the rest of Cornell.</p>
+      </li>
+      <li class="facet">
+        <span class="facet__n">04</span>
+        <h3 class="facet__t">A network in 25+ cities</h3>
+        <p>More than 100 alumni from New York to Hong Kong, who still show up for dinners, coffee chats and each other.</p>
+      </li>
+    </ol>
     <ul class="stats">
       <li class="stat"><span class="stat__n">100+</span><span class="stat__l">Alumni</span></li>
       <li class="stat"><span class="stat__n">60+</span><span class="stat__l">Full-time firms</span></li>
@@ -323,7 +346,7 @@
           <a class="pill pill--primary" href="https://forms.gle/zT7wRRc7eTHoyF9AA" rel="noopener">Apply</a>
         </div>
       </div>
-      <ol class="steps" aria-label="How recruitment works">
+      <ol class="steps" aria-label="How recruitment works" data-stagger>
         <li class="step"><span class="step__n">01</span><span class="step__t">Coffee chats and information sessions</span></li>
         <li class="step"><span class="step__n">02</span><span class="step__t">Written application</span></li>
         <li class="step"><span class="step__n">03</span><span class="step__t">Two rounds of interviews</span></li>
@@ -372,6 +395,6 @@
   <div class="footer__wordmark" aria-hidden="true">GCC</div>
 </footer>
 
-<script src="site.js?v=1789175761" defer></script>
+<script src="site.js?v=1789326495" defer></script>
 </body>
 </html>

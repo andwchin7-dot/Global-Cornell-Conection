@@ -14,7 +14,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500&family=Instrument+Serif&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=1789175761">
+  <link rel="stylesheet" href="styles.css?v=1789326495">
   <style>
     /* recruitment.html — page styles only; everything else comes from styles.css */
     /* current page: the bullet stays the hollow 6px circle (system §4); a quiet ink underline marks the page */
@@ -168,7 +168,7 @@
         <span class="label label--main">Stages of recruitment</span>
         <span class="label label--when" data-placeholder="dates">Fall 2026 cycle · times and venues to follow</span>
       </div>
-      <ol data-placeholder="dates">
+      <ol data-placeholder="dates" data-stagger>
         <li class="stage">
           <span class="stage__n">01</span>
           <div class="stage__main">
@@ -317,6 +317,31 @@
     </svg>
   </div>
 
+  <!-- ===== 4b. questions: one named person, one address (the model's "Questions?" pattern; email is public on Members already) ===== -->
+  <section class="section" aria-labelledby="questions-title">
+    <div class="section__head">
+      <h2 class="section__title" id="questions-title">Questions?</h2>
+      <a class="section__link" href="members.html">The board</a>
+    </div>
+    <ul class="contacts" data-stagger>
+      <li class="contact">
+        <span class="contact__name">Aiden Jung</span>
+        <span class="contact__role">VP of Recruitment</span>
+        <a class="contact__mail" href="mailto:ahj36@cornell.edu">ahj36@cornell.edu</a>
+      </li>
+      <li class="contact">
+        <span class="contact__name">Ethan Chiang</span>
+        <span class="contact__role">Recruitment Chair</span>
+        <a class="contact__mail" href="mailto:erc226@cornell.edu">erc226@cornell.edu</a>
+      </li>
+      <li class="contact">
+        <span class="contact__name">General inbox</span>
+        <span class="contact__role">Anything else</span>
+        <a class="contact__mail" href="mailto:cornellgccinfo@gmail.com">cornellgccinfo@gmail.com</a>
+      </li>
+    </ul>
+  </section>
+
   <!-- ===== 5. apply ===== -->
   <section class="section" aria-labelledby="apply-title" id="apply">
     <div class="section__head">
@@ -378,6 +403,6 @@
   <div class="footer__wordmark" aria-hidden="true">GCC</div>
 </footer>
 
-<script src="site.js?v=1789175761" defer></script>
+<script src="site.js?v=1789326495" defer></script>
 </body>
 </html>

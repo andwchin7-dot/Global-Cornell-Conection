@@ -564,3 +564,99 @@ svg .is-drifting { transform-box: fill-box; transform-origin: center; }
 .tape__set--logos img { height: 24px; width: auto; max-width: 190px; filter: grayscale(1) opacity(.7); }
 .tape__set--logos img.tall { height: 36px; }
 @media (max-width: 800px) { .tape__set--logos { gap: 44px; padding-right: 44px; } .tape__set--logos img { height: 20px; } .tape__set--logos img.tall { height: 30px; } }
+
+/* =====================================================================================================================
+   redesign/akpsi — motion and structure borrowed from the model, on GCC's own paper, ink and type.
+   Appended (never reordered): later blocks deliberately override earlier ones.
+   ===================================================================================================================== */
+
+/* --- header: transparent over the hero, a paper ground once scrolled (fixed on Home, sticky elsewhere) --- */
+.nav { transition: background var(--t) var(--ease-out), box-shadow var(--t) var(--ease-out), padding var(--t) var(--ease-out); }
+body:not(.home--cinema) .nav { position: sticky; top: 0; background: var(--cream); }
+.home--cinema .nav { position: fixed; }
+.nav.is-scrolled { background: rgba(239, 241, 242, .86); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); box-shadow: 0 1px 0 var(--mist); padding-top: 14px; padding-bottom: 12px; }
+.nav.is-scrolled .nav__brand { padding-top: 0; }
+.nav.is-scrolled .nav__cols { padding-top: 0; }
+
+/* --- hero: the aerial zooms under the rising sheet (site.js sets the scale) --- */
+.hero--cinema .hero__video { will-change: transform; transform-origin: 50% 50%; }
+
+/* --- hairlines draw in from the left as their section reveals --- */
+.js-reveal .section__head, .js-reveal .desk, .js-reveal .steps, .js-reveal .facet, .js-reveal .deskbar { position: relative; border-top-color: transparent; }
+.js-reveal .section__head::before, .js-reveal .desk::before, .js-reveal .steps::before, .js-reveal .facet::before, .js-reveal .deskbar::before {
+  content: ""; position: absolute; left: 0; right: 0; top: -1px; height: 1px; background: var(--ink);
+  transform: scaleX(0); transform-origin: left center; transition: transform 900ms var(--ease-out) 80ms; }
+.js-reveal.is-in .section__head::before, .js-reveal.is-in .desk::before, .js-reveal.is-in .steps::before, .js-reveal.is-in .facet::before, .js-reveal.is-in .deskbar::before { transform: scaleX(1); }
+.home--cinema .sheet > .section:first-child .section__head::before { display: none; }   /* that head has no hairline by design */
+
+/* --- staggered children: [data-stagger] > * cascade 50ms apart once their section is in --- */
+.js-reveal [data-stagger] > * { opacity: 0; transform: translateY(14px); transition: opacity 520ms var(--ease-out), transform 520ms var(--ease-out); transition-delay: calc(var(--i, 0) * 50ms); }
+.js-reveal.is-in [data-stagger] > * { opacity: 1; transform: none; }
+
+/* --- Home: the numbered 01–04 (what GCC is), under the positioning line --- */
+.facets { list-style: none; margin: 56px 0 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 44px 64px; }
+.facet { border-top: 1px solid var(--ink); padding-top: 18px; }
+.facet__n { font: 500 13px/1.2 var(--sans); letter-spacing: .04em; color: var(--ink-60); }
+.facet__t { margin-top: 14px; font: 400 30px/1.15 var(--serif); letter-spacing: -.005em; }
+.facet p { margin-top: 10px; max-width: 460px; }
+.facets + .stats { margin-top: 96px; }
+
+/* --- Placements: the desk switcher (one desk at a time) --- */
+.deskbar { display: flex; align-items: center; gap: 16px; margin-top: 40px; border-top: 1px solid var(--ink); padding-top: 18px; }
+.deskbar__tabs { display: flex; flex-wrap: wrap; gap: 6px; flex: 1; min-width: 0; }
+.deskbar__tab { font: 500 12px/1 var(--sans); text-transform: uppercase; letter-spacing: .06em; padding: 10px 14px; border: 1px solid var(--ink); border-radius: 999px; background: transparent; color: var(--ink); cursor: pointer; transition: background var(--t) var(--ease-out), color var(--t) var(--ease-out), transform var(--t-press, 120ms) var(--ease-out); }
+.deskbar__tab[aria-selected="true"] { background: var(--ink); color: var(--cream); }
+.deskbar__tab:active { transform: scale(.97); }
+.deskbar__arrow { flex: none; width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--ink); background: transparent; color: var(--ink); font: 400 18px/1 var(--sans); display: grid; place-items: center; cursor: pointer; transition: background var(--t) var(--ease-out), color var(--t) var(--ease-out); }
+.deskbar__count { flex: none; font: 400 14px/1 var(--sans); color: var(--ink-60); font-variant-numeric: lining-nums tabular-nums; }
+@media (hover: hover) {
+  .deskbar__tab:hover { background: var(--mist); }
+  .deskbar__tab[aria-selected="true"]:hover { background: var(--ink); }
+  .deskbar__arrow:hover { background: var(--ink); color: var(--cream); }
+}
+.desks.is-switching { grid-template-columns: 1fr; gap: 0; margin-top: 8px; }
+.desks.is-switching .desk { border-top: 0; padding-top: 32px; }
+.desks.is-switching .desk::before { display: none; }
+.desks.is-switching .desk.is-active { animation: deskIn 520ms var(--ease-out) both; }
+@keyframes deskIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+.desks.is-switching .desk__label { font: 400 clamp(34px, 4.2vw, 52px)/1.08 var(--serif); text-transform: none; letter-spacing: -.008em; }
+.desks.is-switching .desk__n { font-size: 112px; margin-top: 28px; }
+.desks.is-switching .desk__nl { font-size: 16px; }
+.desk__desc { margin-top: 14px; max-width: 620px; color: var(--ink-60); }
+.desks.is-switching .desk__logos { gap: 28px 44px; margin-top: 40px; }
+.desks.is-switching .fchip img { height: 30px; max-width: 220px; }
+.desks.is-switching .fchip img.tall { height: 44px; }
+.desks.is-switching .fchip--text { font-size: 13px; }
+
+/* --- Placements: the footprint — the city ledger, the network as the product --- */
+.footprint { list-style: none; margin: 32px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 12px 0; }
+.footprint li { font: 500 13px/1 var(--sans); text-transform: uppercase; letter-spacing: .08em; padding: 8px 18px 8px 0; margin-right: 18px; border-right: 1px solid var(--mist); }
+.footprint li:last-child { border-right: 0; }
+.footprint li.is-intl { color: var(--carnelian); }
+
+@media (max-width: 800px) {
+  .facets { grid-template-columns: 1fr; gap: 32px; }
+  .deskbar { flex-wrap: wrap; }
+  .deskbar__tabs { order: 3; flex-basis: 100%; }
+  .desks.is-switching .desk__n { font-size: 80px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nav { transition: none; }
+  .js-reveal .section__head, .js-reveal .desk, .js-reveal .steps, .js-reveal .facet, .js-reveal .deskbar { border-top-color: var(--ink); }
+  .js-reveal .section__head::before, .js-reveal .desk::before, .js-reveal .steps::before, .js-reveal .facet::before, .js-reveal .deskbar::before { display: none; }
+  .js-reveal [data-stagger] > * { opacity: 1 !important; transform: none !important; transition: none !important; }
+  .desks.is-switching .desk.is-active { animation: none; }
+  .hero--cinema .hero__video { transform: none !important; }
+}
+
+/* --- Recruitment: "Questions?" — three contacts on one hairline row --- */
+.contacts { list-style: none; margin: 40px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px 48px; }
+.contact { border-top: 1px solid var(--ink); padding-top: 18px; display: grid; gap: 4px; }
+.contact__name { font: 400 24px/1.2 var(--serif); }
+.contact__role { font: 400 14px/1.4 var(--sans); color: var(--ink-60); }
+.contact__mail { margin-top: 8px; font: 400 15px/1.4 var(--sans); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; }
+.js-reveal .contact { position: relative; border-top-color: transparent; }
+.js-reveal .contact::before { content: ""; position: absolute; left: 0; right: 0; top: -1px; height: 1px; background: var(--ink); transform: scaleX(0); transform-origin: left center; transition: transform 900ms var(--ease-out) 80ms; }
+.js-reveal.is-in .contact::before { transform: scaleX(1); }
+@media (max-width: 800px) { .contacts { grid-template-columns: 1fr; gap: 24px; } }
+@media (prefers-reduced-motion: reduce) { .js-reveal .contact { border-top-color: var(--ink); } .js-reveal .contact::before { display: none; } }
