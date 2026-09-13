@@ -620,9 +620,7 @@ body:not(.home--cinema) .nav { position: sticky; top: 0; background: var(--cream
 .desks.is-switching .desk.is-active { animation: deskIn 520ms var(--ease-out) both; }
 @keyframes deskIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
 .desks.is-switching .desk__label { font: 400 clamp(34px, 4.2vw, 52px)/1.08 var(--serif); text-transform: none; letter-spacing: -.008em; }
-.desks.is-switching .desk__n { font-size: 112px; margin-top: 28px; }
-.desks.is-switching .desk__nl { font-size: 16px; }
-.desk__desc { margin-top: 14px; max-width: 620px; color: var(--ink-60); }
+.desk__desc { margin-top: 16px; max-width: 620px; font-size: 18px; line-height: 1.5; color: var(--ink); }
 .desks.is-switching .desk__logos { gap: 28px 44px; margin-top: 40px; }
 .desks.is-switching .fchip img { height: 30px; max-width: 220px; }
 .desks.is-switching .fchip img.tall { height: 44px; }
@@ -638,7 +636,6 @@ body:not(.home--cinema) .nav { position: sticky; top: 0; background: var(--cream
   .facets { grid-template-columns: 1fr; gap: 32px; }
   .deskbar { flex-wrap: wrap; }
   .deskbar__tabs { order: 3; flex-basis: 100%; }
-  .desks.is-switching .desk__n { font-size: 80px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .nav { transition: none; }
@@ -660,3 +657,32 @@ body:not(.home--cinema) .nav { position: sticky; top: 0; background: var(--cream
 .js-reveal.is-in .contact::before { transform: scaleX(1); }
 @media (max-width: 800px) { .contacts { grid-template-columns: 1fr; gap: 24px; } }
 @media (prefers-reduced-motion: reduce) { .js-reveal .contact { border-top-color: var(--ink); } .js-reveal .contact::before { display: none; } }
+
+/* --- Placements: the wall as the page's stage (replaces the tape). Every mark starts quiet; a spotlight lights what
+   the pointer is near (site.js sets --lit per mark), filters dim the rest, marks cascade in on reveal. --- */
+.section--stage { margin-top: 8px; }
+.wall--stage { margin-top: 0; padding-top: 22px; border-top: 1px solid var(--ink); }
+.wall--stage .wall__label { display: block; margin-bottom: 22px; }
+.wall--stage .wall__filters { margin-bottom: 40px; }
+.wall--stage .wall__grid { gap: 40px 56px; justify-content: center; }
+.wall--stage .wall__item {
+  --lit: 0;
+  opacity: calc(.38 + .62 * var(--lit)); filter: grayscale(calc(1 - var(--lit))); transform: translateY(calc(-5px * var(--lit)));
+  transition: opacity 240ms var(--ease-out), filter 240ms var(--ease-out), transform 240ms var(--ease-out);
+  animation: wallIn 560ms var(--ease-out) backwards; animation-delay: calc(var(--i, 0) * 22ms); animation-play-state: paused; }
+.js-reveal.is-in .wall--stage .wall__item { animation-play-state: running; }
+@keyframes wallIn { from { opacity: 0; transform: translateY(16px); } }
+.wall--stage:not(.is-lit) .wall__item { --lit: 1; }   /* no JS, or reduced motion: everything lit */
+.wall--stage .wall__item img { height: 28px; max-width: 190px; }
+.wall--stage .wall__item img.tall { height: 40px; }
+.wall--stage .wall__item--text span { font: 500 13px/1.3 var(--sans); text-transform: uppercase; letter-spacing: .08em; color: var(--ink); white-space: nowrap; }
+.wall--stage .wall__item.is-dim { opacity: .07; filter: grayscale(1); transform: none; }
+@media (hover: hover) { .wall--stage .wall__item:hover { --lit: 1; } }
+@media (max-width: 800px) {
+  .wall--stage .wall__grid { gap: 28px 32px; }
+  .wall--stage .wall__item img { height: 22px; max-width: 140px; }
+  .wall--stage .wall__item img.tall { height: 30px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wall--stage .wall__item { --lit: 1; animation: none; transition: none; transform: none; }
+}

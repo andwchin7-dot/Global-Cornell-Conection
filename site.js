@@ -303,7 +303,7 @@
     var id = "desk-" + i; p.id = id; p.setAttribute("role", "tabpanel");
     var b = el("button", "deskbar__tab", { type: "button", role: "tab", "aria-controls": id });
     var lab = p.querySelector(".desk__label"); b.textContent = lab ? lab.textContent : ("Desk " + (i + 1));
-    b.addEventListener("click", function () { show(i, true); });
+    b.addEventListener("click", function (e) { show(i, !!(e && e.isTrusted)); });
     tabs.appendChild(b); return b;
   });
   bar.appendChild(prev); bar.appendChild(tabs); bar.appendChild(count); bar.appendChild(next);
@@ -327,4 +327,75 @@
     else if (e.key === "End") { e.preventDefault(); show(n - 1, true); }
   });
   show(0);
+})();
+
+/* ---------- redesign/akpsi: the wall as a stage — a spotlight follows the pointer; on touch it drifts on its own;
+   under reduced motion every mark is simply lit. Also hands each mark its index for the entrance cascade. ---------- */
+(function () {
+  "use strict";
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  document.querySelectorAll("[data-spot]").forEach(function (wall) {
+    var items = Array.prototype.slice.call(wall.querySelectorAll(".wall__item"));
+    if (!items.length) return;
+    items.forEach(function (it, i) { it.style.setProperty("--i", i); });
+    if (reduce) return;   /* CSS: :not(.is-lit) keeps everything lit */
+    var fine = window.matchMedia && window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+    var rects = [], px = -1e4, py = -1e4, raf = false, t0 = performance.now();
+    var measure = function () {
+      var w = wall.getBoundingClientRect();
+      rects = items.map(function (it) { var r = it.getBoundingClientRect(); return { x: r.left - w.left + r.width / 2, y: r.top - w.top + r.height / 2 }; });
+    };
+    var paint = function () {
+      raf = false;
+      var r = Math.max(220, wall.clientWidth * 0.22);
+      for (var i = 0; i < items.length; i++) {
+        var dx = rects[i].x - px, dy = rects[i].y - py, d = Math.sqrt(dx * dx + dy * dy);
+        var lit = d > r ? 0 : 1 - d / r; lit = lit * lit * (3 - 2 * lit);   /* smoothstep */
+        items[i].style.setProperty("--lit", lit.toFixed(3));
+      }
+    };
+    var req = function () { if (!raf) { raf = true; requestAnimationFrame(paint); } };
+    measure();
+    window.addEventListener("resize", function () { measure(); req(); });
+    window.addEventListener("load", function () { measure(); req(); });
+    wall.classList.add("is-lit");
+    if (fine) {
+      wall.addEventListener("pointermove", function (e) { var w = wall.getBoundingClientRect(); px = e.clientX - w.left; py = e.clientY - w.top; req(); });
+      wall.addEventListener("pointerleave", function () { px = -1e4; py = -1e4; req(); });
+      req();
+    } else {
+      var loop = function (now) {   /* no fine pointer: the light wanders the wall, slowly */
+        var s = (now - t0) / 1000, W = wall.clientWidth, Hh = wall.clientHeight;
+        px = W * (0.5 + 0.42 * Math.sin(s * 0.23)); py = Hh * (0.5 + 0.40 * Math.sin(s * 0.31 + 1.3));
+        paint(); requestAnimationFrame(loop);
+      };
+      requestAnimationFrame(loop);
+    }
+  });
+})();
+
+/* ---------- redesign/akpsi: the wall's filters and the desk switcher speak to each other (matched by desk label) ---------- */
+(function () {
+  "use strict";
+  var wall = document.querySelector("[data-wall][data-spot]"), host = document.querySelector("[data-desks]");
+  if (!wall || !host) return;
+  var norm = function (s) { return (s || "").replace(/\s+/g, " ").trim().toLowerCase(); };
+  var busy = false;
+  var wallBtns = Array.prototype.slice.call(wall.querySelectorAll(".wallf"));
+  var byLabel = function (list, label) { var L = norm(label); return list.filter(function (b) { return norm(b.getAttribute("data-label") || b.textContent) === L; })[0]; };
+  wallBtns.forEach(function (b) {
+    b.addEventListener("click", function () {
+      if (busy) return; busy = true;
+      var tab = byLabel(Array.prototype.slice.call(document.querySelectorAll(".deskbar__tab")), b.getAttribute("data-label") || "");
+      if (tab) tab.click();
+      busy = false;
+    });
+  });
+  document.addEventListener("click", function (e) {
+    var tab = e.target.closest && e.target.closest(".deskbar__tab"); if (!tab || busy) return;
+    busy = true;
+    var wb = byLabel(wallBtns, tab.textContent);
+    if (wb) wb.click();
+    busy = false;
+  });
 })();
