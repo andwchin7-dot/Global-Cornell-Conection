@@ -281,11 +281,15 @@
   });
 })();
 
-/* ---------- redesign/akpsi: the field (Placements) — every firm on one slow orbit.
-   Marks pack onto concentric ovals by arc length (narrow marks inside, wide outside, so nothing touches); each oval
-   turns slowly, alternating direction; the near edge reads larger and darker, the far edge smaller and lighter; the
-   whole disc leans with the pointer; a spotlight lights what the pointer is near (on touch it wanders). Under 600px the
-   marks stay in flow with only the bob. Reduced motion: a still oval, all lit. Without JS the marks simply wrap. ---------- */
+/* ---------- redesign/akpsi: the field (Placements) — every firm on one slow disc, grouped by desk.
+   Four concentric ovals. Each desk owns a wedge (sized by how much ring its marks need; a wedge that cannot hold its
+   marks is widened before anything else gives); within a wedge, narrow marks sit inside and wide ones outside, packed by
+   arc length, then nudged apart wherever neighbouring rings run close. A small label rides just outside each wedge and
+   steps outward or hides for a moment rather than touch a mark. The disc only appears when it can hold every mark
+   cleanly: it measures them, shrinks them a little if that closes the gap, and otherwise hands over to the dense wrap.
+   The disc turns as one body; each mark bobs on its own phase; the near edge reads larger and darker; the whole disc
+   leans with the pointer; a spotlight lights what the pointer is near (on touch it wanders).
+   Reduced motion: a still disc, all lit. Without JS the marks simply wrap. ---------- */
 (function () {
   "use strict";
   var host = document.querySelector("[data-field]"); if (!host) return;
@@ -294,83 +298,161 @@
   if (!tiles.length) return;
   var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var fine = window.matchMedia && window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-  var n = tiles.length, W = 1, H = 1, live = false, rings = [], t0 = performance.now();
+  var DESKS = [["ib", "Investment banking"], ["pe", "Private equity & credit"], ["quant", "Quant & trading"], ["consult", "Consulting"],
+               ["tech", "Technology"], ["amf", "Asset management & finance"], ["re", "Real estate"], ["grad", "Graduate study"]];
+  var TAU = Math.PI * 2, n = tiles.length, W = 1, H = 1, live = false, rings = [], marks = [], labels = [], t0 = performance.now();
   var rnd = function (i, k) { var x = Math.sin(i * 12.9898 + k * 78.233) * 43758.5453; return x - Math.floor(x); };
   tiles.forEach(function (t, i) {
-    t._phase = rnd(i, 1) * Math.PI * 2; t._speed = 0.3 + rnd(i, 2) * 0.3; t._amp = 3 + rnd(i, 3) * 4;
+    t._phase = rnd(i, 1) * TAU; t._speed = 0.3 + rnd(i, 2) * 0.3; t._amp = 3 + rnd(i, 3) * 4;
     t._bob = t.querySelector(".tile__bob") || t; t._lit = -1; t._x = 0; t._y = 0;
+    t._desk = (t.getAttribute("data-desk") || "").split(" ")[0];
     t.style.setProperty("--i", i);
   });
-  var arcToAngle = function (r, L) {
-    var P = r.table[r.N]; L = ((L % P) + P) % P;
-    var lo = 0, hi = r.N; while (lo < hi) { var mid = (lo + hi) >> 1; if (r.table[mid] < L) lo = mid + 1; else hi = mid; }
-    return lo / r.N * Math.PI * 2;
+  DESKS.forEach(function (d) {
+    var el = document.createElement("span"); el.className = "field__wedge"; el.textContent = d[1]; el.setAttribute("aria-hidden", "true");
+    stage.appendChild(el); labels.push({ code: d[0], el: el, a: 0, on: false, w: 0, h: 0 });
+  });
+  var arcAt = function (r, a) { a = ((a % TAU) + TAU) % TAU; var f = a / TAU * r.N, k = Math.floor(f); return k >= r.N ? r.P : r.table[k] + (r.table[k + 1] - r.table[k]) * (f - k); };
+  var angleAt = function (r, L) { L = ((L % r.P) + r.P) % r.P; var lo = 0, hi = r.N; while (lo < hi) { var mid = (lo + hi) >> 1; if (r.table[mid] < L) lo = mid + 1; else hi = mid; } return lo / r.N * TAU; };
+  var measure = function () {
+    tiles.forEach(function (t) { t._w = t._bob.offsetWidth || 100; t._h = t._bob.offsetHeight || 24; });
+    labels.forEach(function (l) { l.w = l.el.offsetWidth || 120; l.h = l.el.offsetHeight || 12; });
+  };
+  var buildRings = function (half, ratio) {
+    return [0.28, 0.50, 0.72, 0.94].map(function (f) {
+      var rx = f * half, ry = rx * ratio, table = [0], N = 720, acc = 0, px = rx, py = 0;
+      for (var s = 1; s <= N; s++) { var a = s / N * TAU, x = rx * Math.cos(a), y = ry * Math.sin(a); acc += Math.sqrt((x - px) * (x - px) + (y - py) * (y - py)); table.push(acc); px = x; py = y; }
+      return { rx: rx, ry: ry, table: table, N: N, P: acc };
+    });
+  };
+  var flow = function () {
+    live = false; stage.classList.remove("is-live"); stage.style.height = ""; stage.style.setProperty("--ms", 1);
+    var sr = stage.getBoundingClientRect(); H = Math.max(1, sr.height);
+    tiles.forEach(function (t) { var r = t.getBoundingClientRect(); t._x = r.left - sr.left + r.width / 2; t._y = r.top - sr.top + r.height / 2; });
+  };
+  /* pack every desk into its wedge; returns the largest overflow fraction (0 = everything fitted) */
+  var pack = function (gap, weights) {
+    var byDesk = {}; DESKS.forEach(function (d) { byDesk[d[0]] = []; });
+    tiles.forEach(function (t) { (byDesk[t._desk] || byDesk.grad).push(t); });
+    var total = 0, needs = {};
+    DESKS.forEach(function (d) { needs[d[0]] = byDesk[d[0]].reduce(function (s, t) { return s + t._w + gap; }, 0) * (weights[d[0]] || 1); total += needs[d[0]]; });
+    marks = []; var cursor = -Math.PI / 2, worst = 0, over = {};
+    DESKS.forEach(function (d) {
+      var code = d[0], list = byDesk[code].slice().sort(function (a, b) { return a._w - b._w; });
+      var span = TAU * needs[code] / total, a0 = cursor, a1 = cursor + span; cursor = a1;
+      var lab = labels.filter(function (l) { return l.code === code; })[0]; lab.a = (a0 + a1) / 2; lab.on = list.length > 0;
+      /* this wedge's segment on each ring */
+      var segs = rings.map(function (r) { var La = arcAt(r, a0), seg = (arcAt(r, a1) - La + r.P) % r.P; if (seg < 1) seg = r.P * span / TAU; return { r: r, La: La, seg: seg, used: 0, batch: [] }; });
+      var idx = 0;
+      for (var k = 0; k < segs.length && idx < list.length; k++) {   /* narrow marks inside, wide outside */
+        var sg = segs[k], last = k === segs.length - 1;
+        while (idx < list.length && (sg.used + list[idx]._w + gap <= sg.seg || last)) { sg.batch.push(list[idx]); sg.used += list[idx]._w + gap; idx++; }
+      }
+      /* an overfull ring hands its smallest marks to any ring with room (inner rings usually have some) */
+      for (var guard = 0; guard < 60; guard++) {
+        var full = segs.filter(function (s) { return s.used > s.seg && s.batch.length > 1; })[0]; if (!full) break;
+        var mv = full.batch[0], home = segs.filter(function (s) { return s !== full && s.used + mv._w + gap <= s.seg; })[0];
+        if (!home) break;
+        full.batch.shift(); full.used -= mv._w + gap; home.batch.push(mv); home.used += mv._w + gap;
+      }
+      segs.forEach(function (sg) {
+        if (!sg.batch.length) return;
+        if (sg.used > sg.seg) { var f = sg.used / sg.seg - 1; over[code] = Math.max(over[code] || 0, f); worst = Math.max(worst, f); }
+        var slack = Math.max(0, sg.seg - sg.used) / sg.batch.length, L = sg.La + slack / 2;
+        sg.batch.forEach(function (t) { L += (t._w + gap) / 2; marks.push({ t: t, r: sg.r, a0: angleAt(sg.r, L), w: t._w, h: t._h }); L += (t._w + gap) / 2 + slack; });
+      });
+    });
+    return { worst: worst, over: over };
+  };
+  /* marks can still meet — within a ring that overflowed a little, or across rings where they run close: nudge such
+     pairs apart along their rings. Returns true once nothing touches. */
+  var settle = function (gap) {
+    var S = 16, CLR = 10;   /* px of clear space every pair keeps, at every rotation */   /* the boxes do not turn with the disc, so a pair clear at rest can still meet at the sides: check the whole turn */
+    for (var it = 0; it < 120; it++) {
+      var moved = false;
+      for (var s = 0; s < S; s++) {
+        var rot = s / S * TAU;
+        for (var a = 0; a < marks.length; a++) for (var b = a + 1; b < marks.length; b++) {
+          var A = marks[a], B = marks[b], aa = A.a0 + rot, ab = B.a0 + rot;
+          /* clearance is the straight-line gap between the two boxes (so a diagonal neighbour is not a false hit) */
+          var gx = Math.abs(A.r.rx * Math.cos(aa) - B.r.rx * Math.cos(ab)) - (A.w + B.w) / 2; if (gx >= CLR) continue;
+          var gy = Math.abs(A.r.ry * Math.sin(aa) - B.r.ry * Math.sin(ab)) - (A.h + B.h) / 2; if (gy >= CLR) continue;
+          var g = Math.sqrt(Math.max(0, gx) * Math.max(0, gx) + Math.max(0, gy) * Math.max(0, gy)); if (g >= CLR) continue;
+          moved = true; var step = Math.max(1, (CLR - g) / 2);
+          [A, B].forEach(function (M, side) { var m = M.a0 + rot, tx = -M.r.rx * Math.sin(m), ty = M.r.ry * Math.cos(m), tl = Math.sqrt(tx * tx + ty * ty) || 1; M.a0 += (side === 0 ? -1 : 1) * step / tl; });
+        }
+      }
+      if (!moved) return true;
+    }
+    return false;
   };
   var layout = function () {
-    W = Math.max(1, stage.clientWidth); live = W >= 600;
-    stage.classList.toggle("is-live", live);
-    if (!live) {
-      stage.style.height = "";
-      var sr = stage.getBoundingClientRect(); H = Math.max(1, sr.height);
-      tiles.forEach(function (t) { var r = t.getBoundingClientRect(); t._x = r.left - sr.left + r.width / 2; t._y = r.top - sr.top + r.height / 2; });
-      return;
-    }
-    var gap = 26, ratio = 0.5, half = W / 2 - 24;
-    rings = [0.22, 0.40, 0.58, 0.76, 0.92].map(function (f, k) {
-      var rx = f * half, ry = rx * ratio, table = [0], N = 720, acc = 0, px = rx, py = 0;
-      for (var s = 1; s <= N; s++) { var a = s / N * Math.PI * 2, x = rx * Math.cos(a), y = ry * Math.sin(a); acc += Math.sqrt((x - px) * (x - px) + (y - py) * (y - py)); table.push(acc); px = x; py = y; }
-      return { rx: rx, ry: ry, table: table, N: N, P: acc, w: -(Math.PI * 2) / 150, off: k * 0.9, marks: [], used: 0 };   /* one turn every 150s, as one body */
-    });
-    var order = tiles.slice().sort(function (a, b) { return (a._bob.offsetWidth || 100) - (b._bob.offsetWidth || 100); });
-    var k = 0;
-    order.forEach(function (t) {   /* fill inner rings first; a ring is full when its perimeter is spent */
-      var w = (t._bob.offsetWidth || 100) + gap;
-      while (k < rings.length - 1 && rings[k].used + w > rings[k].P) k++;
-      rings[k].marks.push({ t: t, L: rings[k].used + w / 2 }); rings[k].used += w;
-    });
-    rings.forEach(function (r) {   /* then spread each ring's marks over its whole perimeter */
-      var scale = r.used ? r.P / r.used : 1;
-      r.marks.forEach(function (mk) { mk.a0 = arcToAngle(r, mk.L * scale) + r.off; mk.r = r; mk.w = mk.t._bob.offsetWidth || 100; mk.h = mk.t._bob.offsetHeight || 24; });   /* each ring starts elsewhere: no radial lines */
-    });
-    /* marks on neighbouring rings can still meet where the rings run close: nudge such pairs apart along their rings */
-    var all = []; rings.forEach(function (r) { all = all.concat(r.marks); });
-    var pos = function (mk) { return { x: mk.r.rx * Math.cos(mk.a0), y: mk.r.ry * Math.sin(mk.a0) }; };
-    for (var it = 0; it < 60; it++) {
-      var moved = false;
-      for (var a = 0; a < all.length; a++) for (var b = a + 1; b < all.length; b++) {
-        var A = all[a], B = all[b], pa = pos(A), pb = pos(B);
-        var ox = (A.w + B.w) / 2 + gap * 0.6 - Math.abs(pa.x - pb.x), oy = (A.h + B.h) / 2 + 14 - Math.abs(pa.y - pb.y);
-        if (ox <= 0 || oy <= 0) continue;
-        moved = true;
-        var step = Math.min(ox, oy) / 2;   /* px to move each, along its ring */
-        [A, B].forEach(function (M, side) {
-          var tx = -M.r.rx * Math.sin(M.a0), ty = M.r.ry * Math.cos(M.a0), tl = Math.sqrt(tx * tx + ty * ty) || 1;
-          var dir = (side === 0) ? -1 : 1;   /* opposite ways */
-          M.a0 += dir * step / tl;
-        });
+    W = Math.max(1, stage.clientWidth);
+    if (W < 900) return flow();
+    var gap = 24, half = W / 2 - 24;
+    var ratio = W >= 1300 ? 0.52 : 0.52 + (1300 - W) / 400 * 0.22;   /* rounder when narrower */
+    var ryMax = Math.max(280, ((window.innerHeight || 900) - 240) / 2);
+    ratio = Math.max(0.45, Math.min(ratio, 0.8, ryMax / (0.94 * half)));
+    rings = buildRings(half, ratio);
+    var avail = rings.reduce(function (s, r) { return s + r.P; }, 0);
+    stage.classList.add("is-live"); stage.style.setProperty("--ms", 1); measure();
+    /* at the sides neighbouring rings are 0.22 * half apart: the widest mark must fit in that with room, at any rotation */
+    var maxW = tiles.reduce(function (m, t) { return Math.max(m, t._w); }, 0), maxH = tiles.reduce(function (m, t) { return Math.max(m, t._h); }, 0);
+    var msCap = Math.min((0.22 * half - 14) / maxW, (0.22 * half * ratio - 12) / maxH);
+    if (msCap < 0.7) return flow();
+    var ms = Math.min(1, msCap), weights = {}, ok = false;
+    if (ms < 1) { stage.style.setProperty("--ms", ms.toFixed(3)); measure(); }
+    for (var pass = 0; pass < 40 && !ok; pass++) {
+      var need = tiles.reduce(function (s, t) { return s + t._w + gap; }, 0);
+      if (need * 1.1 > avail) {   /* not enough ring at this size: shrink the marks a little */
+        ms = ms * Math.min(0.97, avail / (need * 1.1));
+        if (ms < 0.7) return flow();
+        stage.style.setProperty("--ms", ms.toFixed(3)); measure(); continue;
       }
-      if (!moved) break;
+      var res = pack(gap, weights);
+      if (res.worst <= 0.35 && settle(gap)) { ok = true; break; }   /* settle is the real test: converged means nothing touches */
+      /* a wedge that overflowed takes a little more of the disc (damped, so the sizes converge rather than bounce);
+         every tenth pass without a fit, the marks shrink a step and the search continues with what it has learned */
+      var bumped = false;
+      for (var code in res.over) { if (res.over.hasOwnProperty(code) && res.over[code] > 0.02) { weights[code] = (weights[code] || 1) * (1 + 0.5 * res.over[code]); bumped = true; } }
+      if (!bumped || (pass + 1) % 10 === 0) { ms = ms * 0.94; if (ms < 0.7) return flow(); stage.style.setProperty("--ms", ms.toFixed(3)); measure(); }
     }
-    H = Math.round(rings[rings.length - 1].ry * 2 + 128);
+    if (!ok) return flow();
+    live = true;
+    H = Math.round(rings[3].ry * 2 + 2 * 58 + 56);
     stage.style.height = H + "px";
   };
-  var px = -1e4, py = -1e4, tx = 0, ty = 0, mx = 0, my = 0;
+  var px = -1e4, py = -1e4, tx = 0, ty = 0, mx = 0, my = 0, wv = -TAU / 150;   /* one turn every 150s */
   var setPointer = function (cx, cy) { var r = stage.getBoundingClientRect(); px = cx - r.left; py = cy - r.top; tx = px / W - 0.5; ty = py / H - 0.5; };
+  var hits = function (x, y, w, h) {   /* does a box at (x,y) touch any mark, at its current position? */
+    for (var i = 0; i < marks.length; i++) { var m = marks[i]; if (Math.abs(m.t._x - x) < (m.w + w) / 2 + 10 && Math.abs(m.t._y - y) < (m.h + h) / 2 + 8) return true; }
+    return false;
+  };
   var frame = function (now) {
     var s = (now - t0) / 1000;
     if (!fine && !reduce) { px = W * (0.5 + 0.42 * Math.sin(s * 0.23)); py = H * (0.5 + 0.40 * Math.sin(s * 0.31 + 1.3)); tx = px / W - 0.5; ty = py / H - 0.5; }
     mx += (tx - mx) * 0.05; my += (ty - my) * 0.05;
-    var cx = W / 2 - mx * 26, cy = H / 2 - my * 18;
+    var cx = W / 2 - mx * 26, cy = H / 2 - my * 18, rot = reduce ? 0 : wv * s;
     if (live) {
-      rings.forEach(function (r) {
-        var ry = r.ry * (1 - my * 0.12);
-        r.marks.forEach(function (mk) {
-          var t = mk.t, a = reduce ? mk.a0 : mk.a0 + r.w * s, sn = Math.sin(a), near = (sn + 1) / 2;
-          var bx = reduce ? 0 : Math.sin(s * t._speed + t._phase) * t._amp * 0.4, by = reduce ? 0 : Math.cos(s * t._speed * 0.8 + t._phase) * t._amp;
-          t._x = cx + r.rx * Math.cos(a) + bx; t._y = cy + ry * sn + by;
-          t._bob.style.transform = "translate(" + t._x.toFixed(1) + "px," + t._y.toFixed(1) + "px) translate(-50%,-50%) scale(" + (0.9 + 0.1 * near).toFixed(3) + ")";
-          t.style.setProperty("--far", (1 - near).toFixed(3));
-        });
+      marks.forEach(function (mk) {
+        var t = mk.t, r = mk.r, a = mk.a0 + rot, sn = Math.sin(a), near = (sn + 1) / 2, ry = r.ry * (1 - my * 0.12);
+        var bx = reduce ? 0 : Math.sin(s * t._speed + t._phase) * t._amp * 0.4, by = reduce ? 0 : Math.cos(s * t._speed * 0.8 + t._phase) * t._amp;
+        t._x = cx + r.rx * Math.cos(a) + bx; t._y = cy + ry * sn + by;
+        t._bob.style.transform = "translate(" + t._x.toFixed(1) + "px," + t._y.toFixed(1) + "px) translate(-50%,-50%) scale(" + (0.9 + 0.1 * near).toFixed(3) + ")";
+        t.style.setProperty("--far", (1 - near).toFixed(3));
+      });
+      var out = rings[3];
+      labels.forEach(function (l) {
+        if (!l.on) { l.el.style.display = "none"; return; }
+        var a = l.a + rot, shown = false, x = 0, y = 0;
+        for (var step = 0; step < 8 && !shown; step++) {   /* just outside the rim; step outward if a mark is in the way */
+          var g = 1 + step * 0.045;
+          x = cx + (out.rx + 26) * g * Math.cos(a); y = cy + (out.ry + 46) * g * Math.sin(a);
+          x = Math.min(W - l.w / 2 - 6, Math.max(l.w / 2 + 6, x)); y = Math.min(H - l.h / 2 - 4, Math.max(l.h / 2 + 4, y));
+          if (!hits(x, y, l.w, l.h)) shown = true;
+        }
+        l.el.style.display = ""; l.el.style.opacity = shown ? "1" : "0";
+        l.el.style.transform = "translate(" + x.toFixed(1) + "px," + y.toFixed(1) + "px) translate(-50%,-50%)";
       });
     } else if (!reduce) {
       for (var i = 0; i < n; i++) { var t = tiles[i]; t._bob.style.transform = "translate(" + (Math.sin(s * t._speed + t._phase) * t._amp * 0.4).toFixed(2) + "px," + (Math.cos(s * t._speed * 0.8 + t._phase) * t._amp).toFixed(2) + "px)"; }
@@ -386,8 +468,9 @@
     }
   };
   layout();
-  window.addEventListener("resize", layout);
-  window.addEventListener("load", function () { layout(); if (reduce) requestAnimationFrame(frame); });
+  var relayout = function () { layout(); if (reduce) requestAnimationFrame(frame); };
+  window.addEventListener("resize", relayout);
+  window.addEventListener("load", relayout);
   if (fine) {
     stage.addEventListener("pointermove", function (e) { setPointer(e.clientX, e.clientY); });
     stage.addEventListener("pointerleave", function () { px = -1e4; py = -1e4; tx = 0; ty = 0; });
