@@ -281,103 +281,117 @@
   });
 })();
 
-/* ---------- redesign/akpsi: the field (Placements) — every firm floating on one stage.
-   Layout: a jittered grid, stable between visits (seeded by index). Each mark bobs on its own phase and sits on one of
-   three depths that parallax with the pointer (eased, velocity-style); a spotlight lights what the pointer is near; on
-   touch the light wanders on its own. A filter gathers one desk into a centred cluster and lets the rest recede.
-   Reduced motion: no bob, no parallax, instant layout, everything lit. Without JS the marks simply wrap. ---------- */
+/* ---------- redesign/akpsi: the field (Placements) — every firm on one slow orbit.
+   Marks pack onto concentric ovals by arc length (narrow marks inside, wide outside, so nothing touches); each oval
+   turns slowly, alternating direction; the near edge reads larger and darker, the far edge smaller and lighter; the
+   whole disc leans with the pointer; a spotlight lights what the pointer is near (on touch it wanders). Under 600px the
+   marks stay in flow with only the bob. Reduced motion: a still oval, all lit. Without JS the marks simply wrap. ---------- */
 (function () {
   "use strict";
-  var host = document.querySelector("[data-field]");
-  if (!host) return;
+  var host = document.querySelector("[data-field]"); if (!host) return;
   var stage = host.querySelector(".field");
   var tiles = Array.prototype.slice.call(stage.querySelectorAll(".tile"));
-  var btns = Array.prototype.slice.call(host.querySelectorAll(".fieldf"));
-  var cap = host.querySelector("[data-field-caption]");
   if (!tiles.length) return;
   var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var fine = window.matchMedia && window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-  var n = tiles.length, W = 1, H = 1, desk = "all";
+  var n = tiles.length, W = 1, H = 1, live = false, rings = [], t0 = performance.now();
   var rnd = function (i, k) { var x = Math.sin(i * 12.9898 + k * 78.233) * 43758.5453; return x - Math.floor(x); };
   tiles.forEach(function (t, i) {
-    t._depth = [0.86, 1, 1.14][i % 3]; t._par = [0.35, 0.65, 1][i % 3];
-    t._phase = rnd(i, 1) * Math.PI * 2; t._speed = 0.32 + rnd(i, 2) * 0.36; t._amp = 5 + rnd(i, 3) * 6;
-    t._codes = (t.getAttribute("data-desk") || "").split(" ");
-    t._bob = t.querySelector(".tile__bob") || t; t._lit = -1; t._tx = 0; t._ty = 0;
-    t.style.setProperty("--i", i); t.style.setProperty("--d", t._depth);
+    t._phase = rnd(i, 1) * Math.PI * 2; t._speed = 0.3 + rnd(i, 2) * 0.3; t._amp = 3 + rnd(i, 3) * 4;
+    t._bob = t.querySelector(".tile__bob") || t; t._lit = -1; t._x = 0; t._y = 0;
+    t.style.setProperty("--i", i);
   });
-  var place = function () {
-    W = Math.max(1, stage.clientWidth);
-    var live = W >= 600;   /* narrow screens keep the marks in flow: denser, and a filter simply collapses the rest */
+  var arcToAngle = function (r, L) {
+    var P = r.table[r.N]; L = ((L % P) + P) % P;
+    var lo = 0, hi = r.N; while (lo < hi) { var mid = (lo + hi) >> 1; if (r.table[mid] < L) lo = mid + 1; else hi = mid; }
+    return lo / r.N * Math.PI * 2;
+  };
+  var layout = function () {
+    W = Math.max(1, stage.clientWidth); live = W >= 600;
     stage.classList.toggle("is-live", live);
     if (!live) {
-      var onN = desk === "all" ? tiles : tiles.filter(function (t) { return t._codes.indexOf(desk) !== -1; });
-      tiles.forEach(function (t) { t.classList.toggle("is-off", onN.indexOf(t) === -1); });
       stage.style.height = "";
       var sr = stage.getBoundingClientRect(); H = Math.max(1, sr.height);
-      tiles.forEach(function (t) { var r = t.getBoundingClientRect(); t._tx = r.left - sr.left + r.width / 2; t._ty = r.top - sr.top + r.height / 2; });
+      tiles.forEach(function (t) { var r = t.getBoundingClientRect(); t._x = r.left - sr.left + r.width / 2; t._y = r.top - sr.top + r.height / 2; });
       return;
     }
-    var cols = Math.max(2, Math.min(9, Math.round(W / 190)));
-    var cw = W / cols, rh = Math.max(96, cw * 0.6), rows = Math.ceil(n / cols);
-    tiles.forEach(function (t, i) {   /* every mark keeps a home slot, so "All firms" is always the same picture */
-      var c = i % cols, r = Math.floor(i / cols), hw = (t.offsetWidth || 120) / 2;
-      /* jitter mostly in y: wide wordmarks share the row, so x stays close to the cell centre; and never past the stage edge */
-      t._hx = Math.min(W - hw, Math.max(hw, c * cw + cw / 2 + (rnd(i, 4) - 0.5) * cw * 0.16));
-      t._hy = r * rh + rh / 2 + (rnd(i, 5) - 0.5) * rh * 0.36;
+    var gap = 26, ratio = 0.5, half = W / 2 - 24;
+    rings = [0.22, 0.40, 0.58, 0.76, 0.92].map(function (f, k) {
+      var rx = f * half, ry = rx * ratio, table = [0], N = 720, acc = 0, px = rx, py = 0;
+      for (var s = 1; s <= N; s++) { var a = s / N * Math.PI * 2, x = rx * Math.cos(a), y = ry * Math.sin(a); acc += Math.sqrt((x - px) * (x - px) + (y - py) * (y - py)); table.push(acc); px = x; py = y; }
+      return { rx: rx, ry: ry, table: table, N: N, P: acc, w: -(Math.PI * 2) / 150, off: k * 0.9, marks: [], used: 0 };   /* one turn every 150s, as one body */
     });
-    H = rows * rh;
-    if (desk === "all") {
-      tiles.forEach(function (t) { t._tx = t._hx; t._ty = t._hy; t.classList.remove("is-off"); });
-    } else {
-      var on = tiles.filter(function (t) { return t._codes.indexOf(desk) !== -1; }), m = on.length;
-      var ccols = Math.max(2, Math.min(cols, Math.ceil(Math.sqrt(m * 1.7)))), crows = Math.ceil(m / ccols);
-      var ccw = Math.min(cw * 1.2, W / ccols), crh = rh;
-      var ox = (W - ccols * ccw) / 2, oy = (H - crows * crh) / 2, k = 0;
-      tiles.forEach(function (t) {
-        if (on.indexOf(t) === -1) { t._tx = t._hx; t._ty = t._hy; t.classList.add("is-off"); return; }
-        var c = k % ccols, r = Math.floor(k / ccols); k++;
-        var last = (r === crows - 1) ? (m - r * ccols) : ccols;   /* a short last row sits centred */
-        t._tx = ox + (ccols - last) * ccw / 2 + c * ccw + ccw / 2; t._ty = oy + r * crh + crh / 2;
-        t.classList.remove("is-off");
-      });
+    var order = tiles.slice().sort(function (a, b) { return (a._bob.offsetWidth || 100) - (b._bob.offsetWidth || 100); });
+    var k = 0;
+    order.forEach(function (t) {   /* fill inner rings first; a ring is full when its perimeter is spent */
+      var w = (t._bob.offsetWidth || 100) + gap;
+      while (k < rings.length - 1 && rings[k].used + w > rings[k].P) k++;
+      rings[k].marks.push({ t: t, L: rings[k].used + w / 2 }); rings[k].used += w;
+    });
+    rings.forEach(function (r) {   /* then spread each ring's marks over its whole perimeter */
+      var scale = r.used ? r.P / r.used : 1;
+      r.marks.forEach(function (mk) { mk.a0 = arcToAngle(r, mk.L * scale) + r.off; mk.r = r; mk.w = mk.t._bob.offsetWidth || 100; mk.h = mk.t._bob.offsetHeight || 24; });   /* each ring starts elsewhere: no radial lines */
+    });
+    /* marks on neighbouring rings can still meet where the rings run close: nudge such pairs apart along their rings */
+    var all = []; rings.forEach(function (r) { all = all.concat(r.marks); });
+    var pos = function (mk) { return { x: mk.r.rx * Math.cos(mk.a0), y: mk.r.ry * Math.sin(mk.a0) }; };
+    for (var it = 0; it < 60; it++) {
+      var moved = false;
+      for (var a = 0; a < all.length; a++) for (var b = a + 1; b < all.length; b++) {
+        var A = all[a], B = all[b], pa = pos(A), pb = pos(B);
+        var ox = (A.w + B.w) / 2 + gap * 0.6 - Math.abs(pa.x - pb.x), oy = (A.h + B.h) / 2 + 14 - Math.abs(pa.y - pb.y);
+        if (ox <= 0 || oy <= 0) continue;
+        moved = true;
+        var step = Math.min(ox, oy) / 2;   /* px to move each, along its ring */
+        [A, B].forEach(function (M, side) {
+          var tx = -M.r.rx * Math.sin(M.a0), ty = M.r.ry * Math.cos(M.a0), tl = Math.sqrt(tx * tx + ty * ty) || 1;
+          var dir = (side === 0) ? -1 : 1;   /* opposite ways */
+          M.a0 += dir * step / tl;
+        });
+      }
+      if (!moved) break;
     }
-    stage.style.height = Math.round(H) + "px";
-    tiles.forEach(function (t) { t.style.setProperty("--x", t._tx.toFixed(1) + "px"); t.style.setProperty("--y", t._ty.toFixed(1) + "px"); });
+    H = Math.round(rings[rings.length - 1].ry * 2 + 128);
+    stage.style.height = H + "px";
   };
-  var px = -1e4, py = -1e4, tx = 0, ty = 0, mx = 0, my = 0, t0 = performance.now();
+  var px = -1e4, py = -1e4, tx = 0, ty = 0, mx = 0, my = 0;
   var setPointer = function (cx, cy) { var r = stage.getBoundingClientRect(); px = cx - r.left; py = cy - r.top; tx = px / W - 0.5; ty = py / H - 0.5; };
   var frame = function (now) {
     var s = (now - t0) / 1000;
-    if (!fine) { px = W * (0.5 + 0.42 * Math.sin(s * 0.23)); py = H * (0.5 + 0.40 * Math.sin(s * 0.31 + 1.3)); tx = px / W - 0.5; ty = py / H - 0.5; }
-    mx += (tx - mx) * 0.06; my += (ty - my) * 0.06;
-    var R = Math.max(220, W * 0.22);
-    for (var i = 0; i < n; i++) {
-      var t = tiles[i];
-      var bx = Math.sin(s * t._speed + t._phase) * t._amp * 0.35, by = Math.cos(s * t._speed * 0.8 + t._phase) * t._amp;
-      t._bob.style.transform = "translate(" + (bx - mx * 28 * t._par).toFixed(2) + "px," + (by - my * 22 * t._par).toFixed(2) + "px)";
-      var dx = t._tx - px, dy = t._ty - py, d = Math.sqrt(dx * dx + dy * dy);
-      var lit = d > R ? 0 : 1 - d / R; lit = lit * lit * (3 - 2 * lit);
-      if (Math.abs(lit - t._lit) > 0.004) { t._lit = lit; t.style.setProperty("--lit", lit.toFixed(3)); }
+    if (!fine && !reduce) { px = W * (0.5 + 0.42 * Math.sin(s * 0.23)); py = H * (0.5 + 0.40 * Math.sin(s * 0.31 + 1.3)); tx = px / W - 0.5; ty = py / H - 0.5; }
+    mx += (tx - mx) * 0.05; my += (ty - my) * 0.05;
+    var cx = W / 2 - mx * 26, cy = H / 2 - my * 18;
+    if (live) {
+      rings.forEach(function (r) {
+        var ry = r.ry * (1 - my * 0.12);
+        r.marks.forEach(function (mk) {
+          var t = mk.t, a = reduce ? mk.a0 : mk.a0 + r.w * s, sn = Math.sin(a), near = (sn + 1) / 2;
+          var bx = reduce ? 0 : Math.sin(s * t._speed + t._phase) * t._amp * 0.4, by = reduce ? 0 : Math.cos(s * t._speed * 0.8 + t._phase) * t._amp;
+          t._x = cx + r.rx * Math.cos(a) + bx; t._y = cy + ry * sn + by;
+          t._bob.style.transform = "translate(" + t._x.toFixed(1) + "px," + t._y.toFixed(1) + "px) translate(-50%,-50%) scale(" + (0.9 + 0.1 * near).toFixed(3) + ")";
+          t.style.setProperty("--far", (1 - near).toFixed(3));
+        });
+      });
+    } else if (!reduce) {
+      for (var i = 0; i < n; i++) { var t = tiles[i]; t._bob.style.transform = "translate(" + (Math.sin(s * t._speed + t._phase) * t._amp * 0.4).toFixed(2) + "px," + (Math.cos(s * t._speed * 0.8 + t._phase) * t._amp).toFixed(2) + "px)"; }
     }
-    requestAnimationFrame(frame);
+    if (!reduce) {
+      var R = Math.max(200, W * 0.2);
+      for (var j = 0; j < n; j++) {
+        var u = tiles[j], dx = u._x - px, dy = u._y - py, d = Math.sqrt(dx * dx + dy * dy);
+        var lit = d > R ? 0 : 1 - d / R; lit = lit * lit * (3 - 2 * lit);
+        if (Math.abs(lit - u._lit) > 0.004) { u._lit = lit; u.style.setProperty("--lit", lit.toFixed(3)); }
+      }
+      requestAnimationFrame(frame);
+    }
   };
-  var setDesk = function (code, btn) {
-    desk = code;
-    btns.forEach(function (b) { var on = b === btn; b.classList.toggle("is-on", on); b.setAttribute("aria-pressed", on ? "true" : "false"); });
-    if (cap) cap.textContent = btn.getAttribute("data-desc") || "";
-    place();
-  };
-  btns.forEach(function (b) { b.addEventListener("click", function () { setDesk(b.getAttribute("data-desk") || "all", b); }); });
-  stage.classList.add("is-settling");   /* no transition on the first placement */
-  place();
-  requestAnimationFrame(function () { requestAnimationFrame(function () { stage.classList.remove("is-settling"); }); });
-  window.addEventListener("resize", place);
-  window.addEventListener("load", place);
+  layout();
+  window.addEventListener("resize", layout);
+  window.addEventListener("load", function () { layout(); if (reduce) requestAnimationFrame(frame); });
   if (fine) {
     stage.addEventListener("pointermove", function (e) { setPointer(e.clientX, e.clientY); });
     stage.addEventListener("pointerleave", function () { px = -1e4; py = -1e4; tx = 0; ty = 0; });
   }
-  if (reduce) { tiles.forEach(function (t) { t.style.setProperty("--lit", 1); }); }
-  else { requestAnimationFrame(frame); }
+  if (reduce) tiles.forEach(function (t) { t.style.setProperty("--lit", 1); });
+  requestAnimationFrame(frame);
 })();

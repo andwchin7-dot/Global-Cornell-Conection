@@ -14,11 +14,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500&family=Instrument+Serif&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=1789329009">
+  <link rel="stylesheet" href="styles.css?v=1789329765">
   <style>
     /* placements.html — page styles only; tape + desks come from styles.css */
     .nav__cols a[aria-current="page"] { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; }
-    .hero--slim { min-height: 320px; padding-bottom: 8px; }
+    .hero--slim { min-height: 0; padding-bottom: 0; }   /* the field sits right under the line */
   </style>
 </head>
 <body>
@@ -59,25 +59,11 @@
 
   <!-- logos: official marks via Wikimedia Commons, used nominatively (fact of employment). School shields: HBS (CC BY-SA 4.0),
        Stanford, LBS, NYU, Penn, Cornell (public domain). Ava Labs is shown by the Avalanche mark (CC BY-SA 4.0). -->
-  <!-- ===== 2. the field (redesign/akpsi): every firm floating on one stage. Marks bob on their own phase across three
-       depths that parallax with the pointer; a spotlight lights what the pointer is near; a filter gathers one desk to
-       the centre and lets the rest recede, with that desk's line as the caption. Without JS the marks simply wrap. ===== -->
+  <!-- ===== 2. the field (redesign/akpsi): every firm on one slow orbit. Marks pack onto concentric ovals (narrow inside,
+       wide outside); each oval turns slowly, alternating direction; the near edge reads larger and darker; the disc
+       leans with the pointer; a spotlight lights what the pointer is near. Under 600px the marks stay in a dense wrap
+       with only the bob. Reduced motion: a still oval, all lit. Without JS the marks simply wrap. ===== -->
   <section class="section section--field" aria-label="Firms where GCC members and alumni have placed" data-field>
-    <div class="field-head">
-      <span class="label">Where members have placed</span>
-      <div class="fieldfs" aria-label="Filter firms by desk">
-          <button class="fieldf is-on" type="button" data-desk="all" data-desc="" aria-pressed="true">All firms</button>
-          <button class="fieldf" type="button" data-desk="ib" data-desc="Coverage and product groups, from bulge brackets to boutiques." aria-pressed="false">Investment Banking</button>
-          <button class="fieldf" type="button" data-desk="pe" data-desc="Buyout, growth and private credit funds." aria-pressed="false">Private Equity &amp; Credit</button>
-          <button class="fieldf" type="button" data-desk="quant" data-desc="Market-making and proprietary trading." aria-pressed="false">Quant &amp; Trading</button>
-          <button class="fieldf" type="button" data-desk="consult" data-desc="Strategy and advisory, Bain to the Big Four." aria-pressed="false">Consulting</button>
-          <button class="fieldf" type="button" data-desk="tech" data-desc="Product, engineering and strategy at large platforms and in crypto." aria-pressed="false">Technology</button>
-          <button class="fieldf" type="button" data-desk="amf" data-desc="Asset managers, payments and financial data." aria-pressed="false">Asset Management &amp; Finance</button>
-          <button class="fieldf" type="button" data-desk="re" data-desc="Investment management, development and hospitality." aria-pressed="false">Real Estate</button>
-          <button class="fieldf" type="button" data-desk="grad" data-desc="Business, law and engineering programs after Cornell." aria-pressed="false">Graduate Study</button>
-      </div>
-      <p class="field-caption" data-field-caption aria-live="polite"></p>
-    </div>
     <ul class="field" aria-label="Firms where GCC members and alumni work">
       <li class="tile" data-desk="ib" data-firm="Goldman Sachs"><span class="tile__bob"><img src="assets/logos/goldman-sachs.svg" alt="Goldman Sachs" class="tall" loading="lazy"></span></li>
       <li class="tile" data-desk="ib" data-firm="J.P. Morgan"><span class="tile__bob"><img src="assets/logos/jpmorgan.svg" alt="J.P. Morgan" loading="lazy"></span></li>
@@ -223,6 +209,6 @@
   <div class="footer__wordmark" aria-hidden="true">GCC</div>
 </footer>
 
-<script src="site.js?v=1789329009" defer></script>
+<script src="site.js?v=1789329765" defer></script>
 </body>
 </html>
