@@ -630,34 +630,88 @@ body:not(.home--cinema) .nav { position: sticky; top: 0; background: var(--cream
 @media (max-width: 800px) { .contacts { grid-template-columns: 1fr; gap: 24px; } }
 @media (prefers-reduced-motion: reduce) { .js-reveal .contact { border-top-color: var(--ink); } .js-reveal .contact::before { display: none; } }
 
-/* --- Placements: the field — every firm on one slow orbit (replaces the wall and the desks) --- */
-.section--field { margin-top: 0; padding-top: 72px; }   /* air between the line and the disc */
-.field { position: relative; list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 22px 28px; }
-.field.is-live { display: block; }
-.tile { --lit: 0; --far: 0; display: flex; align-items: center; justify-content: center;
-  opacity: calc((.62 + .38 * var(--lit)) * (1 - .22 * var(--far))); filter: grayscale(calc(1 - var(--lit)));
-  transition: opacity 320ms var(--ease-out), filter 320ms var(--ease-out);
-  animation: fieldIn 640ms var(--ease-out) backwards; animation-delay: calc(var(--i, 0) * 14ms); animation-play-state: paused; }
-.js-reveal.is-in .tile { animation-play-state: running; }
-@keyframes fieldIn { from { opacity: 0; } }
-.field.is-live .tile { position: absolute; left: 0; top: 0; width: 0; height: 0; overflow: visible; }
-.field.is-live .tile__bob { position: absolute; left: 0; top: 0; transform: translate(-50%, -50%); }
-.tile__bob { display: flex; align-items: center; gap: 8px; white-space: nowrap; will-change: transform; }
-.field { --ms: 1; }   /* mark scale: the disc shrinks its marks a little when that is what fits */
-.tile img { height: calc(21px * var(--ms)); width: auto; max-width: calc(124px * var(--ms)); display: block; }
-.tile img.tall { height: calc(30px * var(--ms)); }
-.tile img.crest { height: calc(42px * var(--ms)); max-width: calc(54px * var(--ms)); }
-.tile img.mark { height: calc(19px * var(--ms)); max-width: calc(25px * var(--ms)); }
-.field__wedge { position: absolute; left: 0; top: 0; font: 500 11px/1 var(--sans); text-transform: uppercase; letter-spacing: .1em; color: var(--ink-60); white-space: nowrap; pointer-events: none; transition: opacity 320ms var(--ease-out); }
-.field:not(.is-live) .field__wedge { display: none; }
-.tile__text { font: 500 calc(11px * var(--ms, 1))/1.3 var(--sans); text-transform: uppercase; letter-spacing: .08em; color: var(--ink); white-space: nowrap; }
-.tile__bob { gap: calc(8px * var(--ms, 1)); }
-@media (hover: hover) { .tile:hover { --lit: 1; } }
+/* --- the borrowed register (romemichal.pl, 2026-09): assets slide and lift rather than fade. Expo-out for anything that
+   travels; a strong in-out for the curtain. --- */
+:root { --ease-expo: cubic-bezier(.16, 1, .3, 1); }
+
+/* line clip: text rises out of a mask (the hero line runs on load) */
+.clip { display: block; overflow: hidden; padding-bottom: .12em; margin-bottom: -.12em; }
+.clip__in { display: block; transform: translateY(110%); }
+.hero .clip__in { animation: clipUp 1100ms var(--ease-expo) 120ms forwards; }
+@keyframes clipUp { to { transform: none; } }
+
+/* --- Placements: the marks — every firm at once, one grid, no grouping: the names are the point. Each mark slides in as it
+   enters, sweeping left to right along its row (site.js sets --d from its place in the row). --- */
+.section--marks { margin-top: 0; padding-top: 88px; }
+.marks { list-style: none; margin: 0; padding: 20px 0 0; position: relative; border-top: 1px solid var(--ink);
+  display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px 24px; }
+.mark { display: flex; align-items: center; justify-content: center; gap: 10px; min-height: 112px; padding: 0 8px;
+  opacity: 0; transform: translateX(40px); transition: opacity 600ms var(--ease-out), transform 1000ms var(--ease-expo); transition-delay: var(--d, 0ms); }
+.mark.is-in { opacity: 1; transform: none; }
+.mark img { height: 32px; width: auto; max-width: 74%; object-fit: contain; display: block;
+  transition: filter 320ms var(--ease-out), opacity 320ms var(--ease-out), transform 320ms var(--ease-expo); }   /* full colour at rest */
+.mark img.tall { height: 52px; }
+.mark img.crest { height: 64px; max-width: 70px; }
+.mark img.icon { height: 26px; max-width: 30px; }
+.mark--text, .mark--lockup span { font: 500 13px/1.3 var(--sans); text-transform: uppercase; letter-spacing: .08em; color: var(--ink-60);
+  text-align: center; transition: color 320ms var(--ease-out); }
+@media (hover: hover) {
+  .mark:hover img { transform: scale(1.06); }
+  .marks:has(.mark:hover) .mark:not(:hover) img { filter: grayscale(1); opacity: .3; }   /* the mark in hand keeps its colour; the rest step back */
+}
+@media (max-width: 1100px) { .marks { grid-template-columns: repeat(4, minmax(0, 1fr)); } .mark { min-height: 100px; } }
 @media (max-width: 800px) {
-  .field { gap: 18px 22px; }
-  .tile img { height: 18px; max-width: 120px; } .tile img.tall { height: 26px; } .tile img.crest { height: 36px; } .tile img.mark { height: 18px; }
+  .section--marks { padding-top: 56px; }
+  .marks { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 16px; }
+  .mark { min-height: 84px; padding: 0 4px; }
+  .mark img { height: 24px; max-width: 82%; } .mark img.tall { height: 38px; } .mark img.crest { height: 48px; } .mark img.icon { height: 20px; }
+  .mark--text, .mark--lockup span { font-size: 11px; }
 }
+@media (max-width: 520px) { .marks { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* --- photo curtain: a cream sheet lifts off each photo card as its section reveals, and the photo settles from a slight zoom --- */
+.js-reveal .card::before { content: ""; position: absolute; inset: 0; z-index: 3; background: var(--cream); transform-origin: 50% 100%;
+  transition: transform 900ms var(--ease-in-out) 120ms; pointer-events: none; }
+.js-reveal.is-in .card::before { transform: scaleY(0); }
+.js-reveal .card > img { transform: scale(1.06); transition: transform 1400ms var(--ease-expo) 120ms; }
+.js-reveal.is-in .card > img { transform: none; }
+
 @media (prefers-reduced-motion: reduce) {
-  .tile { --lit: 1; --far: 0; animation: none; transition: none; }
-  .field:not(.is-live) .tile__bob { transform: none !important; }
+  .clip__in, .hero .clip__in { transform: none; animation: none; transition: none; }
+  .mark { opacity: 1; transform: none; transition: none; }
+  .marks:has(.mark:hover) .mark:not(:hover) img { filter: none; opacity: 1; }
+  .js-reveal .card::before { display: none; }
+  .js-reveal .card > img { transform: none; transition: none; }
 }
+/* --- Home: the network section is the title and one sentence; the photographs follow with a short gap --- */
+.network__lede { margin-top: 28px; }
+.section--network + .gallery { margin-top: 56px; }
+.gallery .carousel-controls { padding: 20px var(--m) 0; }      /* the arrows sit under the track */
+@media (max-width: 800px) { .section--network + .gallery { margin-top: 40px; } .gallery .carousel-controls { padding-top: 16px; } }
+
+/* --- Placements: 48 marks fill six columns exactly; the schools sit under the wall as one quiet labelled row --- */
+.marks { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 4px 20px; }
+.mark { min-height: 104px; }
+.mark img { max-width: 78%; }
+.marks--schools { border-top: 0; padding-top: 12px; margin-top: 8px; display: flex; flex-wrap: wrap; gap: 0 12px; }
+.marks--schools .mark { min-height: 88px; padding: 0 22px; }
+.schools__label { margin-top: 48px; padding-top: 22px; border-top: 1px solid var(--ink); color: var(--ink-60); }
+@media (max-width: 1100px) { .marks { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (max-width: 800px) { .marks { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 14px; } .marks--schools { gap: 0; } .marks--schools .mark { min-height: 72px; padding: 0 14px; } .schools__label { margin-top: 32px; } }
+@media (max-width: 520px) { .marks { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* --- Home: the placements preview — the same marks grid under a normal section head (which already carries the hairline) --- */
+.marks--home { border-top: 0; padding-top: 0; margin-top: 24px; }
+.marks--home .mark { min-height: 96px; }
+@media (max-width: 800px) { .marks--home .mark { min-height: 80px; } }
+
+/* --- the page has a width. Content is capped at --max and centred; below that nothing changes (the gutter is the old 28px
+   margin); above it the gutters grow so titles, links, ledes and grids stop drifting to the edges of a wide monitor.
+   Heroes, the sheet and the footer ground stay full bleed — only their contents sit inside the gutters. --- */
+:root { --max: 1440px; --gutter: max(var(--m), calc((100% - var(--max)) / 2)); }
+.nav { padding-left: var(--gutter); padding-right: var(--gutter); }
+.hero, .hero--home, .hero--photo, .hero--cinema, .page--photo .hero--photo { padding-left: var(--gutter); padding-right: var(--gutter); }
+.section, .tagline, .divider, .footer { padding-left: var(--gutter); padding-right: var(--gutter); }
+.carousel { padding-left: var(--gutter); padding-right: var(--gutter); scroll-padding-inline: var(--gutter); }
+.carousel-controls, .gallery .carousel-controls { padding-left: var(--gutter); padding-right: var(--gutter); }
+.card { width: min(1100px, calc(100vw - 120px)); }

@@ -5,10 +5,9 @@
 
 What it does (and nothing else):
   - members.html      ← templates/members.html + content/board.json, members.json, alumni.json, crops.json
+                        (members.json "graduated_through" moves graduated classes off the roster, into alumni.html)
   - index.html        ← content/gallery.json (the photo carousel and the three "What we do" cards),
                         written between <!-- build:gallery --> / <!-- build:pillars --> markers
-  - about.html        ← content/about.json + board.json ("Who runs it" and "What we stand for"),
-                        written between <!-- build:who-runs-it --> / <!-- build:values --> markers
   - every page        ← partials/nav.html, footer.html, nodes.html re-synced
 Headshots: assets/people/<first-last>.jpg is used automatically when it exists (lowercase, hyphens, e.g.
 assets/people/sophia-jian.jpg); a person without a photo gets a quiet empty tile, never an initials circle.
@@ -24,7 +23,7 @@ def load(name):
     return json.loads((CONTENT / name).read_text(encoding="utf-8"))
 
 board_data = load("board.json"); members_data = load("members.json"); alumni_data = load("alumni.json")
-crops_data = load("crops.json"); gallery_data = load("gallery.json"); about_data = load("about.json")
+crops_data = load("crops.json"); gallery_data = load("gallery.json")
 
 def esc(s): return html.escape(str(s or ""))
 def slug(name): return re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-")
@@ -101,16 +100,45 @@ def roster_li(p):
     return out + "</span></li>"
 
 def dir_li(p):
-    out = f'<li><span class="directory__name">{esc(p["name"])}</span>'
-    if p.get("role"): out += f'<span class="directory__role">{nowrap_year(p["role"])}</span>'
+    year = f' <span class="directory__year">\u2019{p["year"] % 100:02d}</span>' if p.get("year") else ""
+    out = f'<li><span class="directory__name">{esc(p["name"])}{year}</span>'
+    if p.get("role"): out += f'<span class="directory__role">{esc(p["role"])}</span>'
     return out + "</li>"
 
-# the roster keeps every member exactly as listed — board members appear in BOTH the board grid and their
+# ---------- who is on campus and who has graduated ----------
+# members.json "graduated_through" is the class year of the newest class that has graduated (2026 -> '26 and earlier).
+# Those members leave the public roster and join the alumni directory; alumni.json still holds where people work.
+GRADUATED_THROUGH = int(members_data.get("graduated_through") or 0)
+def class_year(s):
+    m = re.search(r"'(\d\d)$", (s or "").strip()); return 2000 + int(m.group(1)) if m else None
+def drop_year(s): return re.sub(r"\s*'\d\d$", "", (s or "").strip())
+def graduated(p):
+    y = class_year(p.get("major")); return y is not None and y <= GRADUATED_THROUGH
+
+# the roster keeps every current member exactly as listed — board members appear in BOTH the board grid and their
 # own semester class (overlap is intended; the board is drawn from these classes)
-roster_groups = [(g["semester"], g["people"]) for g in members_data["groups"] if g["people"]]
+roster_groups = [(g["semester"], [p for p in g["people"] if not graduated(p)]) for g in members_data["groups"]]
+roster_groups = [(s, ps) for s, ps in roster_groups if ps]
+graduates = [p for g in members_data["groups"] for p in g["people"] if graduated(p)]
 omitted = 0
 alumni = alumni_data["people"]; by_name = {p["name"]: p for p in alumni}
 featured = [by_name[n] for n in alumni_data.get("featured", []) if n in by_name]
+
+# the directory: everyone in alumni.json plus every graduated member, one entry per name, alphabetical by surname.
+# A graduate with no alumni.json entry is listed with their major until the board adds where they work.
+directory, dir_by_name = [], {}
+for p in alumni:
+    d = {"name": p["name"], "role": drop_year(p.get("role")), "year": class_year(p.get("role"))}
+    directory.append(d); dir_by_name[d["name"]] = d
+for p in graduates:
+    d = dir_by_name.get(p["name"])
+    if d is None:
+        d = {"name": p["name"], "role": drop_year(p.get("major")), "year": class_year(p.get("major"))}
+        directory.append(d); dir_by_name[d["name"]] = d
+    else:
+        d["year"] = d["year"] or class_year(p.get("major"))
+        if not d["role"]: d["role"] = drop_year(p.get("major"))
+directory.sort(key=lambda d: (d["name"].split()[-1].lower(), d["name"].lower()))
 
 members_html = "\n".join(
     f'<div class="roster__group">\n<p class="label roster__label">{esc(s)}</p>\n<ul class="roster__grid" aria-label="{esc(s)} members">\n'
@@ -132,8 +160,8 @@ out = (tpl.replace("{{NODES}}", partial("nodes.html")).replace("{{NAV}}", nav_fo
           .replace("{{BOARD}}", "\n".join(board_li(p) for p in board_people))
           .replace("{{BOARD_TERM}}", esc(board_data.get("term", "")))
           .replace("{{MEMBERS}}", members_html)
-          .replace("{{DIRECTORY}}", "\n".join(dir_li(p) for p in alumni))
-          .replace("{{ALUMNI_COUNT}}", str(len(alumni))).replace("{{OMITTED}}", str(omitted)))
+          .replace("{{DIRECTORY}}", "\n".join(dir_li(p) for p in directory))
+          .replace("{{ALUMNI_COUNT}}", str(len(directory))).replace("{{OMITTED}}", str(omitted)))
 (SITE / "members.html").write_text(out, encoding="utf-8")
 
 # ---------- alumni.html: the members-only directory, AES-encrypted at build time ----------
@@ -147,7 +175,7 @@ try:
         raise _SkipDirectory
     from cryptography.hazmat.primitives.ciphers.aead import AESGCM
     import hashlib as _hashlib, os as _os, base64 as _b64
-    _dir_html = '<ul class="directory" aria-label="GCC alumni and where they work">' + "\n".join(dir_li(p) for p in alumni) + "</ul>"
+    _dir_html = '<ul class="directory" aria-label="GCC alumni and where they work">' + "\n".join(dir_li(p) for p in directory) + "</ul>"
     _salt = _os.urandom(16); _iv = _os.urandom(12)
     _key = _hashlib.pbkdf2_hmac("sha256", _password.encode(), _salt, 310000, dklen=32)
     _ct = AESGCM(_key).encrypt(_iv, _dir_html.encode("utf-8"), None)
@@ -156,7 +184,7 @@ try:
     _aout = (_atpl.replace("{{NODES}}", partial("nodes.html")).replace("{{NAV}}", nav_for("alumni.html"))
                   .replace("{{FOOTER}}", partial("footer.html")).replace("{{PAYLOAD}}", _payload))
     (SITE / "alumni.html").write_text(_aout, encoding="utf-8")
-    print(f"alumni.html: encrypted directory of {len(alumni)} alumni (password in content/alumni-password.txt)")
+    print(f"alumni.html: encrypted directory of {len(directory)} alumni (password in content/alumni-password.txt)")
 except _SkipDirectory:
     print("alumni.html: SKIPPED - content/alumni-password.txt not found (ask a board member; the live directory keeps its password)")
 except ImportError:
@@ -182,21 +210,7 @@ pillars = "\n".join(
     f'          <a class="pill pill--light" href="{esc(p["href"])}">{esc(p["link_text"])}</a>\n        </div>\n      </article>' for p in gallery_data["pillars"])
 replace_block(SITE / "index.html", "pillars", pillars)
 
-# ---------- about.html: who runs it + values ----------
-bp = {p["name"]: p for p in board_people}
-def about_person(name):
-    p = bp.get(name, {"name": name, "role": ""})
-    rel = photo_for(p)
-    if rel:
-        fx, fy, z = CROPS.get(name, DEFAULT_CROP)
-        img = f'<div class="person__photo"><img src="{esc(rel)}" alt="{esc(name)}" style="--oy:{int(fy*100)}%" loading="lazy" draggable="false"></div>'
-    else:
-        img = '<div class="person__photo person__photo--empty" aria-hidden="true"></div>'
-    return (f'          <figure class="person">\n            {img}\n            <figcaption><span class="person__name">{esc(name)}</span>'
-            f'<span class="person__role">{esc(p.get("role",""))}</span></figcaption>\n          </figure>')
-who = "\n".join("      <li>\n" + about_person(n) + "\n      </li>" for n in about_data["who_runs_it"][:4])
-replace_block(SITE / "about.html", "who-runs-it", who)
-# (the "What we stand for" values section was removed at the client's request, 2026-08-26)
+# (about.html: the board snapshot and the values section were both removed at the client's request; only nav/footer are synced)
 
 # ---------- re-sync nav/footer into the static pages ----------
 for page in ["index.html", "about.html", "recruitment.html", "placements.html"]:
@@ -217,7 +231,8 @@ for page in ["index.html", "about.html", "members.html", "recruitment.html", "al
 # ---------- report ----------
 no_photo = [p["name"] for p in board_people if not photo_for(p)]
 print(f"members.html: board {len(board_people)} ({board_data.get('term','')}), {len(no_photo)} without a headshot: {no_photo}")
-print(f"             roster {sum(len(ps) for _, ps in roster_groups)} in {len(roster_groups)} semesters (board omitted: {omitted}); alumni {len(alumni)}, featured {len(featured)}")
+print(f"             roster {sum(len(ps) for _, ps in roster_groups)} in {len(roster_groups)} semesters (graduated through {GRADUATED_THROUGH}: {len(graduates)} moved to the directory)")
+no_role = [p["name"] for p in graduates if p["name"] not in by_name]
+print(f"             directory {len(directory)} (alumni.json {len(alumni)} + graduates); {len(no_role)} graduates listed by major only, no alumni.json entry yet: {no_role}")
 print(f"index.html:  carousel {len(gallery_data['carousel'])} cards, pillars {len(gallery_data['pillars'])}")
-print(f"about.html:  who runs it {len(about_data['who_runs_it'][:4])}, values {len(about_data['values'])}")
 print("done — preview with: python3 -m http.server 8123  (then open http://localhost:8123)")

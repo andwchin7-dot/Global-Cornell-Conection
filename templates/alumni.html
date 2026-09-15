@@ -26,13 +26,19 @@
     .gate.is-wrong .gate__err { display: block; }
 
     /* the unlocked directory (same treatment as the roster pages) */
-    .directory { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px 40px; margin-top: 48px; }
-    .directory > li { min-width: 0; }
+    /* alphabetical by surname, so it reads DOWN each column (CSS columns, not a row-major grid) */
+    .directory { column-count: 3; column-gap: 40px; margin-top: 48px; }
+    .directory > li { min-width: 0; break-inside: avoid; padding-bottom: 22px; }
     .directory__name { display: block; font: 400 16px/1.3 var(--sans); }
     .directory__role { display: block; margin-top: 1px; font: 400 14px/1.35 var(--sans); color: var(--ink-60); }
+    .directory__year { margin-left: 4px; color: var(--ink-60); font-variant-numeric: tabular-nums; }
+    .directory > li[hidden] { display: none; }
+    .vault__filter { display: flex; max-width: 420px; margin-top: 40px; border: 1px solid var(--ink); border-radius: 999px; padding: 10px 18px; }
+    .vault__filter input { flex: 1; min-width: 0; background: transparent; border: 0; color: var(--ink); font: 400 16px/1.2 var(--sans); outline: none; }
+    .vault__empty { margin-top: 32px; font-size: 15px; color: var(--ink-60); }
     .vault__note { margin-top: 40px; font-size: 14px; color: var(--ink-60); max-width: 620px; }
-    @media (max-width: 1100px) { .directory { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-    @media (max-width: 520px) { .directory { grid-template-columns: 1fr; } }
+    @media (max-width: 1100px) { .directory { column-count: 2; } }
+    @media (max-width: 520px) { .directory { column-count: 1; } }
   </style>
 </head>
 <body>
@@ -64,8 +70,12 @@
       </div>
 
       <div class="vault" data-vault hidden>
-        <p class="section__intro">Recent alumni and where they went next.</p>
+        <div class="vault__filter">
+          <label class="sr-only" for="vault-q">Filter alumni</label>
+          <input id="vault-q" type="search" placeholder="Filter by name, firm or class year" autocomplete="off" data-vault-filter>
+        </div>
         <div data-vault-list></div>
+        <p class="vault__empty" data-vault-empty hidden>No one matches that yet.</p>
         <p class="vault__note">Please keep this directory within the GCC community. To update your own listing, email <a href="mailto:cornellgccinfo@gmail.com">cornellgccinfo@gmail.com</a>.</p>
       </div>
     </div>
@@ -105,6 +115,17 @@
     vault.hidden = false;
     if (remember) try { sessionStorage.setItem("gcc-dir-pw", pw); } catch (e) {}
   }
+
+  /* the filter: name, firm or class year — plain substring match on each entry's text */
+  var q = document.querySelector("[data-vault-filter]"), empty = document.querySelector("[data-vault-empty]");
+  var norm = function (s) { return s.toLowerCase().replace(/[\u2019']/g, "").replace(/\s+/g, " ").trim(); };
+  q.addEventListener("input", function () {
+    var needle = norm(q.value), shown = 0;
+    Array.prototype.forEach.call(list.querySelectorAll("li"), function (li) {
+      var hit = !needle || norm(li.textContent).indexOf(needle) !== -1; li.hidden = !hit; if (hit) shown++;
+    });
+    empty.hidden = shown > 0;
+  });
 
   form.addEventListener("submit", function (e) {
     e.preventDefault();

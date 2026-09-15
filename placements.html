@@ -14,11 +14,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500&family=Instrument+Serif&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=1789348277">
+  <link rel="stylesheet" href="styles.css?v=1789440677">
   <style>
-    /* placements.html — page styles only; tape + desks come from styles.css */
+    /* placements.html — page styles only; the marks grid and the clip reveal come from styles.css */
     .nav__cols a[aria-current="page"] { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; }
-    .hero--slim { min-height: 0; padding-bottom: 0; }   /* the field sits right under the line */
+    .hero--slim { min-height: 0; padding-bottom: 0; }   /* the grid opens right under the line */
   </style>
 </head>
 <body>
@@ -54,72 +54,79 @@
 
   <!-- ===== 1. hero: one serif line, then the field ===== -->
   <section class="hero hero--slim" aria-labelledby="hero-title">
-    <h1 class="hero__title" id="hero-title">Ten weeks of training, and the desks it leads to.</h1>
+    <h1 class="hero__title" id="hero-title"><span class="clip"><span class="clip__in">Ten weeks of training, and the desks it leads to.</span></span></h1>
   </section>
 
   <!-- logos: official marks via Wikimedia Commons, used nominatively (fact of employment). School shields: HBS (CC BY-SA 4.0),
-       Stanford, LBS, NYU, Penn, Cornell (public domain). Ava Labs is shown by the Avalanche mark (CC BY-SA 4.0). -->
-  <!-- ===== 2. the field (redesign/akpsi): every firm on one slow orbit. Marks pack onto concentric ovals (narrow inside,
-       wide outside); each oval turns slowly, alternating direction; the near edge reads larger and darker; the disc
-       leans with the pointer; a spotlight lights what the pointer is near. Under 600px the marks stay in a dense wrap
-       with only the bob. Reduced motion: a still oval, all lit. Without JS the marks simply wrap. ===== -->
-  <section class="section section--field" aria-label="Firms where GCC members and alumni have placed" data-field>
-    <ul class="field" aria-label="Firms where GCC members and alumni work">
-      <li class="tile" data-desk="ib" data-firm="Goldman Sachs"><span class="tile__bob"><img src="assets/logos/goldman-sachs.svg" alt="Goldman Sachs" class="tall" loading="lazy"></span></li>
-      <li class="tile" data-desk="ib" data-firm="J.P. Morgan"><span class="tile__bob"><img src="assets/logos/jpmorgan.svg" alt="J.P. Morgan" loading="lazy"></span></li>
-      <li class="tile" data-desk="ib" data-firm="Morgan Stanley"><span class="tile__bob"><img src="assets/logos/morgan-stanley.svg" alt="Morgan Stanley" loading="lazy"></span></li>
-      <li class="tile" data-desk="ib" data-firm="Evercore"><span class="tile__bob"><img src="assets/logos/evercore.svg" alt="Evercore" loading="lazy"></span></li>
-      <li class="tile" data-desk="ib" data-firm="PJT Partners"><span class="tile__bob"><img src="assets/logos/pjt.svg" alt="PJT Partners" class="tall" loading="lazy"></span></li>
-      <li class="tile" data-desk="ib" data-firm="Lazard"><span class="tile__bob"><img src="assets/logos/lazard.svg" alt="Lazard" loading="lazy"></span></li>
-      <li class="tile" data-desk="ib" data-firm="Guggenheim"><span class="tile__bob"><img src="assets/logos/guggenheim.svg" alt="Guggenheim" loading="lazy"></span></li>
-      <li class="tile" data-desk="ib" data-firm="Citi"><span class="tile__bob"><img src="assets/logos/citi.svg" alt="Citi" loading="lazy"></span></li>
-      <li class="tile" data-desk="ib" data-firm="Barclays"><span class="tile__bob"><img src="assets/logos/barclays.svg" alt="Barclays" loading="lazy"></span></li>
-      <li class="tile" data-desk="ib" data-firm="Bank of America"><span class="tile__bob"><img src="assets/logos/bank-of-america.svg" alt="Bank of America" loading="lazy"></span></li>
-      <li class="tile" data-desk="ib" data-firm="UBS"><span class="tile__bob"><img src="assets/logos/ubs.png" alt="UBS" class="tall" loading="lazy"></span></li>
-      <li class="tile" data-desk="ib" data-firm="Nomura"><span class="tile__bob"><img src="assets/logos/nomura.svg" alt="Nomura" loading="lazy"></span></li>
-      <li class="tile" data-desk="ib" data-firm="Wells Fargo"><span class="tile__bob"><img src="assets/logos/wells-fargo.svg" alt="Wells Fargo" class="tall" loading="lazy"></span></li>
-      <li class="tile" data-desk="ib" data-firm="CIBC"><span class="tile__bob"><img src="assets/logos/cibc.svg" alt="CIBC" loading="lazy"></span></li>
-      <li class="tile" data-desk="pe re" data-firm="Blackstone"><span class="tile__bob"><img src="assets/logos/blackstone.svg" alt="Blackstone" loading="lazy"></span></li>
-      <li class="tile" data-desk="pe" data-firm="The Carlyle Group"><span class="tile__bob"><img src="assets/logos/carlyle.svg" alt="The Carlyle Group" loading="lazy"></span></li>
-      <li class="tile" data-desk="pe" data-firm="Oaktree Capital"><span class="tile__bob"><img src="assets/logos/oaktree.svg" alt="Oaktree Capital" loading="lazy"></span></li>
-      <li class="tile" data-desk="pe" data-firm="Sixth Street"><span class="tile__bob"><img src="assets/logos/sixth-street.svg" alt="Sixth Street" class="tall" loading="lazy"></span></li>
-      <li class="tile" data-desk="pe" data-firm="Oak Hill Advisors"><span class="tile__bob"><img src="assets/logos/oak-hill.png" alt="Oak Hill Advisors" class="tall" loading="lazy"></span></li>
-      <li class="tile" data-desk="pe" data-firm="Primavera Capital"><span class="tile__bob"><img src="assets/logos/primavera.png" alt="Primavera Capital" class="tall" loading="lazy"></span></li>
-      <li class="tile" data-desk="pe" data-firm="Arcline Investment Management"><span class="tile__bob"><img src="assets/logos/arcline.svg" alt="Arcline Investment Management" loading="lazy"></span></li>
-      <li class="tile" data-desk="pe" data-firm="Trillium Asset Management"><span class="tile__bob"><img src="assets/logos/trillium.svg" alt="Trillium Asset Management" class="tall" loading="lazy"></span></li>
-      <li class="tile" data-desk="pe" data-firm="Strategic Investment Group"><span class="tile__bob"><img src="assets/logos/strategic-investment-group.svg" alt="Strategic Investment Group" class="tall" loading="lazy"></span></li>
-      <li class="tile" data-desk="quant" data-firm="Susquehanna International Group"><span class="tile__bob"><img src="assets/logos/susquehanna.png" alt="Susquehanna International Group" loading="lazy"></span></li>
-      <li class="tile" data-desk="quant" data-firm="Optiver"><span class="tile__bob"><img src="assets/logos/optiver.svg" alt="Optiver" loading="lazy"></span></li>
-      <li class="tile" data-desk="quant" data-firm="Wintermute"><span class="tile__bob"><img src="assets/logos/wintermute.svg" alt="" class="mark" loading="lazy"><span class="tile__text">Wintermute</span></span></li>
-      <li class="tile" data-desk="consult" data-firm="Bain &amp; Company"><span class="tile__bob"><img src="assets/logos/bain.svg" alt="Bain &amp; Company" loading="lazy"></span></li>
-      <li class="tile" data-desk="consult" data-firm="PwC"><span class="tile__bob"><img src="assets/logos/pwc.svg" alt="PwC" class="tall" loading="lazy"></span></li>
-      <li class="tile" data-desk="consult" data-firm="EY"><span class="tile__bob"><img src="assets/logos/ey.svg" alt="EY" loading="lazy"></span></li>
-      <li class="tile" data-desk="consult" data-firm="Deloitte"><span class="tile__bob"><img src="assets/logos/deloitte.svg" alt="Deloitte" loading="lazy"></span></li>
-      <li class="tile" data-desk="consult" data-firm="Wavestone"><span class="tile__bob"><img src="assets/logos/wavestone.svg" alt="Wavestone" loading="lazy"></span></li>
-      <li class="tile" data-desk="tech" data-firm="Meta"><span class="tile__bob"><img src="assets/logos/meta.svg" alt="Meta" loading="lazy"></span></li>
-      <li class="tile" data-desk="tech" data-firm="Oracle"><span class="tile__bob"><img src="assets/logos/oracle.svg" alt="Oracle" loading="lazy"></span></li>
-      <li class="tile" data-desk="tech" data-firm="Amazon"><span class="tile__bob"><img src="assets/logos/amazon.svg" alt="Amazon" loading="lazy"></span></li>
-      <li class="tile" data-desk="tech" data-firm="Microsoft"><span class="tile__bob"><img src="assets/logos/microsoft.svg" alt="Microsoft" loading="lazy"></span></li>
-      <li class="tile" data-desk="tech" data-firm="IBM"><span class="tile__bob"><img src="assets/logos/ibm.svg" alt="IBM" loading="lazy"></span></li>
-      <li class="tile" data-desk="tech" data-firm="Walmart Global Tech"><span class="tile__bob"><img src="assets/logos/walmart.svg" alt="Walmart Global Tech" loading="lazy"></span></li>
-      <li class="tile" data-desk="tech" data-firm="Uber"><span class="tile__bob"><img src="assets/logos/uber.svg" alt="Uber" loading="lazy"></span></li>
-      <li class="tile" data-desk="tech" data-firm="Robinhood"><span class="tile__bob"><img src="assets/logos/robinhood.svg" alt="Robinhood" class="tall" loading="lazy"></span></li>
-      <li class="tile" data-desk="tech" data-firm="Coinbase"><span class="tile__bob"><img src="assets/logos/coinbase.svg" alt="Coinbase" loading="lazy"></span></li>
-      <li class="tile" data-desk="tech" data-firm="Ava Labs"><span class="tile__bob"><img src="assets/logos/avalanche.svg" alt="" class="mark" loading="lazy"><span class="tile__text">Ava Labs</span></span></li>
-      <li class="tile" data-desk="amf" data-firm="Fidelity"><span class="tile__bob"><img src="assets/logos/fidelity.svg" alt="Fidelity" loading="lazy"></span></li>
-      <li class="tile" data-desk="amf" data-firm="Capital One"><span class="tile__bob"><img src="assets/logos/capital-one.svg" alt="Capital One" loading="lazy"></span></li>
-      <li class="tile" data-desk="amf" data-firm="American Express"><span class="tile__bob"><img src="assets/logos/amex.svg" alt="American Express" class="tall" loading="lazy"></span></li>
-      <li class="tile" data-desk="amf" data-firm="S&amp;P Global"><span class="tile__bob"><img src="assets/logos/sp-global.svg" alt="S&amp;P Global" loading="lazy"></span></li>
-      <li class="tile" data-desk="re" data-firm="Ares Management"><span class="tile__bob"><img src="assets/logos/ares.svg" alt="Ares Management" class="tall" loading="lazy"></span></li>
-      <li class="tile" data-desk="re" data-firm="Tishman Speyer"><span class="tile__bob"><img src="assets/logos/tishman-speyer.png" alt="Tishman Speyer" class="tall" loading="lazy"></span></li>
-      <li class="tile" data-desk="re" data-firm="LaSalle Investment Management"><span class="tile__bob"><img src="assets/logos/lasalle.svg" alt="LaSalle Investment Management" loading="lazy"></span></li>
-      <li class="tile tile--text" data-desk="re" data-firm="Park Hotels &amp; Resorts"><span class="tile__bob"><span class="tile__text">Park Hotels &amp; Resorts</span></span></li>
-      <li class="tile" data-desk="grad" data-firm="Harvard Business School"><span class="tile__bob"><img src="assets/logos/harvard-business-school.svg" alt="Harvard Business School" class="crest" loading="lazy"></span></li>
-      <li class="tile" data-desk="grad" data-firm="Stanford"><span class="tile__bob"><img src="assets/logos/stanford.svg" alt="Stanford" loading="lazy"></span></li>
-      <li class="tile" data-desk="grad" data-firm="London Business School"><span class="tile__bob"><img src="assets/logos/london-business-school.svg" alt="London Business School" class="crest" loading="lazy"></span></li>
-      <li class="tile" data-desk="grad" data-firm="NYU Law"><span class="tile__bob"><img src="assets/logos/nyu.svg" alt="NYU School of Law" class="crest" loading="lazy"></span></li>
-      <li class="tile" data-desk="grad" data-firm="Penn Engineering"><span class="tile__bob"><img src="assets/logos/penn.svg" alt="Penn Engineering" class="crest" loading="lazy"></span></li>
-      <li class="tile" data-desk="grad" data-firm="Graduate programs at Cornell"><span class="tile__bob"><img src="assets/logos/cornell.svg" alt="Cornell University" class="crest" loading="lazy"></span></li>
+       Stanford, LBS, NYU, Penn, Cornell (public domain). Jefferies and Crédit Agricole: Commons, public domain (simple marks).
+       Only firms with a real mark are on the wall, and only recognisable business, finance and technology names; the schools sit
+       under it as their own row. Placements in content/alumni.json without a mark here (2026-09-13): Lincoln International,
+       CohnReznick Capital, NH Investment & Securities, Trinity Life Sciences, Bowery Valuation, The Ritz-Carlton, Kengo Kuma &
+       Associates, Agoda, General Motors, Aabix Corporation, Ocean Solar Technologies. -->
+  <!-- ===== 2. the marks (redesign/akpsi): every firm at once, one grid, no grouping — the names are the point, the most
+       recognisable first. Each mark slides in as it enters, sweeping along its row (site.js sets --d from its place in the
+       row); marks rest in quiet grayscale and light in colour under the pointer while the rest step back.
+       Reduced motion: simply present. Without JS the grid is plain. ===== -->
+  <section class="section section--marks" aria-labelledby="marks-title">
+    <h2 class="sr-only" id="marks-title">Firms where GCC members and alumni have placed</h2>
+    <ul class="marks">
+      <li class="mark"><img src="assets/logos/goldman-sachs.svg" alt="Goldman Sachs" class="tall"></li>
+      <li class="mark"><img src="assets/logos/jpmorgan.svg" alt="J.P. Morgan" class="tall"></li>
+      <li class="mark"><img src="assets/logos/morgan-stanley.svg" alt="Morgan Stanley" class="tall"></li>
+      <li class="mark"><img src="assets/logos/blackstone.svg" alt="Blackstone"></li>
+      <li class="mark"><img src="assets/logos/citi.svg" alt="Citi"></li>
+      <li class="mark"><img src="assets/logos/bank-of-america.svg" alt="Bank of America"></li>
+      <li class="mark"><img src="assets/logos/barclays.svg" alt="Barclays"></li>
+      <li class="mark"><img src="assets/logos/ubs.png" alt="UBS" class="tall"></li>
+      <li class="mark"><img src="assets/logos/meta.svg" alt="Meta"></li>
+      <li class="mark"><img src="assets/logos/amazon.svg" alt="Amazon"></li>
+      <li class="mark"><img src="assets/logos/microsoft.svg" alt="Microsoft"></li>
+      <li class="mark"><img src="assets/logos/evercore.svg" alt="Evercore"></li>
+      <li class="mark"><img src="assets/logos/lazard.svg" alt="Lazard"></li>
+      <li class="mark"><img src="assets/logos/pjt.svg" alt="PJT Partners" class="tall"></li>
+      <li class="mark"><img src="assets/logos/jefferies.svg" alt="Jefferies"></li>
+      <li class="mark"><img src="assets/logos/guggenheim.svg" alt="Guggenheim"></li>
+      <li class="mark"><img src="assets/logos/nomura.svg" alt="Nomura"></li>
+      <li class="mark"><img src="assets/logos/wells-fargo.svg" alt="Wells Fargo" class="tall"></li>
+      <li class="mark"><img src="assets/logos/cibc.svg" alt="CIBC" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/credit-agricole.svg" alt="Crédit Agricole" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/carlyle.svg" alt="The Carlyle Group" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/oaktree.svg" alt="Oaktree Capital" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/sixth-street.svg" alt="Sixth Street" class="tall" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/ares.svg" alt="Ares Management" class="tall" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/bain.svg" alt="Bain &amp; Company" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/deloitte.svg" alt="Deloitte" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/pwc.svg" alt="PwC" class="tall" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/ey.svg" alt="EY" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/oracle.svg" alt="Oracle" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/ibm.svg" alt="IBM" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/uber.svg" alt="Uber" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/robinhood.svg" alt="Robinhood" class="tall" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/coinbase.svg" alt="Coinbase" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/walmart.svg" alt="Walmart Global Tech" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/fidelity.svg" alt="Fidelity" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/capital-one.svg" alt="Capital One" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/amex.svg" alt="American Express" class="tall" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/sp-global.svg" alt="S&amp;P Global" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/susquehanna.png" alt="Susquehanna International Group" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/optiver.svg" alt="Optiver" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/oak-hill.png" alt="Oak Hill Advisors" class="tall" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/primavera.png" alt="Primavera Capital" class="tall" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/arcline.svg" alt="Arcline Investment Management" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/trillium.svg" alt="Trillium Asset Management" class="tall" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/strategic-investment-group.svg" alt="Strategic Investment Group" class="tall" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/wavestone.svg" alt="Wavestone" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/tishman-speyer.png" alt="Tishman Speyer" class="tall" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/lasalle.svg" alt="LaSalle Investment Management" loading="lazy"></li>
+    </ul>
+    <p class="label schools__label" id="schools-title">Graduate study</p>
+    <ul class="marks marks--schools" aria-labelledby="schools-title">
+      <li class="mark"><img src="assets/logos/harvard-business-school.svg" alt="Harvard Business School" class="crest" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/stanford.svg" alt="Stanford" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/london-business-school.svg" alt="London Business School" class="crest" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/nyu.svg" alt="NYU School of Law" class="crest" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/penn.svg" alt="Penn Engineering" class="crest" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/cornell.svg" alt="Cornell University" class="crest" loading="lazy"></li>
     </ul>
   </section>
 
@@ -209,6 +216,6 @@
   <div class="footer__wordmark" aria-hidden="true">GCC</div>
 </footer>
 
-<script src="site.js?v=1789348277" defer></script>
+<script src="site.js?v=1789440677" defer></script>
 </body>
 </html>
