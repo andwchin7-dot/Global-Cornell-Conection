@@ -149,18 +149,22 @@
   if (!reduce) {   /* v2.0: the reveal register runs site-wide (Millennium continuity), not just on Home */
     var heroText = document.querySelector(".hero--cinema .hero__text");
     var heroDim = document.querySelector(".hero--cinema .hero__dim");
-    if (heroText || heroDim) {
+    var heroVideo = document.querySelector(".hero--cinema .hero__video");
+    if (heroText || heroDim || heroVideo) {
       var htTick = false;
       var htRamp = function () {
         htTick = false;
         var y = window.pageYOffset || 0, vh = window.innerHeight || 800;
         var f = Math.min(1, y / (vh * 0.55));
+        var g = Math.min(1, y / vh);   /* redesign: the zoom runs the full first viewport, slower than the fade */
         if (heroText) {
           heroText.style.opacity = (1 - f).toFixed(3);
-          heroText.style.transform = "translateY(" + (-f * 60).toFixed(1) + "px)";
+          heroText.style.transform = "translateY(" + (-f * 90).toFixed(1) + "px)";
         }
         /* continuity: the video recedes into the band's night as the sheet arrives — the hand-off is one world */
         if (heroDim) heroDim.style.opacity = (f * 0.6).toFixed(3);
+        /* redesign: the aerial creeps in as the sheet rises over it (1 -> 1.1), so the pinned frame never reads as frozen */
+        if (heroVideo) heroVideo.style.transform = "scale(" + (1 + g * 0.1).toFixed(4) + ")";
       };
       window.addEventListener("scroll", function () { if (!htTick) { htTick = true; requestAnimationFrame(htRamp); } }, { passive: true });
       htRamp();
@@ -250,4 +254,46 @@
       });
     });
   });
+})();
+
+/* ---------- redesign/akpsi: the header gains a paper ground once the page has moved (no layout shift: Home nav is fixed,
+   other pages sticky) ---------- */
+(function () {
+  "use strict";
+  var nav = document.querySelector(".nav");
+  if (!nav) return;
+  var on = false, tick = false;
+  var upd = function () {
+    tick = false;
+    var s = (window.pageYOffset || 0) > 24;
+    if (s !== on) { on = s; nav.classList.toggle("is-scrolled", s); }
+  };
+  window.addEventListener("scroll", function () { if (!tick) { tick = true; requestAnimationFrame(upd); } }, { passive: true });
+  upd();
+})();
+
+/* ---------- redesign/akpsi: staggered children — any [data-stagger] container hands each child its index;
+   styles.css turns that into a 50ms cascade once the section reveals ---------- */
+(function () {
+  "use strict";
+  document.querySelectorAll("[data-stagger]").forEach(function (g) {
+    Array.prototype.forEach.call(g.children, function (c, i) { c.style.setProperty("--i", i); });
+  });
+})();
+
+/* ---------- redesign/akpsi: the marks (Placements, and the preview on Home) — each mark reveals on its own as it enters the viewport, and its delay
+   comes from where it sits in its row, so every row sweeps in left to right. Reduced motion: marks simply present. ---------- */
+(function () {
+  "use strict";
+  var grids = Array.prototype.slice.call(document.querySelectorAll(".marks")); if (!grids.length) return;
+  var marks = Array.prototype.slice.call(document.querySelectorAll(".marks .mark"));
+  var sweep = function () { grids.forEach(function (grid) { var w = grid.clientWidth || 1;
+    Array.prototype.forEach.call(grid.querySelectorAll(".mark"), function (m) { m.style.setProperty("--d", Math.round(m.offsetLeft / w * 260) + "ms"); }); }); };
+  sweep(); window.addEventListener("resize", sweep);
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduce || !("IntersectionObserver" in window)) { marks.forEach(function (m) { m.classList.add("is-in"); }); return; }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("is-in"); io.unobserve(e.target); } });
+  }, { rootMargin: "0px 0px -8% 0px" });
+  marks.forEach(function (m) { io.observe(m); });
 })();

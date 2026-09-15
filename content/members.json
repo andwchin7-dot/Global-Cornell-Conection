@@ -1,4 +1,6 @@
 {
+ "_how_to_edit": "Members are grouped by the semester they joined. graduated_through is the class year of the newest class that has graduated: anyone whose major ends in that year or earlier ('26 and before while it is 2026) leaves the public roster and appears in the members-only alumni directory (alumni.html), matched by name with alumni.json. Bump it by one each June, then run python3 build.py.",
+ "graduated_through": 2026,
  "groups": [
   {
    "semester": "Spring 2026",

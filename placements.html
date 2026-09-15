@@ -14,11 +14,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500&family=Instrument+Serif&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=1787939953">
+  <link rel="stylesheet" href="styles.css?v=1789440677">
   <style>
-    /* placements.html — page styles only; tape + desks come from styles.css */
+    /* placements.html — page styles only; the marks grid and the clip reveal come from styles.css */
     .nav__cols a[aria-current="page"] { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; }
-    .hero--slim { min-height: 320px; padding-bottom: 8px; }
+    .hero--slim { min-height: 0; padding-bottom: 0; }   /* the grid opens right under the line */
   </style>
 </head>
 <body>
@@ -52,86 +52,125 @@
 
 <main id="main">
 
-  <!-- ===== 1. hero: one serif line, then the tape ===== -->
+  <!-- ===== 1. hero: one serif line, then the field ===== -->
   <section class="hero hero--slim" aria-labelledby="hero-title">
-    <h1 class="hero__title" id="hero-title">Ten weeks of training. A seat on every desk.</h1>
+    <h1 class="hero__title" id="hero-title"><span class="clip"><span class="clip__in">Ten weeks of training, and the desks it leads to.</span></span></h1>
   </section>
 
-  <!-- logos: official marks via Wikimedia Commons, used nominatively (fact of employment), rendered grayscale -->
-    <!-- the tape: same ribbon as Home — the firms, moving like a ticker -->
-  <div class="tape" role="img" aria-label="Firms where GCC alumni work">
-    <div class="tape__track"><div class="tape__set tape__set--logos"><img src="assets/logos/goldman-sachs.svg" alt="Goldman Sachs" class="tall"><img src="assets/logos/jpmorgan.svg" alt="J.P. Morgan"><img src="assets/logos/morgan-stanley.svg" alt="Morgan Stanley"><img src="assets/logos/blackstone.svg" alt="Blackstone"><img src="assets/logos/evercore.svg" alt="Evercore"><img src="assets/logos/lazard.svg" alt="Lazard"><img src="assets/logos/carlyle.svg" alt="The Carlyle Group"><img src="assets/logos/citi.svg" alt="Citi"><img src="assets/logos/barclays.svg" alt="Barclays"><img src="assets/logos/bank-of-america.svg" alt="Bank of America"><img src="assets/logos/nomura.svg" alt="Nomura"><img src="assets/logos/wells-fargo.svg" alt="Wells Fargo" class="tall"><img src="assets/logos/guggenheim.svg" alt="Guggenheim Partners"><img src="assets/logos/bain.svg" alt="Bain &amp; Company"><img src="assets/logos/deloitte.svg" alt="Deloitte"><img src="assets/logos/meta.svg" alt="Meta"><img src="assets/logos/microsoft.svg" alt="Microsoft"><img src="assets/logos/fidelity.svg" alt="Fidelity"><img src="assets/logos/optiver.svg" alt="Optiver"><img src="assets/logos/oracle.svg" alt="Oracle"><img src="assets/logos/pwc.svg" alt="PwC" class="tall"><img src="assets/logos/ubs.png" alt="UBS" class="tall"><img src="assets/logos/cibc.svg" alt="CIBC"><img src="assets/logos/pjt.svg" alt="PJT Partners" class="tall"><img src="assets/logos/ares.svg" alt="Ares Management" class="tall"><img src="assets/logos/coinbase.svg" alt="Coinbase"><img src="assets/logos/sixth-street.svg" alt="Sixth Street" class="tall"></div><div class="tape__set tape__set--logos" aria-hidden="true"><img src="assets/logos/goldman-sachs.svg" alt="Goldman Sachs" class="tall"><img src="assets/logos/jpmorgan.svg" alt="J.P. Morgan"><img src="assets/logos/morgan-stanley.svg" alt="Morgan Stanley"><img src="assets/logos/blackstone.svg" alt="Blackstone"><img src="assets/logos/evercore.svg" alt="Evercore"><img src="assets/logos/lazard.svg" alt="Lazard"><img src="assets/logos/carlyle.svg" alt="The Carlyle Group"><img src="assets/logos/citi.svg" alt="Citi"><img src="assets/logos/barclays.svg" alt="Barclays"><img src="assets/logos/bank-of-america.svg" alt="Bank of America"><img src="assets/logos/nomura.svg" alt="Nomura"><img src="assets/logos/wells-fargo.svg" alt="Wells Fargo" class="tall"><img src="assets/logos/guggenheim.svg" alt="Guggenheim Partners"><img src="assets/logos/bain.svg" alt="Bain &amp; Company"><img src="assets/logos/deloitte.svg" alt="Deloitte"><img src="assets/logos/meta.svg" alt="Meta"><img src="assets/logos/microsoft.svg" alt="Microsoft"><img src="assets/logos/fidelity.svg" alt="Fidelity"><img src="assets/logos/optiver.svg" alt="Optiver"><img src="assets/logos/oracle.svg" alt="Oracle"><img src="assets/logos/pwc.svg" alt="PwC" class="tall"><img src="assets/logos/ubs.png" alt="UBS" class="tall"><img src="assets/logos/cibc.svg" alt="CIBC"><img src="assets/logos/pjt.svg" alt="PJT Partners" class="tall"><img src="assets/logos/ares.svg" alt="Ares Management" class="tall"><img src="assets/logos/coinbase.svg" alt="Coinbase"><img src="assets/logos/sixth-street.svg" alt="Sixth Street" class="tall"></div></div>
-  </div>
+  <!-- logos: official marks via Wikimedia Commons, used nominatively (fact of employment). School shields: HBS (CC BY-SA 4.0),
+       Stanford, LBS, NYU, Penn, Cornell (public domain). Jefferies and Crédit Agricole: Commons, public domain (simple marks).
+       Only firms with a real mark are on the wall, and only recognisable business, finance and technology names; the schools sit
+       under it as their own row. Placements in content/alumni.json without a mark here (2026-09-13): Lincoln International,
+       CohnReznick Capital, NH Investment & Securities, Trinity Life Sciences, Bowery Valuation, The Ritz-Carlton, Kengo Kuma &
+       Associates, Agoda, General Motors, Aabix Corporation, Ocean Solar Technologies. -->
+  <!-- ===== 2. the marks (redesign/akpsi): every firm at once, one grid, no grouping — the names are the point, the most
+       recognisable first. Each mark slides in as it enters, sweeping along its row (site.js sets --d from its place in the
+       row); marks rest in quiet grayscale and light in colour under the pointer while the rest step back.
+       Reduced motion: simply present. Without JS the grid is plain. ===== -->
+  <section class="section section--marks" aria-labelledby="marks-title">
+    <h2 class="sr-only" id="marks-title">Firms where GCC members and alumni have placed</h2>
+    <ul class="marks">
+      <li class="mark"><img src="assets/logos/goldman-sachs.svg" alt="Goldman Sachs" class="tall"></li>
+      <li class="mark"><img src="assets/logos/jpmorgan.svg" alt="J.P. Morgan" class="tall"></li>
+      <li class="mark"><img src="assets/logos/morgan-stanley.svg" alt="Morgan Stanley" class="tall"></li>
+      <li class="mark"><img src="assets/logos/blackstone.svg" alt="Blackstone"></li>
+      <li class="mark"><img src="assets/logos/citi.svg" alt="Citi"></li>
+      <li class="mark"><img src="assets/logos/bank-of-america.svg" alt="Bank of America"></li>
+      <li class="mark"><img src="assets/logos/barclays.svg" alt="Barclays"></li>
+      <li class="mark"><img src="assets/logos/ubs.png" alt="UBS" class="tall"></li>
+      <li class="mark"><img src="assets/logos/meta.svg" alt="Meta"></li>
+      <li class="mark"><img src="assets/logos/amazon.svg" alt="Amazon"></li>
+      <li class="mark"><img src="assets/logos/microsoft.svg" alt="Microsoft"></li>
+      <li class="mark"><img src="assets/logos/evercore.svg" alt="Evercore"></li>
+      <li class="mark"><img src="assets/logos/lazard.svg" alt="Lazard"></li>
+      <li class="mark"><img src="assets/logos/pjt.svg" alt="PJT Partners" class="tall"></li>
+      <li class="mark"><img src="assets/logos/jefferies.svg" alt="Jefferies"></li>
+      <li class="mark"><img src="assets/logos/guggenheim.svg" alt="Guggenheim"></li>
+      <li class="mark"><img src="assets/logos/nomura.svg" alt="Nomura"></li>
+      <li class="mark"><img src="assets/logos/wells-fargo.svg" alt="Wells Fargo" class="tall"></li>
+      <li class="mark"><img src="assets/logos/cibc.svg" alt="CIBC" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/credit-agricole.svg" alt="Crédit Agricole" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/carlyle.svg" alt="The Carlyle Group" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/oaktree.svg" alt="Oaktree Capital" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/sixth-street.svg" alt="Sixth Street" class="tall" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/ares.svg" alt="Ares Management" class="tall" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/bain.svg" alt="Bain &amp; Company" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/deloitte.svg" alt="Deloitte" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/pwc.svg" alt="PwC" class="tall" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/ey.svg" alt="EY" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/oracle.svg" alt="Oracle" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/ibm.svg" alt="IBM" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/uber.svg" alt="Uber" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/robinhood.svg" alt="Robinhood" class="tall" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/coinbase.svg" alt="Coinbase" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/walmart.svg" alt="Walmart Global Tech" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/fidelity.svg" alt="Fidelity" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/capital-one.svg" alt="Capital One" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/amex.svg" alt="American Express" class="tall" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/sp-global.svg" alt="S&amp;P Global" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/susquehanna.png" alt="Susquehanna International Group" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/optiver.svg" alt="Optiver" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/oak-hill.png" alt="Oak Hill Advisors" class="tall" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/primavera.png" alt="Primavera Capital" class="tall" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/arcline.svg" alt="Arcline Investment Management" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/trillium.svg" alt="Trillium Asset Management" class="tall" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/strategic-investment-group.svg" alt="Strategic Investment Group" class="tall" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/wavestone.svg" alt="Wavestone" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/tishman-speyer.png" alt="Tishman Speyer" class="tall" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/lasalle.svg" alt="LaSalle Investment Management" loading="lazy"></li>
+    </ul>
+    <p class="label schools__label" id="schools-title">Graduate study</p>
+    <ul class="marks marks--schools" aria-labelledby="schools-title">
+      <li class="mark"><img src="assets/logos/harvard-business-school.svg" alt="Harvard Business School" class="crest" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/stanford.svg" alt="Stanford" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/london-business-school.svg" alt="London Business School" class="crest" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/nyu.svg" alt="NYU School of Law" class="crest" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/penn.svg" alt="Penn Engineering" class="crest" loading="lazy"></li>
+      <li class="mark"><img src="assets/logos/cornell.svg" alt="Cornell University" class="crest" loading="lazy"></li>
+    </ul>
+  </section>
 
-
-  <!-- ===== 2. the desks: placements organized the way finance is ===== -->
-  <section class="section" aria-labelledby="desks-title">
+  <!-- ===== 3. footprint: the city ledger — the network is the product (redesign/akpsi) ===== -->
+  <section class="section" aria-labelledby="footprint-title">
     <div class="section__head">
-      <h2 class="section__title" id="desks-title">The desks</h2>
-      <a class="section__link" href="members.html">Members &amp; Alumni</a>
+      <h2 class="section__title" id="footprint-title">Where they sit</h2>
+      <a class="section__link" href="about.html#network-title">The network</a>
     </div>
-    <p class="section__intro">Where alumni and current members sit, by practice. Counts come from the alumni directory and this year&rsquo;s placements.</p>
-    <div class="desks">
-      <div class="desk">
-        <p class="desk__label">Investment Banking</p>
-        <span class="desk__n">25</span>
-        <span class="desk__nl">alumni on the street</span>
-        <div class="desk__logos"><span class="fchip"><img src="assets/logos/goldman-sachs.svg" alt="Goldman Sachs" class="tall" loading="lazy"></span><span class="fchip"><img src="assets/logos/jpmorgan.svg" alt="J.P. Morgan" loading="lazy"></span><span class="fchip"><img src="assets/logos/morgan-stanley.svg" alt="Morgan Stanley" loading="lazy"></span><span class="fchip"><img src="assets/logos/evercore.svg" alt="Evercore" loading="lazy"></span><span class="fchip"><img src="assets/logos/pjt.svg" alt="PJT Partners" class="tall" loading="lazy"></span><span class="fchip"><img src="assets/logos/lazard.svg" alt="Lazard" loading="lazy"></span><span class="fchip"><img src="assets/logos/guggenheim.svg" alt="Guggenheim" loading="lazy"></span><span class="fchip"><img src="assets/logos/citi.svg" alt="Citi" loading="lazy"></span><span class="fchip"><img src="assets/logos/barclays.svg" alt="Barclays" loading="lazy"></span><span class="fchip"><img src="assets/logos/bank-of-america.svg" alt="Bank of America" loading="lazy"></span><span class="fchip"><img src="assets/logos/ubs.png" alt="UBS" class="tall" loading="lazy"></span><span class="fchip"><img src="assets/logos/nomura.svg" alt="Nomura" loading="lazy"></span><span class="fchip"><img src="assets/logos/wells-fargo.svg" alt="Wells Fargo" class="tall" loading="lazy"></span><span class="fchip"><img src="assets/logos/cibc.svg" alt="CIBC" loading="lazy"></span></div>
-      </div>
-      <div class="desk">
-        <p class="desk__label">Private Equity &amp; Credit</p>
-        <span class="desk__n">8</span>
-        <span class="desk__nl">alumni on the buy side</span>
-        <div class="desk__logos"><span class="fchip"><img src="assets/logos/blackstone.svg" alt="Blackstone" loading="lazy"></span><span class="fchip"><img src="assets/logos/carlyle.svg" alt="The Carlyle Group" loading="lazy"></span><span class="fchip"><img src="assets/logos/oaktree.svg" alt="Oaktree Capital" loading="lazy"></span><span class="fchip"><img src="assets/logos/sixth-street.svg" alt="Sixth Street" class="tall" loading="lazy"></span><span class="fchip"><img src="assets/logos/oak-hill.png" alt="Oak Hill Advisors" class="tall" loading="lazy"></span><span class="fchip"><img src="assets/logos/primavera.png" alt="Primavera Capital" class="tall" loading="lazy"></span><span class="fchip"><img src="assets/logos/arcline.svg" alt="Arcline Investment Management" loading="lazy"></span><span class="fchip"><img src="assets/logos/trillium.svg" alt="Trillium Asset Management" class="tall" loading="lazy"></span><span class="fchip"><img src="assets/logos/strategic-investment-group.svg" alt="Strategic Investment Group" class="tall" loading="lazy"></span></div>
-      </div>
-      <div class="desk">
-        <p class="desk__label">Quant &amp; Trading</p>
-        <span class="desk__n">3</span>
-        <span class="desk__nl">alumni on the floor</span>
-        <div class="desk__logos"><span class="fchip"><img src="assets/logos/susquehanna.png" alt="Susquehanna International Group" loading="lazy"></span><span class="fchip"><img src="assets/logos/optiver.svg" alt="Optiver" loading="lazy"></span><span class="fchip fchip--lockup"><img src="assets/logos/wintermute.svg" alt="" loading="lazy"><span>Wintermute</span></span></div>
-      </div>
-      <div class="desk">
-        <p class="desk__label">Consulting</p>
-        <span class="desk__n">15</span>
-        <span class="desk__nl">alumni in advisory</span>
-        <div class="desk__logos"><span class="fchip"><img src="assets/logos/bain.svg" alt="Bain &amp; Company" loading="lazy"></span><span class="fchip"><img src="assets/logos/pwc.svg" alt="PwC" class="tall" loading="lazy"></span><span class="fchip"><img src="assets/logos/ey.svg" alt="EY" loading="lazy"></span><span class="fchip"><img src="assets/logos/deloitte.svg" alt="Deloitte" loading="lazy"></span><span class="fchip fchip--text">Wavestone</span></div>
-      </div>
-      <div class="desk">
-        <p class="desk__label">Technology</p>
-        <span class="desk__n">20</span>
-        <span class="desk__nl">alumni in tech</span>
-        <div class="desk__logos"><span class="fchip"><img src="assets/logos/meta.svg" alt="Meta" loading="lazy"></span><span class="fchip"><img src="assets/logos/oracle.svg" alt="Oracle" loading="lazy"></span><span class="fchip"><img src="assets/logos/amazon.svg" alt="Amazon" loading="lazy"></span><span class="fchip"><img src="assets/logos/microsoft.svg" alt="Microsoft" loading="lazy"></span><span class="fchip"><img src="assets/logos/ibm.svg" alt="IBM" loading="lazy"></span><span class="fchip"><img src="assets/logos/walmart.svg" alt="Walmart Global Tech" loading="lazy"></span><span class="fchip"><img src="assets/logos/uber.svg" alt="Uber" loading="lazy"></span><span class="fchip"><img src="assets/logos/robinhood.svg" alt="Robinhood" class="tall" loading="lazy"></span><span class="fchip"><img src="assets/logos/coinbase.svg" alt="Coinbase" loading="lazy"></span><span class="fchip fchip--text">Ava Labs</span></div>
-      </div>
-      <div class="desk">
-        <p class="desk__label">Asset Management &amp; Finance</p>
-        <span class="desk__n">5</span>
-        <span class="desk__nl">alumni in markets &amp; payments</span>
-        <div class="desk__logos"><span class="fchip"><img src="assets/logos/fidelity.svg" alt="Fidelity" loading="lazy"></span><span class="fchip"><img src="assets/logos/capital-one.svg" alt="Capital One" loading="lazy"></span><span class="fchip"><img src="assets/logos/amex.svg" alt="American Express" class="tall" loading="lazy"></span><span class="fchip"><img src="assets/logos/sp-global.svg" alt="S&amp;P Global" loading="lazy"></span></div>
-      </div>
-      <div class="desk">
-        <p class="desk__label">Real Estate</p>
-        <span class="desk__n">6</span>
-        <span class="desk__nl">alumni in real assets</span>
-        <div class="desk__logos"><span class="fchip"><img src="assets/logos/ares.svg" alt="Ares Management" class="tall" loading="lazy"></span><span class="fchip"><img src="assets/logos/tishman-speyer.png" alt="Tishman Speyer" class="tall" loading="lazy"></span><span class="fchip"><img src="assets/logos/blackstone.svg" alt="Blackstone" loading="lazy"></span><span class="fchip fchip--text">LaSalle Investment Management</span><span class="fchip fchip--text">Park Hotels &amp; Resorts</span></div>
-      </div>
-
-      <div class="desk">
-        <p class="desk__label">Graduate Study</p>
-        <span class="desk__n">9</span>
-        <span class="desk__nl">alumni in graduate school</span>
-        <div class="desk__logos"><span class="fchip fchip--text">Harvard Business School</span><span class="fchip fchip--text">Stanford</span><span class="fchip fchip--text">London Business School</span><span class="fchip fchip--text">NYU Law</span><span class="fchip fchip--text">Penn Engineering</span><span class="fchip fchip--text">Graduate programs at Cornell</span></div>
-      </div>
-    </div>
+    <p class="section__intro">Alumni work in 25+ cities. Recent international placements include Hong Kong, Seoul and Shanghai.</p>
+    <ul class="footprint" data-stagger aria-label="Cities where GCC alumni work">
+      <li>Ithaca</li>
+      <li>New York</li>
+      <li>Boston</li>
+      <li>Washington DC</li>
+      <li class="is-intl">Toronto</li>
+      <li>Chicago</li>
+      <li>Atlanta</li>
+      <li>Dallas</li>
+      <li>Los Angeles</li>
+      <li>San Francisco</li>
+      <li>Seattle</li>
+      <li class="is-intl">Vancouver</li>
+      <li class="is-intl">London</li>
+      <li class="is-intl">Paris</li>
+      <li class="is-intl">Beijing</li>
+      <li class="is-intl">Shanghai</li>
+      <li class="is-intl">Seoul</li>
+      <li class="is-intl">Hong Kong</li>
+      <li class="is-intl">Bangkok</li>
+      <li class="is-intl">Singapore</li>
+      <li class="is-intl">Jakarta</li>
+      <li class="is-intl">Sydney</li>
+    </ul>
   </section>
 
-  <!-- ===== 3. apply strip ===== -->
+  <!-- ===== 4. apply strip ===== -->
   <section class="section" id="apply" aria-labelledby="apply-title">
     <div class="section__head">
       <h2 class="section__title" id="apply-title">Start here</h2>
       <a class="section__link" href="recruitment.html">How recruitment works</a>
     </div>
     <div class="recruit">
-      <p>Every seat above started with the 10-week new member series. Any major, any background — applications open each semester.</p>
+      <p>Every seat above started with the 10-week new member series. Any major, any background, and applications open each semester.</p>
       <div class="actions">
         <a class="pill pill--primary" href="https://forms.gle/zT7wRRc7eTHoyF9AA" rel="noopener">Apply</a>
       </div>
@@ -177,6 +216,6 @@
   <div class="footer__wordmark" aria-hidden="true">GCC</div>
 </footer>
 
-<script src="site.js?v=1787939953" defer></script>
+<script src="site.js?v=1789440677" defer></script>
 </body>
 </html>

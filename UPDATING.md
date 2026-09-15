@@ -20,14 +20,13 @@ It rewrites the generated parts of the pages and prints a short report. Nothing 
 ## Change the executive board → `content/board.json`
 - Edit names, roles, years, majors, emails (set `"show_emails": false` to hide all emails). Phone numbers are never shown.
 - Headshot: save a JPEG as `assets/people/first-last.jpg` (lowercase, hyphen, e.g. `assets/people/sophia-jian.jpg`) — it is picked up automatically. Square-ish head-and-shoulders photos, 400–800px, work best. No photo → a quiet empty tile.
-- Run `python3 build.py`. The board grid on the Members page and "Who runs it" on About both update.
-- To choose who appears in About's "Who runs it" and "What we stand for", edit `content/about.json` (names must match board.json).
+- Run `python3 build.py`. The board grid on the Members page updates.
 
 ## Change members / alumni → `content/members.json`, `content/alumni.json`
 - Members are grouped by the semester they joined; add a person as `{"name": "…", "major": "Economics '29"}` (a photo at `assets/people/first-last.jpg` is optional).
-- Alumni: `{"name": "…", "role": "Analyst at Firm"}`. The six in `"featured"` are the headshot row on the Members page — pick people with clean head-and-shoulders photos.
-- Someone who graduates: move their entry from members.json to alumni.json.
-- Run `python3 build.py`.
+- `"graduated_through"` at the top of members.json is the class year of the newest class that has graduated (`2026` = everyone whose major ends in '26 or earlier). Those members leave the public roster and appear in the members-only alumni directory automatically. Bump it by one each June.
+- Alumni: `{"name": "…", "role": "Analyst at Firm"}` in alumni.json. A graduated member is matched to alumni.json by name, so to show where a graduate works, add them there; until then the directory lists their major and class year.
+- Run `python3 build.py`. The report names the graduates who have no alumni.json entry yet.
 
 ## Change photos → `content/gallery.json`
 - Put the photo in `assets/img/` (phone photos are fine; 2000px wide is plenty).
@@ -48,8 +47,9 @@ It rewrites the generated parts of the pages and prints a short report. Nothing 
 The folder is a static site: drag `gcc-website/` onto Netlify Drop, or push it to GitHub Pages / Vercel. Point gcccornell.com at the host when you're ready to replace the Wix site.
 
 ## The members-only alumni directory → `alumni.html`
-- The full alumni list lives behind a shared password at `alumni.html`. The page is encrypted at build time —
-  the published site contains no readable names without the password.
+- Every alumnus (alumni.json plus every graduated class from members.json) lives behind a shared password at
+  `alumni.html`: name, class year and where they work, alphabetical by surname, with a filter box for name, firm
+  or class year. The page is encrypted at build time — the published site contains no readable names without the password.
 - The password is in `content/alumni-password.txt` (this file is gitignored and must never be committed).
   To change it: edit the file, run `python3 build.py`, push. Share the new password with members.
 - Requires the `cryptography` package once per machine: `python3 -m pip install --user cryptography`.

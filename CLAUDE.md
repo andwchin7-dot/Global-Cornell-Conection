@@ -6,7 +6,7 @@ from `main` — pushing/merging to main deploys in about a minute.
 ## Commands
 - Build: `python3 build.py` — regenerates members.html and alumni.html from
   `templates/` + `content/*.json`, re-syncs nav/footer partials into every page,
-  refreshes generated blocks (Home wall/carousel/pillars, About), and stamps
+  refreshes generated blocks (Home carousel/pillars), and stamps
   `?v=` cache-busters. Run after ANY change to `content/` or `partials/`, and
   commit the regenerated pages together with the source change.
 - Preview: `python3 -m http.server 8123` → http://localhost:8123
@@ -14,11 +14,16 @@ from `main` — pushing/merging to main deploys in about a minute.
 
 ## Architecture
 - `content/*.json` is the single source of truth for people/photos/text.
+- members.json `graduated_through` (a class year) splits the public roster from the
+  encrypted alumni directory; alumni.json holds where people work, matched by name.
 - members.html and alumni.html are FULLY generated — hand edits are lost on build.
-- index.html and about.html contain generated blocks between
-  `<!-- build:NAME -->` markers — same rule inside those.
+- index.html contains generated blocks between `<!-- build:NAME -->` markers —
+  same rule inside those.
 - styles.css: design tokens up top (`--cream`, `--ink`, `--carnelian`…);
   later blocks deliberately override earlier ones — append, don't reorder.
+- Content is capped at `--max` (1440px) and centred: page-level padding uses
+  `var(--gutter)` (28px below 1440px, growing above). Never pad a new page-level
+  block with `var(--m)` alone or it drifts to the edge on wide monitors.
 - Design register: quiet editorial. Instrument Serif/Sans, carnelian accents on
   cool paper. Hover effects live behind `@media (hover: hover)`;
   `prefers-reduced-motion` is respected globally. Match this register.
